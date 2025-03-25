@@ -1,12 +1,5 @@
-import React from 'react';
+function calendarPage() {
+  return <div>calendarPage</div>;
+}
 
-const CalendarPage: React.FC = () => {
-  return (
-    <div>
-      <h1>Calendar Page</h1>
-      <p>This is the calendar page for a specific ID.</p>
-    </div>
-  );
-};
-
-export default CalendarPage;
+export default calendarPage;
