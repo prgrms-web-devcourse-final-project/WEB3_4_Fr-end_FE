@@ -35,4 +35,9 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-lsj push test1
+## 시작시 NPM 세팅
+
+```sh
+ npx shadcn@latest add breadcrumb card checkbox dropdown-menu input label popover select separator table textarea skeleton carousel
+ npm i react-icons next-themes @radix-ui/react-icons
+```
