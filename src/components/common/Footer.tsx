@@ -3,7 +3,7 @@ import Image from "next/image";
 const Footer: React.FC = () => {
   return (
     <div className="w-full min-w-[1440px] h-full min-h-[290px] relative bg-neutral-600">
-      <div className="w-[254px] h-[17px] left-[101px] top-[138px] absolute justify-start text-[#f2f2f2] text-[13px] font-normal font-['Pretendard']">
+      <div className="w-[254px] h-[17px] ml-[101px] mt-[138px] absolute justify-start text-[#f2f2f2] text-[13px] font-normal font-['Pretendard']">
         Where Travelers Meet & Memories Begin.
       </div>
       <Image

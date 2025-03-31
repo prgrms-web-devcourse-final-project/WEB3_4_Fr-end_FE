@@ -6,7 +6,7 @@ import React from "react";
 
 const Header: React.FC = () => {
   return (
-    <header className="w-[1440px] h-[125px] relative bg-[#ffffff] overflow-hidden mx-auto">
+    <header className="w-[1440px] h-[125px] relative bg-[#ffffff] overflow-hidden mx-auto mt-[22px]">
       <div className="w-[1256px] px-2.5 inline-flex justify-start items-start gap-[637px]">
         <Image src="/logo/blue.png" alt="Logo" width={103} height={42} />
         <div className="py-2.5 flex justify-start items-center gap-[27px]">
