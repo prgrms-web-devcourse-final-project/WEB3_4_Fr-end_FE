@@ -4,7 +4,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-customGray-600">
       <div className="container max-w-[1440px] mx-auto pt-12 pb-28 flex">
-        <div className="w-full grid grid-cols-4 gap-8 px-[0px] mx-[100px]">
+        <div className="w-full grid grid-cols-4 gap-8 px-2.5">
           <div className="flex flex-col items-start">
             <Image
               src="/logo/blue.png"
@@ -19,23 +19,20 @@ const Footer: React.FC = () => {
           </div>
           <div>
             <h2 className="text-white text-xl font-bold mb-4">MEMBER</h2>
-            <div className="grid grid-cols-2 gap-x-[10px] gap-y-[5px] text-white text-base">
-              {[
-                "배채연",
-                "이재이",
-                "양윤호",
-                "박찬호",
-                "이석준",
-                "이현준",
-                "이지환",
-                "김나은",
-                "",
-                "유영주",
-              ].map((name, idx) => (
-                <div key={idx} className="w-auto h-auto">
-                  {name}
-                </div>
-              ))}
+            <div className="flex gap-x-10 text-white text-base">
+              <div className="flex flex-col space-y-1">
+                <div>배채연</div>
+                <div>양윤호</div>
+                <div>이석준</div>
+                <div>이지환</div>
+              </div>
+              <div className="flex flex-col space-y-1">
+                <div>이재이</div>
+                <div>박찬호</div>
+                <div>이현준</div>
+                <div>김나은</div>
+                <div>유영주</div>
+              </div>
             </div>
           </div>
           <div>
