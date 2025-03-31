@@ -38,6 +38,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## 시작시 NPM 세팅
 
 ```sh
- npx shadcn@latest add breadcrumb card checkbox dropdown-menu input label popover select separator table textarea skeleton carousel
+ npx shadcn@latest add breadcrumb card checkbox dropdown-menu input label popover select separator table textarea skeleton carousel pagination
  npm i react-icons next-themes @radix-ui/react-icons
+ npx shadcn@latest add pagination
 ```
