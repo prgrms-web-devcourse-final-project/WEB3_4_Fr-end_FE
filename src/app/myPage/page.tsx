@@ -1,9 +1,8 @@
-<<<<<<< HEAD
 import Image from "next/image";
 
 function myPage() {
   return (
-    <div className="w-[1044px] h-[699px] relative">
+    <div className="w-full max-w-[1044px] h-[699px] relative mx-[198px]">
       <div className="w-[196px] h-px left-0 top-[275px] absolute bg-[#d9d9d9]" />
       <Image
         src="/defaultAvatar/31.png"
@@ -39,11 +38,7 @@ function myPage() {
       </div>
       <div className="w-[726px] h-[698px] left-[318px] top-[1px] absolute opacity-25 bg-white rounded-lg outline outline-[#979797]" />
       <div className="w-[547px] left-[424px] top-[51px] absolute inline-flex justify-start items-start flex-wrap content-start">
-        <div className="w-10 h-10 relative overflow-hidden">
-          <div className="w-[16.67px] h-[11.67px] left-[11.67px] top-[3.33px] absolute bg-[#424242]" />
-          <div className="w-[26.67px] h-[21.67px] left-[6.67px] top-[15px] absolute bg-[#fb8c00]" />
-          <div className="w-[5px] h-[5px] left-[17.50px] top-[23.33px] absolute bg-[#c76e00]" />
-        </div>
+        <div className="w-10 h-10 relative overflow-hidden">🔒</div>
         <div className="justify-start text-black text-[28px] font-bold font-['Pretendard']">
           비밀번호 변경
         </div>
@@ -56,13 +51,6 @@ function myPage() {
           보호하는 데 중요한 역할을 합니다.
         </div>
       </div>
-=======
-
-function myPage() {
-  return (
-    <div>
-     
->>>>>>> main
     </div>
   );
 }
