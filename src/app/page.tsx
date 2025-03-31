@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
 export default function Home() {
   return (
     <>
+      <Header />
       <div className="text-3xl">
         <p className="font-thin">프리텐다드 thin</p>
         <p className="font-extralight">프리텐다드 extralight</p>
@@ -38,6 +38,7 @@ export default function Home() {
         <div className="bg-customViloet-200">customViloet-200 </div>
         <div className="bg-customYellow-100"> customYellow-100</div>
       </div>
+      <Footer />
     </>
   );
 }
