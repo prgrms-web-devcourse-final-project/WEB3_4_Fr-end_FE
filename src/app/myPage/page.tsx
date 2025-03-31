@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Image from "next/image";
 
 function myPage() {
@@ -55,6 +56,13 @@ function myPage() {
           보호하는 데 중요한 역할을 합니다.
         </div>
       </div>
+=======
+
+function myPage() {
+  return (
+    <div>
+     
+>>>>>>> main
     </div>
   );
 }
