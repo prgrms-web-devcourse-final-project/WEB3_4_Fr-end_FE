@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
-import Navbar from "@/components/navbar/Navbar";
 import Container from "@/components/global/Container";
 import Providers from "./providers";
+import Header from "@/components/common/Header";
+import Footer from "@/components/common/Footer";
 
 export const metadata: Metadata = {
   title: "PlanIt",
@@ -38,8 +39,9 @@ export default function RootLayout({
     >
       <body className={pretendard.className}>
         <Providers>
-          <Navbar />
+          <Header />
           <Container>{children}</Container>
+          <Footer />
         </Providers>
       </body>
     </html>
