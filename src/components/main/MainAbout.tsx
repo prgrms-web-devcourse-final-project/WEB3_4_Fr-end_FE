@@ -44,7 +44,7 @@ export default function MainAbout() {
 
 
   {/* 달력 섹션 */}
-  <div className="flex-1 flex items-center justify-center mt-6">
+  <div className="flex-1 flex justify-end mt-10">
     <div className='mt-16'>
   <p className="font-paperlogy text-4xl">
       메이트 구하기
