@@ -71,7 +71,7 @@ export default function ProfileChangeForm() {
                   type="text"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="text-[40px] font-bold h-[48px] px-2 border border-[#bfbfbf] rounded w-full max-w-[408px]"
+                  className="text-[40px] font-bold h-[48px] rounded w-full max-w-[408px]"
                 />
                 <br />
               </div>
