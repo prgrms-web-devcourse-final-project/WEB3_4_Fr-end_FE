@@ -9,7 +9,7 @@ export default function MyPage(): JSX.Element {
   const [isActiveOpen, setIsActiveOpen] = useState<boolean>(true);
 
   return (
-    <div className="max-w-[1044px] mx-auto flex gap-[122px] py-8 mb-[166px]">
+    <div className="max-w-[1044px] mx-auto flex gap-[122px] py-8 mb-[166px] mt-[89px]">
       <div className="w-[197px] h-[447px] flex flex-col items-center">
         <Image
           src="/defaultAvatar/31.png"
@@ -68,7 +68,7 @@ export default function MyPage(): JSX.Element {
       </div>
       <div className="flex-1 p-8 bg-white rounded-[8px] border border-customGray-400 w-[726px] h-[698px]">
         <div className="flex items-center gap-2 mb-4 ">
-          <span className="text-2xl">🔒</span>
+          <span className="text-[40px]">🔒</span>
           <h2 className="text-2xl font-bold">비밀번호 변경</h2>
         </div>
         <p className="text-sm text-black mb-2">
