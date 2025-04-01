@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import MateSearch from "./MateSearch";
-import CategoryFilter from "./CategoryFilter";
-import MateCardList from "./MateCardList";
+import MateSearch from "@/components/mateBoard/mateBoardMain/MateSearch";
+import CategoryFilter from "@/components/mateBoard/mateBoardMain/CategoryFilter";
+import MateCardList from "@/components/mateBoard/mateBoardMain/MateCardList";
 import { useDebounce } from "@/hooks/useDebounce";
 import type { MateCardData } from "@/types/MateCardData";
-import PaginationControls from "./PaginationControls";
-import WritingButton from "./WritingButton";
+import PaginationControls from "@/components/mateBoard/mateBoardMain/PaginationControls";
+import WritingButton from "@/components/mateBoard/mateBoardMain/WritingButton";
 
 export default function MateBoardFilter({ cards }: { cards: MateCardData[] }) {
   const [searchInput, setSearchInput] = useState("");
