@@ -20,24 +20,36 @@ export default function ProfileChangeForm() {
   const toggleEdit = () => {
     setIsEditing((prev) => !prev);
   };
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const phoneValid = /^01[016789]\d{7,8}$/.test(phone);
 
   const fields = [
     {
       label: "이메일",
       type: "email",
       placeholder: "새로운 이메일을 입력해 주세요.",
-      e: "비밀번호가 다릅니다.",
+      e: "이메일 형식이 올바르지 않습니다!",
+      value: email,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+        setEmail(e.target.value),
+      isValid: email === "" || emailValid,
     },
     {
       label: "휴대폰 번호",
       type: "text",
-      placeholder: "새로운 휴대폰 번호를 입력해 주세요.",
-      e: "비밀번호 형식이 올바르지 않습니다!",
+      placeholder: "새로운 휴대폰 번호를 입력해 주세요. (-제외)",
+      e: "휴대폰 번호 형식이 올바르지 않습니다!",
+      value: phone,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+        setPhone(e.target.value),
+      isValid: phone === "" || phoneValid,
     },
   ];
 
   return (
-    <div className="w-[726px] h-[698px] relative bg-white rounded-lg ">
+    <div className="w-[726px] h-[698px] relative bg-white rounded-lg mb-[168px]">
       <div className="flex gap-8">
         <div className="flex flex-col items-center mt-[95px] ml-[95px]">
           <Image
@@ -107,10 +119,16 @@ export default function ProfileChangeForm() {
                 </label>
                 <input
                   type={f.type}
-                  placeholder={f.e}
+                  value={f.value}
+                  onChange={f.onChange}
+                  placeholder={f.placeholder}
                   className="w-full h-[50px] px-2.5 py-2 bg-white rounded outline outline-[#bfbfbf] mt-1 focus:outline-customGray-600"
                 />
-                <p className="text-customPink-300 text-[13px] mt-1 hidden">
+                <p
+                  className={`text-customPink-300 text-[13px] mt-1 ${
+                    f.isValid ? "hidden" : ""
+                  }`}
+                >
                   {f.e}
                 </p>
               </div>
