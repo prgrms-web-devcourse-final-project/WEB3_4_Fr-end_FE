@@ -60,7 +60,7 @@ export default function PasswordChangeForm() {
   ];
 
   return (
-    <div className="relative">
+    <div className="relative ">
       <form
         onSubmit={handleSubmit}
         className="space-y-4 border-black w-[726px] h-[698px] bg-white rounded-[8px]"
