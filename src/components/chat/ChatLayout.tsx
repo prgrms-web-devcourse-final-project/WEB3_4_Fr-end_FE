@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ChatSidebar } from "./ChatSidebar";
-import { ChatArea } from "./ChatArea";
+import { ChatSidebar } from "@/components/chat/ChatSidebar";
+import { ChatArea } from "@/components/chat/ChatArea";
 import { GroupChat } from "@/types/chat";
 
 const sampleChats: GroupChat[] = [
