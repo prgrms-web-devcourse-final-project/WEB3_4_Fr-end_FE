@@ -66,12 +66,15 @@ export default function ProfileChangeForm() {
 
           <div className="ml-8 mt-[101px]">
             {isEditing ? (
-              <input
-                type="text"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-                className="text-[40px] font-bold mb-1"
-              />
+              <div>
+                <input
+                  type="text"
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                  className="text-[40px] font-bold h-[48px] px-2 border border-[#bfbfbf] rounded w-full max-w-[408px]"
+                />
+                <br />
+              </div>
             ) : (
               <h2 className="text-[40px] font-bold">{nickname}</h2>
             )}
