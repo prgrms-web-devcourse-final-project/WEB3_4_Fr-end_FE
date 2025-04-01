@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 
 const locationData = [
   { id: 1, image: "/main/seoul.jpg", title: "서울"},
