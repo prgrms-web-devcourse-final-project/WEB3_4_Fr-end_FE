@@ -38,7 +38,9 @@ export default function MenuSection({
             <li
               key={idx}
               onClick={() => {
-                onSelectSection(title);
+                if (selectedSection !== title) {
+                  onSelectSection(title);
+                }
                 onSelectItem(item);
               }}
               className={`cursor-pointer ${

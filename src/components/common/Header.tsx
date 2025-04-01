@@ -41,7 +41,6 @@ const Header: React.FC = () => {
           />
         </div>
       )}
-
       <header className="mx-52 h-[125px] relative overflow-hidden mt-5">
         {/* 헤더 내부 중앙 정렬 */}
         <div className="flex justify-between items-center w-full max-w-[1980px] px-2.5 mx-auto">
