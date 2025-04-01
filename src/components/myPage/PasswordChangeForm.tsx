@@ -81,7 +81,7 @@ export default function PasswordChangeForm() {
             </p>
           </div>
         </div>
-        <div className="flex flex-col mb-[20px] items-center">
+        <div className="flex flex-col mb-[20px] items-center mt-[33px]">
           {fields.map((f, i) => (
             <div key={i} className="flex flex-col items-start w-[408px] mb-4">
               <label>{f.label}</label>
