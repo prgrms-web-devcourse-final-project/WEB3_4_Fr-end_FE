@@ -4,7 +4,7 @@ import type { MateCardData } from "../../../types/MateCardData";
 
 export default function MateCard({ data }: { data: MateCardData }) {
   return (
-    <div className="w-full h-[300px] rounded-2xl bg-customGray-100 p-6 flex justify-between">
+    <div className="w-full h-[300px] rounded-2xl bg-gray-50 p-6 flex justify-between">
       <div className="flex flex-col gap-3 w-[60%]">
         {/* 모집 상태 */}
         <div
@@ -25,7 +25,9 @@ export default function MateCard({ data }: { data: MateCardData }) {
         <h2 className="text-[28px] font-bold">{data.title}</h2>
 
         {/* 설명 */}
-        <p className="text-muted-foreground text-[24px]">{data.description}</p>
+        <p className="text-muted-foreground text-[24px] overflow-hidden">
+          {data.description}
+        </p>
 
         {/* 유저 정보 */}
         <div className="flex items-center gap-2 mt-auto">
