@@ -1,6 +1,6 @@
 import Dropdown from "./Dropdown";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 import { SearchIcon } from "lucide-react";
 
 export default function MateSearch({

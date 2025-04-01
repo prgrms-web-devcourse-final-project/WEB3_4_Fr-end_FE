@@ -4,7 +4,8 @@ export const dummyCards: MateCardData[] = [
   {
     id: 1,
     title: "25일 오늘 제주도 저녁 식사",
-    description: "오늘 저녁 식사하실분",
+    description:
+      "오늘 저녁 식사하실분 오늘 저녁 식사하실분 오늘 저녁 식사하실분 오늘 저녁 식사하실분 오늘 저녁 식사하실분 오늘 저녁 식사하실분",
     recruitCount: 3,
     region: "제주도",
     thumbnailUrl: "/jeju.jpg",
