@@ -194,4 +194,10 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+.shadow-custom-figma {
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25); /* Figma 드롭 섀도우 설정 */
+  border-radius: 0.625rem; /* 둥근 모서리 설정 (예시) */
+}
+
 }
