@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { GroupChat, ChatMessage } from "@/types/chat";
-import { ChatHeader } from "./ChatHeader";
-import { MessageInput } from "./MessageInput";
+import { ChatHeader } from "@/components/chat/ChatHeader";
+import { MessageInput } from "@/components/chat/MessageInput";
 import Image from "next/image";
 
 interface ChatAreaProps {

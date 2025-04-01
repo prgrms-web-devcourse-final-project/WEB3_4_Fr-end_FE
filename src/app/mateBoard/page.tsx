@@ -1,6 +1,6 @@
 import MateHero from "@/components/mateBoard/mateBoardMain/MateHero";
 import MateBoardFilter from "@/components/mateBoard/mateBoardMain/MateBoardFilter";
-import type { MateCardData } from "../../../types/MateCardData";
+import type { MateCardData } from "@/types/MateCardData";
 
 import { dummyCards } from "@/dummyData/mateCards";
 

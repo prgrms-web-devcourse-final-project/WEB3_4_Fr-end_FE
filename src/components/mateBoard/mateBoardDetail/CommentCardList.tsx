@@ -1,5 +1,4 @@
-import CommentCard from "./CommentCard";
-
+import CommentCard from "@/components/mateBoard/mateBoardDetail/CommentCard";
 export default function CommentCardList() {
   return (
     <div className="space-y-4">
