@@ -18,7 +18,7 @@ const Header: React.FC = () => {
     }
   }, [pathname]);
 
-  // 경로가 '/'일 때 스타일 설정
+  // 경로가 /일 때 설정
   const isMainPage = pathname === "/";
   const textColor = isMainPage ? "text-customGray-100" : "text-[#1a1a1a]";
   const outlineColor = isMainPage ? "outline-customGray-100" : "outline-[#202020]";
@@ -40,7 +40,7 @@ const Header: React.FC = () => {
       </div>
       
       )}
-      <header className="w-full max-w-[1440px] h-[125px] relative overflow-hidden mx-auto mt-5">
+      <header className="w-[1490px] h-[125px] mx-auto relative overflow-hidden mt-5">
   {/* 헤더 내부 중앙 정렬 */}
   <div className="flex justify-between items-center w-full max-w-[1980] px-2.5 mx-auto">
     <Link href="/">

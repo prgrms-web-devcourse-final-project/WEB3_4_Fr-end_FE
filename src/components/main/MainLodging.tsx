@@ -9,7 +9,8 @@ export default function MainLodging() {
         <p className='font-paperlogy text-4xl pt-16'>숙소 예약하기</p>
         <div className='flex justify-between'>
         <p className='text-lg pt-2 font-medium'>국내여행 숙소 모두 여기서, 숙소 찾고 결제까지 Planit에서 한번에!</p>
-        <Button className='mr-2 mb-4 rounded-2xl w-28 shadow-customBlack-400'>전체보기</Button>
+        <Button className='mr-2 mb-4 rounded-2xl w-28 shadow-customBlack-400
+        transition-transform duration-300 ease-in-out hover:scale-110'>전체보기</Button>
         </div>
         <div className="flex w-full gap-14 ">
   <div className="pt-4 flex-grow-[5] relative h-[418px] transition-transform duration-300 ease-in-out hover:scale-105">
