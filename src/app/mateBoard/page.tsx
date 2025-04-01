@@ -10,7 +10,6 @@ function mateBoard() {
       <div className="pb-20">
         <MateHero />
       </div>
-
       <div className="pb-20">
         <MateBoardFilter cards={dummyCards} />
       </div>
