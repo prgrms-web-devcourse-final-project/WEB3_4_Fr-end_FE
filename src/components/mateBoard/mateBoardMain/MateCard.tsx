@@ -3,7 +3,7 @@
 import { CalendarIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import type { MateCardData } from "../../../../types/MateCardData";
+import type { MateCardData } from "@/types/MateCardData";
 import { useMateDetailStore } from "@/lib/store/useMateDetailStore";
 
 export default function MateCard({ data }: { data: MateCardData }) {
