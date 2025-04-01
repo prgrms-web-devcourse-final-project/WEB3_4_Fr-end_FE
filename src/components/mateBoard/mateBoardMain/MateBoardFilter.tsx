@@ -7,6 +7,7 @@ import MateCardList from "./MateCardList";
 import { useDebounce } from "@/hooks/useDebounce";
 import type { MateCardData } from "../../../../types/MateCardData";
 import PaginationControls from "./PaginationControls";
+import WritingButton from "./WritingButton";
 
 export default function MateBoardFilter({ cards }: { cards: MateCardData[] }) {
   const [searchInput, setSearchInput] = useState("");
@@ -63,8 +64,11 @@ export default function MateBoardFilter({ cards }: { cards: MateCardData[] }) {
           onSubmit={handleSubmit}
         />
       </div>
-      <div className="mb-5">
+      <div className="mb-5 flex">
         <CategoryFilter value={category} onChange={setCategory} />
+        <div className="ml-auto">
+          <WritingButton />
+        </div>
       </div>
       <div className="mb-20">
         <MateCardList cards={paginated} />

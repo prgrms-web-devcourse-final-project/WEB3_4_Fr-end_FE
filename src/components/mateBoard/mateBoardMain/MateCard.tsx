@@ -13,7 +13,7 @@ export default function MateCard({ data }: { data: MateCardData }) {
 
   const handleClick = () => {
     setDetail(data);
-    router.push(`/mateBoard/${data.id}`);
+    router.push(`/mateBoard/detail/${data.id}`);
   };
 
   return (
