@@ -16,5 +16,6 @@ export default function MainBanner() {
      </div>
       <div className="h-[290px]" />
     </div>
+    
   );
 }
