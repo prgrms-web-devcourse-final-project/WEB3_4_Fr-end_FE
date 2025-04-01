@@ -1,10 +1,27 @@
+"use client";
+
 import { CalendarIcon } from "lucide-react";
 import Image from "next/image";
-import type { MateCardData } from "../../../types/MateCardData";
+import { useRouter } from "next/navigation";
+import type { MateCardData } from "../../../../types/MateCardData";
+import { useMateDetailStore } from "@/lib/store/useMateDetailStore";
 
 export default function MateCard({ data }: { data: MateCardData }) {
+  //MateCard의 데이터들을 Zustand store에 저장
+  const router = useRouter();
+  const setDetail = useMateDetailStore((state) => state.setDetail);
+
+  const handleClick = () => {
+    setDetail(data);
+    router.push(`/mateBoard/${data.id}`);
+  };
+
   return (
-    <div className="w-full h-[300px] rounded-2xl bg-customGray-100 p-6 flex justify-between">
+    <div
+      onClick={handleClick}
+      className="w-full h-[300px] rounded-2xl bg-gray-50 p-6 flex justify-between
+      cursor-pointer hover:shadow-lg hover:scale-[1.02] transition-transform duration-300"
+    >
       <div className="flex flex-col gap-3 w-[60%]">
         {/* 모집 상태 */}
         <div
@@ -25,7 +42,9 @@ export default function MateCard({ data }: { data: MateCardData }) {
         <h2 className="text-[28px] font-bold">{data.title}</h2>
 
         {/* 설명 */}
-        <p className="text-muted-foreground text-[24px]">{data.description}</p>
+        <p className="text-muted-foreground text-[24px] overflow-hidden">
+          {data.description}
+        </p>
 
         {/* 유저 정보 */}
         <div className="flex items-center gap-2 mt-auto">
