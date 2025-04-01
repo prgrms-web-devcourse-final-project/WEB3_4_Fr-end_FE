@@ -1,4 +1,4 @@
-import { GroupChat } from "../../../types/chat";
+import { GroupChat } from "../../types/chat";
 import Image from "next/image";
 
 interface ChatSidebarProps {

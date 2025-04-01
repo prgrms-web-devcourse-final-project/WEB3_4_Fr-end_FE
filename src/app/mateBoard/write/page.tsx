@@ -1,5 +1,89 @@
-import React from "react";
+"use client";
 
-export default function WritePage() {
-  return <div>WritePage</div>;
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import Dropdown from "@/components/mateBoard/common/Dropdown";
+import DatePicker from "@/components/mateBoard/mateBoardWriting/DatePicker";
+
+export default function MateWritePage() {
+  const [title, setTitle] = useState("");
+  const [location, setLocation] = useState("지역을 검색해 주세요");
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [people, setPeople] = useState("");
+  const [content, setContent] = useState("");
+  const [images, setImages] = useState<File[]>([]);
+
+  const handleSubmit = () => {
+    // post logic 여기에
+    console.log({ title, location, date, people, content, images });
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 py-10 space-y-6">
+      <h1 className="text-2xl font-bold text-center">게시글 작성</h1>
+
+      {/* 제목 */}
+      <Input
+        placeholder="제목을 입력해주세요"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+
+      {/* 여행지 & 날짜 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="md:col-span-1 w-full">
+          <Dropdown value={location} onChange={setLocation} />
+        </div>
+        <DatePicker />
+      </div>
+
+      {/* 모집 인원 */}
+      <Input
+        type="number"
+        placeholder="모집 인원"
+        value={people}
+        onChange={(e) => setPeople(e.target.value)}
+      />
+
+      {/* 이미지 업로드 (기본 UI) */}
+      <div className="space-y-2">
+        <p className="text-sm font-medium">첨부사진</p>
+        <input
+          type="file"
+          multiple
+          onChange={(e) => setImages(Array.from(e.target.files ?? []))}
+        />
+        <div className="flex gap-2">
+          {images.map((img, idx) => (
+            <div
+              key={idx}
+              className="w-[100px] h-[100px] bg-gray-200 rounded-lg flex items-center justify-center text-xs"
+            >
+              {img.name}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 내용 */}
+      <Textarea
+        placeholder="내용을 입력해주세요"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        className="h-40"
+      />
+
+      {/* 제출 버튼 */}
+      <div className="text-center">
+        <Button
+          onClick={handleSubmit}
+          className="px-6 py-2 text-white bg-black hover:bg-gray-800"
+        >
+          작성하기
+        </Button>
+      </div>
+    </div>
+  );
 }
