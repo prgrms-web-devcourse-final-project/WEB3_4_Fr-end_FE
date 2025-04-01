@@ -71,12 +71,14 @@ export default function ProfileChangeForm() {
                   type="text"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="text-[40px] font-bold h-[48px] rounded w-full max-w-[408px]"
+                  className="text-[40px] font-bold rounded w-full max-w-[447px] h-[60px]"
                 />
                 <br />
               </div>
             ) : (
-              <h2 className="text-[40px] font-bold">{nickname}</h2>
+              <p className="text-[40px] font-bold max-w-[447px] h-[60px]">
+                {nickname}
+              </p>
             )}
             <button
               className="text-[#9f99eb] text-[13px] hover:text-customBlue-200"
@@ -93,23 +95,25 @@ export default function ProfileChangeForm() {
                 className="mt-2 text-[13px] font-semibold  w-[326px] h-[60px]"
               />
             ) : (
-              <p className="mt-2 text-[13px] font-semibold">{intro}</p>
+              <p className="mt-2 text-[13px] font-semibold w-[326px] h-[60px] mb-[6.5px]">
+                {intro}
+              </p>
             )}
 
-            <div className="w-[408px] mt-[130px]">
+            <div className="w-[408px]">
               <label className="text-base text-black font-[pretendard]">
                 이메일
               </label>
               <input
                 type="email"
                 placeholder="새로운 이메일을 입력해 주세요."
-                className="w-full h-[50px] px-2.5 py-2 bg-white rounded outline outline-[#bfbfbf] mt-1"
+                className="w-full h-[50px] px-2.5 py-2 bg-white rounded outline outline-[#bfbfbf] mt-1 focus:outline-customGray-600"
               />
               <p className="text-customPink-300 text-[13px] mt-1 hidden">
                 이메일 형식이 올바르지 않습니다!
               </p>
             </div>
-            <div className="mt-4 w-[408px] gap-[10px]">
+            <div className="mt-4 w-[408px]">
               <label className="text-base text-black font-[pretendard]">
                 휴대폰 번호
               </label>
@@ -127,9 +131,12 @@ export default function ProfileChangeForm() {
 
             {/* 구독 취소 안내 */}
             <div className="mt-8 w-[408px] p-4 border border-[#bfbfbf] rounded">
-              <p className="text-[13px] font-semibold mb-2">
+              <p className="text-[13px] font-semibold">
                 아쉽지만, 이제 작별할 시간인가요? 언제든 다시 돌아오실 수
-                있어요! 🥲 구독 취소는 아래에서 가능합니다.
+                있어요! 🥲
+              </p>
+              <p className="text-[13px] font-semibold mb-2">
+                구독 취소는 아래에서 가능합니다.
               </p>
               <button className="bg-black text-white text-[13px] font-bold px-4 py-1 rounded">
                 구독 취소
