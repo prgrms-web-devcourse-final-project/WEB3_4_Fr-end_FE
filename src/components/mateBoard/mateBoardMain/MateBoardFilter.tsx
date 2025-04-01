@@ -5,7 +5,7 @@ import MateSearch from "./MateSearch";
 import CategoryFilter from "./CategoryFilter";
 import MateCardList from "./MateCardList";
 import { useDebounce } from "@/hooks/useDebounce";
-import type { MateCardData } from "../../../types/MateCardData";
+import type { MateCardData } from "../../../../types/MateCardData";
 import PaginationControls from "./PaginationControls";
 
 export default function MateBoardFilter({ cards }: { cards: MateCardData[] }) {
