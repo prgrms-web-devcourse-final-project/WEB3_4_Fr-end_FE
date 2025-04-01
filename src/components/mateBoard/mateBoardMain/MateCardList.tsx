@@ -1,5 +1,5 @@
 import MateCard from "./MateCard";
-import type { MateCardData } from "@/../../types/MateCardData";
+import type { MateCardData } from "@/types/MateCardData";
 
 export default function MateCardList({ cards }: { cards: MateCardData[] }) {
   return (
