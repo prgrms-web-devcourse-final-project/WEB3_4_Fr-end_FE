@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function MateDetailPage() {
   return (
-    <div className="px-4 py-12 max-w-5xl mx-auto space-y-12">
+    <div className=" py-12 max-w-5xl mx-auto space-y-12">
       {/* 제목 */}
       <div>
         <h1 className="text-4xl font-bold text-gray-800 mb-2">
@@ -75,10 +75,9 @@ export default function MateDetailPage() {
           </div>
         </div>
 
-        {/* 구분선 */}
         <hr className="my-4 border-customGray-300" />
 
-        {/* 하단: 한줄 소개 */}
+        {/* 유저소개 */}
         <p className="text-[16px] text-customGray-600">
           서로를 존중하고 배려하는 여행을 하고 싶습니다.
         </p>
