@@ -4,11 +4,12 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function MyPage(): JSX.Element {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isPersonalOpen, setIsPersonalOpen] = useState<boolean>(true);
+  const [isPasswordOpen, setPasswordOpen] = useState<boolean>(true);
+  const [isActiveOpen, setIsActiveOpen] = useState<boolean>(true);
 
   return (
-    <div className="max-w-[1044px] mx-auto flex gap-[122px] py-8">
-      {/* 왼쪽 사이드바 */}
+    <div className="max-w-[1044px] mx-auto flex gap-[122px] py-8 mb-[166px]">
       <div className="w-[197px] h-[447px] flex flex-col items-center">
         <Image
           src="/defaultAvatar/31.png"
@@ -22,30 +23,49 @@ export default function MyPage(): JSX.Element {
         <p className="text-black text-xl">님!</p>
 
         <div className="mt-6 w-full border-t border-gray-300 pt-4 flex flex-col items-start gap-[10px]">
-          {/* 개인 정보 (토글 버튼) */}
           <button
             type="button"
-            onClick={() => setIsOpen((prev) => !prev)}
-            className="text-xl font-semibold focus:outline-none"
+            onClick={() => setIsPersonalOpen((prev) => !prev)}
+            className={
+              !isPersonalOpen
+                ? "text-[20px] font-pretendard focus:outline-none text-customGray-500"
+                : "text-[20px] font-pretendard font-semibold text-customBlack-400"
+            }
           >
             개인 정보
           </button>
 
-          {/* 하위 항목 */}
-          {isOpen && (
+          {isPersonalOpen && (
             <ul className="pl-2 space-y-2 text-[#707070] text-sm transition-all">
-              <li className="text-[#1a1a1a] font-semibold">비밀번호 변경</li>
+              <li
+                onClick={() => setIsPersonalOpen((prev) => !prev)}
+                className={
+                  !isPersonalOpen
+                    ? "text-[20px] font-pretendard focus:outline-none text-customGray-500"
+                    : "text-[20px] font-pretendard font-semibold text-customBlack-400"
+                }
+              >
+                비밀번호 변경
+              </li>
               <li>내 프로필 변경</li>
             </ul>
           )}
-
-          {/* 고정 항목들 */}
-          <ul className="text-sm">내 활동 내역</ul>
-          <div className="text-sub-200 text-sm">로그 아웃</div>
+          <button
+            type="button"
+            onClick={() => setIsActiveOpen((prev) => !prev)}
+            className={
+              !isActiveOpen
+                ? "text-[20px] font-pretendard  text-customGray-500"
+                : "text-[20px] font-pretendard font-semibold text-customBlack-400"
+            }
+          >
+            내 활동 내역
+          </button>
+          <div className="text-[20px] font-pretendard text-customPink-300">
+            로그 아웃
+          </div>
         </div>
       </div>
-
-      {/* 오른쪽 컨텐츠 영역 */}
       <div className="flex-1 p-8 bg-white rounded-[8px] border border-customGray-400 w-[726px] h-[698px]">
         <div className="flex items-center gap-2 mb-4 ">
           <span className="text-2xl">🔒</span>
