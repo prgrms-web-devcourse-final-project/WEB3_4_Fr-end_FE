@@ -47,7 +47,7 @@ export default function MyReservationCurrentCard({ item }: CardProps) {
               {item.street}
             </div>
           </div>
-          <button className="w-[93px] h-[31px] bg-customGray-600 text-white text-[13px] font-semibold rounded-[8px] px-[22px] hover:bg-customBlue-100">
+          <button className="w-[93px] h-[31px] bg-customGray-600 text-white text-[13px] font-semibold rounded-[8px] px-[22px] hover:bg-customBlue-100 cursor-p">
             예약 취소
           </button>
         </div>

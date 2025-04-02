@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import MyReservationPastCard from "./reservation/MyReservationPastCard";
+import MyReservationPastCard from "./MyReservationPastCard";
 import Link from "next/link";
-import MyReservationCurrentCard from "./reservation/MyReservationCurrentCard";
+import MyReservationCurrentCard from "./MyReservationCurrentCard";
 
 const dummyPastContents = [
   {
@@ -172,23 +172,31 @@ const dummyCurrentContents = [
 ];
 
 export default function ReservationHistory() {
-  const [visibleCount, setVisibleCount] = useState(3); // 추가
+  const [visiblePastCount, setVisiblePastCount] = useState(3);
+  const [visibleCurrentCount, setVisibleCurrentCount] = useState(3);
 
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 3);
+  const handlePastLoadMore = () => {
+    setVisiblePastCount((prev) => prev + 3);
   };
 
-  const visibleCurrentItems = dummyCurrentContents.slice(0, visibleCount);
-  const visiblePastItems = dummyPastContents.slice(0, visibleCount);
-  const hasCurrentMore = visibleCount < dummyCurrentContents.length;
-  const hasPastMore = visibleCount < dummyPastContents.length;
+  const handleCurrentLoadMore = () => {
+    setVisibleCurrentCount((prev) => prev + 3);
+  };
+
+  const visibleCurrentItems = dummyCurrentContents.slice(
+    0,
+    visibleCurrentCount
+  );
+  const visiblePastItems = dummyPastContents.slice(0, visiblePastCount);
+  const hasCurrentMore = visibleCurrentCount < dummyCurrentContents.length;
+  const hasPastMore = visiblePastCount < dummyPastContents.length;
 
   return (
     <div className="w-[726px] min-h-[763px] flex-col">
       <div className="font-bold text-[28px] font-[pretendard] mb-[21px]">
         내 예약 내역
       </div>
-      {dummyCurrentContents.length === 0 ? (
+      {!dummyCurrentContents || dummyCurrentContents.length === 0 ? (
         <div className="w-[726px] bg-customGray-100 px-[25px] py-[30px] rounded-[4px]">
           <p className="font-semibold text-[16px] font-[pretendard]">
             예정된 여행이 없습니다.
@@ -208,10 +216,10 @@ export default function ReservationHistory() {
           ))}
           {hasCurrentMore && (
             <div
-              onClick={handleLoadMore}
-              className="cursor-pointer w-[156px] h-10 px-[61px] py-3 bg-[#202020] rounded-lg inline-flex justify-center items-center gap-2.5 mt-[26px] mx-[285px] mb-[20px]"
+              onClick={handleCurrentLoadMore}
+              className="cursor-pointer w-[156px] h-10 px-[61px] py-3 bg-customBlack-300 rounded-lg inline-flex justify-center items-center gap-2.5 mt-[26px] mx-[285px] mb-[20px] hover:bg-customGray-600"
             >
-              <div className="text-[#f2f2f2] text-[13px] font-semibold font-['Pretendard']">
+              <div className="text-white text-[13px] font-semibold font-['Pretendard']">
                 더보기
               </div>
             </div>
@@ -229,10 +237,10 @@ export default function ReservationHistory() {
       </div>
       {hasPastMore && (
         <div
-          onClick={handleLoadMore}
-          className="cursor-pointer w-[156px] h-10 px-[61px] py-3 bg-[#202020] rounded-lg inline-flex justify-center items-center gap-2.5 mt-[26px] mx-[285px] mb-[113px]"
+          onClick={handlePastLoadMore}
+          className="cursor-pointer w-[156px] h-10 px-[61px] py-3 bg-customBlack-300 rounded-lg inline-flex justify-center items-center gap-2.5 mt-[26px] mx-[285px] mb-[113px] hover:bg-customGray-600"
         >
-          <div className="text-[#f2f2f2] text-[13px] font-semibold font-['Pretendard']">
+          <div className="text-white text-[13px] font-semibold font-['Pretendard']">
             더보기
           </div>
         </div>
