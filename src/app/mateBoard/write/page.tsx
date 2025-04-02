@@ -10,7 +10,7 @@ import { DateRange } from "react-day-picker";
 
 export default function MateWritePage() {
   const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("지역");
+  const [location, setLocation] = useState("지역 검색");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [people, setPeople] = useState("");
   const [content, setContent] = useState("");
@@ -37,8 +37,8 @@ export default function MateWritePage() {
 
       {/* 여행지 & 날짜 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="md:col-span-1 w-2xl">
-          <Dropdown value={location} onChange={setLocation} />
+        <div className="md:col-span-1">
+          <Dropdown value={location} className="w-40" onChange={setLocation} />
         </div>
         <DatePickerWithRange date={dateRange} onChange={setDateRange} />
       </div>

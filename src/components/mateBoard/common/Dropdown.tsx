@@ -8,15 +8,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const categories = ["전체", "서울", "부산", "제주도", "대구"];
 
 export default function Dropdown({
   value,
   onChange,
+  className,
 }: {
   value: string;
   onChange: (value: string) => void;
+  className?: string;
 }) {
   const [search, setSearch] = useState("");
   const filtered = categories.filter((cat) =>
@@ -25,7 +28,10 @@ export default function Dropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex gap-4  border-customGray-300">
+        <Button
+          variant="outline"
+          className={cn("flex gap-4 border-customGray-300", className)}
+        >
           {value}
         </Button>
       </DropdownMenuTrigger>
