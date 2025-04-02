@@ -50,7 +50,7 @@ export default function TodayReservationSection() {
             <Image
               src={box.imageSrc}
               alt={`${box.name} 이미지`}
-              layout="fill"
+              fill
               style={{ objectFit: "cover", filter: "brightness(80%)" }}
             />
             {activeIndex === index && (

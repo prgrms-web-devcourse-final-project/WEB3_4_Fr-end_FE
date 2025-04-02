@@ -44,7 +44,7 @@ export default function HouseDetail() {
           <Image
             src={"/reservationImg/testImg.webp"}
             alt="숙소 메인이미지"
-            layout="fill"
+            fill
             objectFit="cover"
           />
         </div>
@@ -53,7 +53,7 @@ export default function HouseDetail() {
             <Image
               src={"/reservationImg/testImg.webp"}
               alt="숙소 서브이미지"
-              layout="fill"
+              fill
               objectFit="cover"
             />
           </div>
@@ -61,7 +61,7 @@ export default function HouseDetail() {
             <Image
               src={"/reservationImg/testImg.webp"}
               alt="숙소 서브이미지"
-              layout="fill"
+              fill
               objectFit="cover"
             />
           </div>
@@ -69,7 +69,7 @@ export default function HouseDetail() {
             <Image
               src={"/reservationImg/testImg.webp"}
               alt="숙소 서브이미지"
-              layout="fill"
+              fill
               objectFit="cover"
             />
           </div>
@@ -77,7 +77,7 @@ export default function HouseDetail() {
             <Image
               src={"/reservationImg/testImg.webp"}
               alt="숙소 서브이미지"
-              layout="fill"
+              fill
               objectFit="cover"
             />
           </div>
@@ -178,7 +178,7 @@ export default function HouseDetail() {
               <Image
                 src={"/reservationImg/testImg.webp"}
                 alt="객실 이미지"
-                layout="fill"
+                fill
                 objectFit="cover"
               />
             </div>

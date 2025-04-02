@@ -16,7 +16,7 @@ export default function ReservationCard({
       <Image
         src={imageSrc}
         alt={altText}
-        layout="fill"
+        fill
         style={{
           objectFit: "cover",
           filter: "brightness(50%)",
