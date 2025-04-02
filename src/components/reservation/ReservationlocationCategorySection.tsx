@@ -115,7 +115,7 @@ export default function ReservationLocationCategorySection() {
               <Image
                 src={listing.imageSrc}
                 alt={`${listing.name} 이미지`}
-                layout="fill"
+                fill
                 style={{ objectFit: "cover" }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-customBlack-200 to-transparent opacity-80"></div>
