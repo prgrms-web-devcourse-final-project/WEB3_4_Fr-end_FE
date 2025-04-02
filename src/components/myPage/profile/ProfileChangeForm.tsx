@@ -68,11 +68,11 @@ export default function ProfileChangeForm() {
           <button
             type="button"
             onClick={handleUploadClick}
-            className="mt-4 w-[120px] h-[25px] bg-customViloet-200 rounded-lg text-white text-[13px] hover:bg-customBlue-200"
+            className="mt-4 w-[120px] h-[25px] bg-customViloet-200 rounded-lg text-white text-[13px] hover:bg-customBlue-200 cursor-pointer"
           >
             이미지 업로드
           </button>
-          <button className="mt-2  text-customViloet-200 text-[13px] hover:text-customBlue-200">
+          <button className="mt-2  text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer">
             이미지 제거
           </button>
         </div>
@@ -95,7 +95,7 @@ export default function ProfileChangeForm() {
               </p>
             )}
             <button
-              className="text-[#9f99eb] text-[13px] hover:text-customBlue-200"
+              className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
               onClick={toggleEdit}
             >
               {isEditing ? "확인" : "수정"}
@@ -122,7 +122,7 @@ export default function ProfileChangeForm() {
                   value={f.value}
                   onChange={f.onChange}
                   placeholder={f.placeholder}
-                  className="w-full h-[50px] px-2.5 py-2 bg-white rounded outline outline-[#bfbfbf] mt-1 focus:outline-customGray-600"
+                  className="w-full h-[50px] px-2.5 py-2 bg-white rounded outline outline-customGray-300 mt-1 focus:outline-customGray-600"
                 />
                 <p
                   className={`text-customPink-300 text-[13px] mt-1 ${
@@ -133,7 +133,7 @@ export default function ProfileChangeForm() {
                 </p>
               </div>
             ))}
-            <button className=" ml-[272px] mt-[18px] bg-black text-white w-[93px] h-[30px] rounded-lg text-[13px] font-bold font-pretendard hover:bg-customBlue-200">
+            <button className=" ml-[272px] mt-[18px] bg-black text-white w-[93px] h-[30px] rounded-[8px] text-[13px] font-bold font-pretendard hover:bg-customBlue-200 cursor-pointer">
               수정 완료
             </button>
             {isSubscribed === true ? (
@@ -149,7 +149,7 @@ export default function ProfileChangeForm() {
                 </div>
                 <button
                   onClick={toggleSubscribed}
-                  className="bg-black text-white text-[13px] font-bold rounded-[8px] w-[93px] h-[30px] mt-[6px] ml-[272px] mb-[27px] hover:bg-customBlue-200"
+                  className="bg-black text-white text-[13px] font-bold rounded-[8px] w-[93px] h-[30px] mt-[6px] ml-[272px] mb-[27px] hover:bg-customBlue-200 cursor-pointer"
                 >
                   구독 취소
                 </button>
