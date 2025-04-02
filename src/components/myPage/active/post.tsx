@@ -1,4 +1,5 @@
 import Image from "next/image";
+import dayjs from "dayjs";
 
 const dummy = {
   id: 1,
@@ -11,10 +12,12 @@ const dummy = {
 };
 
 export default function Post() {
-    const start = dayjs(dummy.startDate);
-    const end = dayjs(dummy.endDate);
-    const duration = end.diff(start, 'day') + 1;
-    const formatted = `${start.format(`YY.MM.DD`)} - ${end.format(`YY.MM.DD`)} (${duration}일)`
+  const start = dayjs(dummy.startDate);
+  const end = dayjs(dummy.endDate);
+  const duration = end.diff(start, "day") + 1;
+  const formatted = `${start.format(`YY.MM.DD`)} - ${end.format(
+    `YY.MM.DD`
+  )} (${duration}일)`;
 
   return (
     <div className="w-[210px] min-h-[260px] bg-white outline outline-customGray-400 rounded-[16px] flex-col">
@@ -23,25 +26,25 @@ export default function Post() {
         alt={dummy.title}
         width={210}
         height={181}
-        className="rounded-t-[16px] w-[210px] h-[181px] mb-[15px] object-cover"
+        className="rounded-t-[16px] w-[210px] h-[181px] mb-[5px] object-cover"
       />
-      <div className="p-[15px] flex-col justify-start items-start gap-[5px]">
+      <div className="px-[20px] pb-[20px] flex-col justify-start items-start gap-[5px]">
         <div className="font-bold text-[13px] font-pretendard text-customGray-300">
           {dummy.city}
         </div>
         <div className="font-semibold text-black text-[16px]">
           {dummy.title}
         </div>
-        <div className="flex">
+        <div className="flex items-center">
           <Image
             src="/icons/Vector.png"
             alt="Calendar"
-            width={15}
+            width={13}
             height={13}
-            className="w-[15px] h-[13px]"
+            className="w-[13px] h-[13px] mr-[2px]"
           />
-          <div>
-            {dummy.startDate} - {dummy.endDate}
+          <div className="text-[13px] font-normal font-pretendard text-customGray-500">
+            {formatted}
           </div>
         </div>
       </div>
