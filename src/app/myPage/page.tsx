@@ -1,11 +1,11 @@
 "use client";
 
 import UserSidebar from "@/components/myPage/UserSidebar";
-import PasswordChangeForm from "@/components/myPage/PasswordChangeForm";
-import ProfileChangeForm from "@/components/myPage/ProfileChangeForm";
-import ReservationHistory from "@/components/myPage/ReservationHistory";
-import ActiveLog from "@/components/myPage/ActiveLog";
-import ScheduleManager from "@/components/myPage/ScheduleManager";
+import PasswordChangeForm from "@/components/myPage/password/PasswordChangeForm";
+import ProfileChangeForm from "@/components/myPage/profile/ProfileChangeForm";
+import ReservationHistory from "@/components/myPage/reservation/ReservationHistory";
+import ActiveLog from "@/components/myPage/active/ActiveLog";
+import ScheduleManager from "@/components/myPage/schedule/ScheduleManager";
 import { useState } from "react";
 
 export default function MyPage() {

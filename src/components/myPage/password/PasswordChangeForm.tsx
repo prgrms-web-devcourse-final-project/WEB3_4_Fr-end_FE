@@ -104,12 +104,12 @@ export default function PasswordChangeForm() {
         </div>
         <button
           type="submit"
-          className="bg-black text-white w-[196px] h-[39] py-2 mx-[265px] mt-[30px] mb-[169px] rounded-[8px] hover:opacity-90 "
+          className="bg-black text-white w-[196px] h-[39] py-2 mx-[265px] mt-[30px] mb-[169px] rounded-[8px] hover:bg-customGray-600 cursor-pointer"
         >
           수정 완료
         </button>
       </form>
-      <button className="absolute top-6 right-6 text-sm text-customBlue-200 hover:underline">
+      <button className="absolute top-6 right-6 text-sm text-customBlue-200 hover:underline hover:text-red-600 cursor-pointer">
         회원탈퇴
       </button>
     </div>
