@@ -19,12 +19,7 @@ export default function ReservationSearchCard({
     <>
       <div className="w-full h-80 border border-customGray-300 rounded-2xl overflow-hidden">
         <div className="w-full h-50 relative">
-          <Image
-            src={imageSrc}
-            alt="검색 이미지"
-            layout="fill"
-            objectFit="cover"
-          />
+          <Image src={imageSrc} alt="검색 이미지" fill objectFit="cover" />
         </div>
         <div className="m-3">
           <div className="flex gap-2">

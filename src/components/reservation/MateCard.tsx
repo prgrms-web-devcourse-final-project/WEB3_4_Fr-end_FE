@@ -23,12 +23,7 @@ export default function MateCard({
     <>
       <div className="w-[302px] h-full border border-customGray-300 rounded-tr-2xl">
         <div className="w-full h-49 relative overflow-hidden rounded-tr-2xl">
-          <Image
-            src={imageSrc}
-            alt="메이트카드 이미지"
-            layout="fill"
-            quality={100}
-          />
+          <Image src={imageSrc} alt="메이트카드 이미지" fill quality={100} />
         </div>
         <div className="my-3 mx-4">
           <div className="font-semibold text-xl whitespace-nowrap overflow-hidden overflow-ellipsis">

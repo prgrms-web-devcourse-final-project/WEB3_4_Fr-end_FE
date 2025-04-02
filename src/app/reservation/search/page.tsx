@@ -137,7 +137,7 @@ export default function Search() {
         <Image
           src={"/reservationImg/reservationBanner.webp"}
           alt="예약메인배너이미지"
-          layout="fill"
+          fill
           style={{ objectFit: "cover" }}
           quality={100}
           priority
