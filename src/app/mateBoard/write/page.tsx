@@ -5,23 +5,27 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import Dropdown from "@/components/mateBoard/common/Dropdown";
-import DatePicker from "@/components/mateBoard/mateBoardWriting/DatePicker";
+import { DatePickerWithRange } from "@/components/mateBoard/mateBoardWriting/DatePickerWithRange";
+import { DateRange } from "react-day-picker";
 
 export default function MateWritePage() {
   const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("지역을 검색해 주세요");
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [location, setLocation] = useState("지역");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [people, setPeople] = useState("");
   const [content, setContent] = useState("");
   const [images, setImages] = useState<File[]>([]);
 
   const handleSubmit = () => {
     // post logic 여기에
-    console.log({ title, location, date, people, content, images });
+    console.log({ title, location, dateRange, people, content, images });
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10 space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-3xl mx-auto px-4 py-10 space-y-6"
+    >
       <h1 className="text-2xl font-bold text-center">게시글 작성</h1>
 
       {/* 제목 */}
@@ -33,10 +37,10 @@ export default function MateWritePage() {
 
       {/* 여행지 & 날짜 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="md:col-span-1 w-full">
+        <div className="md:col-span-1 w-2xl">
           <Dropdown value={location} onChange={setLocation} />
         </div>
-        <DatePicker />
+        <DatePickerWithRange date={dateRange} onChange={setDateRange} />
       </div>
 
       {/* 모집 인원 */}
@@ -84,6 +88,6 @@ export default function MateWritePage() {
           작성하기
         </Button>
       </div>
-    </div>
+    </form>
   );
 }

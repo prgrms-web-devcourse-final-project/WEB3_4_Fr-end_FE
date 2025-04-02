@@ -25,10 +25,7 @@ export default function Dropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className="flex gap-4 w-[80px] border-customGray-300"
-        >
+        <Button variant="outline" className="flex gap-4  border-customGray-300">
           {value}
         </Button>
       </DropdownMenuTrigger>
