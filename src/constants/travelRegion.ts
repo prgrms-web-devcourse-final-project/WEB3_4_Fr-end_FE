@@ -1,4 +1,3 @@
-// 지역 Enum value-label 쌍
 export const travelRegions = [
   { value: "ALL", label: "전국" },
   { value: "SEOUL", label: "서울" },
