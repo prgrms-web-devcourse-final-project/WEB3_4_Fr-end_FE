@@ -53,7 +53,7 @@ export default function ProfileChangeForm() {
       <div className="flex gap-8">
         <div className="flex flex-col items-center mt-[95px] ml-[95px]">
           <Image
-            src=""
+            src="/defaultAvatar/31.png"
             alt="프로필 이미지"
             width={150}
             height={150}
