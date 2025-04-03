@@ -1,12 +1,16 @@
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+'use client';
 
-interface NavItemProps {
+import { CSS } from '@dnd-kit/utilities';
+import { useSortable } from '@dnd-kit/sortable';
+import { motion } from 'framer-motion';
+
+interface Props {
   id: string;
   label: string;
+  isEditing: boolean;
 }
 
-const CalendarNavItem = ({ id, label }: NavItemProps) => {
+const CalendarNavItem = ({ id, label }: Props) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
   const style = {
@@ -15,7 +19,7 @@ const CalendarNavItem = ({ id, label }: NavItemProps) => {
   };
 
   return (
-    <div
+    <motion.div
       ref={setNodeRef}
       style={style}
       {...attributes}
@@ -23,7 +27,7 @@ const CalendarNavItem = ({ id, label }: NavItemProps) => {
       className="p-2 my-1 bg-gray-100 rounded-md cursor-grab hover:bg-gray-200 transition-all"
     >
       {label}
-    </div>
+    </motion.div>
   );
 };
 

@@ -18,7 +18,7 @@ const FCalendar = () => {
         selectable={true}      // 날짜 선택 가능
         dateClick={handleDateClick}
         events={[
-          { title: '회의', date: '2025-04-10' },
+          { title: '부산', start: '2025-04-12', end: '2025-04-15' },
           { title: '프로젝트 마감', date: '2025-04-20' },
         ]}
         height="auto"
