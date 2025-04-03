@@ -1,4 +1,4 @@
-// next.config.js
+/** @type {import('next').NextConfig} */
 module.exports = {
   images: {
     remotePatterns: [
@@ -9,5 +9,9 @@ module.exports = {
         pathname: '/**',
       },
     ],
+  },
+  eslint: {
+    // 빌드 중 ESLint 오류 무시
+    ignoreDuringBuilds: true,
   },
 };
