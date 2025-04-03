@@ -5,12 +5,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import { cn } from "@/lib/utils";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 
-const categories = ["전체", "서울", "부산", "제주도", "대구"];
+import { travelRegions } from "@/constants/travelRegion";
 
 export default function Dropdown({
   value,
@@ -22,8 +24,11 @@ export default function Dropdown({
   className?: string;
 }) {
   const [search, setSearch] = useState("");
-  const filtered = categories.filter((cat) =>
-    cat.toLowerCase().includes(search.toLowerCase())
+
+  const selected = travelRegions.find((region) => region.value === value);
+
+  const filtered = travelRegions.filter((region) =>
+    region.label.toLowerCase().includes(search.toLowerCase())
   );
   return (
     <DropdownMenu>
@@ -32,28 +37,28 @@ export default function Dropdown({
           variant="outline"
           className={cn("flex gap-4 border-customGray-300", className)}
         >
-          {value}
+          {selected?.label ?? "지역선택"}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-50" align="start" sideOffset={10}>
+      <DropdownMenuContent className="w-50 h-60" align="start" sideOffset={10}>
         <div className="px-2 py-2">
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="카테고리 검색"
-            className="h-8 text-sm"
+            placeholder="지역 검색"
+            className="h-6 text-sm"
           />
         </div>
 
-        {filtered.map((cat) => (
+        {filtered.map((region) => (
           <DropdownMenuItem
-            key={cat}
+            key={region.value}
             onClick={() => {
-              onChange(cat);
+              onChange(region.value);
               setSearch("");
             }}
           >
-            {cat}
+            {region.label}
           </DropdownMenuItem>
         ))}
 
