@@ -1,5 +1,9 @@
-function calendarDetailPage() {
-  return <div>calendarDetailPage</div>;
+
+export default function page() {
+  return (
+    <div>
+      
+    </div>
+  )
 }
 
-export default calendarDetailPage;
