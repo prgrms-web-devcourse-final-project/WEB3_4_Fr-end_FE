@@ -42,7 +42,7 @@ export default function UserSidebar({
           />
           <MenuSection
             title="내 활동 내역"
-            items={["내 예약 내역", "내 활동 내역", "내 스케줄 관리"]}
+            items={["내 예약 내역", "내 활동 내역", "내 캘린더 관리"]}
             selectedSection={selectedSection}
             selectedMenu={selectedMenu}
             onSelectSection={onSelectSection}

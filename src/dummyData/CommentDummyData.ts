@@ -91,4 +91,94 @@ export const commentDummyData: CommentData[] = [
       "따뜻한 봄바람 맞으며 남산에서 돗자리 깔고 소풍하실 분 모집해요. 김밥과 과일 챙겨가고 싶어요. 산책하고 이야기 나누는 여유로운 하루 기대합니다. 날씨 좋을 때 사진도 함께 찍고, 벚꽃이 피면 더할 나위 없을 거예요. 혼자보다는 둘이 더 즐거운 소풍이 될 수 있을 거예요. 음악도 살짝 틀고, 잔디밭에서 햇살 즐기며 치유되는 하루 보내봐요!Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut vitae beatae qui, exercitationem voluptatum aspernatur porro aut cumque unde sequi assumenda, tempore temporibus iste a molestiae. Ducimus accusamus qui magni.",
     avatar: "45.png",
   },
+  {
+    id: 11,
+    title: "4월 초 속초 여행",
+    author: "여행좋아",
+    date: "2025-03-21",
+    content:
+      "벚꽃이 필 무렵 속초를 가고 싶어요. 바다 구경도 하고 아바이순대 꼭 먹을 예정입니다. 바다 앞에서 산책도 하고, 맛집 리스트는 공유드릴게요.",
+    avatar: "57.png",
+  },
+  {
+    id: 12,
+    title: "대구 근교 드라이브 같이 가요",
+    author: "드라이브마니아",
+    date: "2025-03-20",
+    content:
+      "평일 저녁 대구 근교로 드라이브 다녀오실 분 계신가요? 간단한 야경 구경이나 카페 방문 계획 중입니다. 혼자보단 함께여서 더 좋을 것 같아요!",
+    avatar: "60.png",
+  },
+  {
+    id: 13,
+    title: "카페 투어 멤버 모집",
+    author: "카페인중독",
+    date: "2025-03-20",
+    content:
+      "서울 시내 분위기 좋은 카페들 리스트 만들어 투어하고 있어요. 커피 좋아하시고 사진 찍는 거 즐기시는 분들 환영입니다. 요일은 주말 선호예요!",
+    avatar: "63.png",
+  },
+  {
+    id: 14,
+    title: "5월 제주 렌트카 비용 나눌 분",
+    author: "제주고고",
+    date: "2025-03-19",
+    content:
+      "제주도 3박 4일 여행 예정입니다. 렌트카 예약했는데 비용을 함께 나누실 분 찾습니다. 숙소도 공유하면 더 좋을 것 같아요. 일정은 융통성 있어요~",
+    avatar: "avatar1.png",
+  },
+  {
+    id: 15,
+    title: "전국일주 버킷리스트 도전!",
+    author: "도전왕",
+    date: "2025-03-18",
+    content:
+      "1주일간 전국을 도는 여행 계획입니다. 각 지역에서 하루씩 묵고 맛집과 명소 중심으로 다닐 예정입니다. 열정 있으신 분들 함께해요!",
+    avatar: "avatar2.png",
+  },
+  {
+    id: 16,
+    title: "군산 맛집투어 갑시다",
+    author: "먹방러",
+    date: "2025-03-18",
+    content:
+      "군산에 유명한 빵집과 식당들 투어해요. 빵순이, 빵돌이 모두 환영입니다. 자차 있으니 이동도 편하게 함께할 수 있어요. 사진 찍기 좋은 곳도 많습니다!",
+    avatar: "avrtar3.png",
+  },
+  {
+    id: 17,
+    title: "북촌 한옥마을 산책",
+    author: "산책좋아",
+    date: "2025-03-17",
+    content:
+      "북촌 한옥마을 골목골목 산책하며 여유를 즐기고 싶어요. 날씨 좋은 날 따뜻한 햇살 받으며 걷는 게 목표입니다. 사진 찍기 좋은 포인트도 알려드려요!",
+    avatar: "31.png",
+  },
+  {
+    id: 18,
+    title: "4월 초 남이섬 봄꽃 나들이",
+    author: "꽃구경러",
+    date: "2025-03-17",
+    content:
+      "남이섬의 봄꽃 구경을 함께할 분을 찾고 있어요. 입장권은 미리 예매해두었고, 사진과 영상 촬영 좋아하시는 분이면 정말 좋겠습니다. 도시락도 싸갈 예정입니다!",
+    avatar: "45.png",
+  },
+  {
+    id: 19,
+    title: "경주 벚꽃축제 함께 해요",
+    author: "벚꽃사랑",
+    date: "2025-03-16",
+    content:
+      "경주의 벚꽃이 활짝 피는 시즌에 맞춰 함께 다녀오실 분을 찾습니다. DSLR이나 미러리스 있으신 분이면 더욱 좋아요. 꽃길 산책 같이해요!",
+    avatar: "57.png",
+  },
+  {
+    id: 20,
+    title: "평창 대관령 목장 출사",
+    author: "사진작가지망생",
+    date: "2025-02-01",
+    content:
+      "평창 대관령 목장에서의 아침 풍경을 담고 싶어요. 일출 시간에 맞춰 새벽에 출발할 예정입니다. 풍경 사진 좋아하는 분들 함께해요!",
+    avatar: "60.png",
+  },
 ];
