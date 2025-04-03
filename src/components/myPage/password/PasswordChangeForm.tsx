@@ -19,6 +19,8 @@ export default function PasswordChangeForm() {
     e.preventDefault();
 
     if (!validatePassword(newPassword)) {
+      //vercel 배포용 임시
+      console.log(error);
       setError("비밀번호가 틀립니다! (숫자+영어 대문자+소문자+특수문자)");
       return;
     }
