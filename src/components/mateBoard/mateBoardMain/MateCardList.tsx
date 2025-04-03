@@ -1,5 +1,5 @@
-import MateCard from "./MateCard";
-import type { MateCardData } from "@/../../types/MateCardData";
+import MateCard from "@/components/mateBoard/mateBoardMain/MateCard";
+import type { MateCardData } from "@/types/MateCardData";
 
 export default function MateCardList({ cards }: { cards: MateCardData[] }) {
   return (

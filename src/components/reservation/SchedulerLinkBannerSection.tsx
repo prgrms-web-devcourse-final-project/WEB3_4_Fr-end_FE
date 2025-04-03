@@ -8,7 +8,7 @@ export default function SchedulerLinkBannerSection() {
         <Image
           src={"/reservationImg/linkBanner.webp"}
           alt="스케쥴러링크배너"
-          layout="fill"
+          fill
           style={{ objectFit: "cover", filter: "brightness(70%)" }}
           quality={100}
         />
