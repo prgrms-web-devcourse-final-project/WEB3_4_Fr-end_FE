@@ -3,6 +3,15 @@
 import { useEffect } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
+interface MapCenter {
+  lat: number;
+  lng: number;
+}
+
+interface KakaoMapProps {
+  center?: MapCenter;
+}
+
 const KakaoMap = () => {
   useEffect(() => {
     if (!window.kakao) {
