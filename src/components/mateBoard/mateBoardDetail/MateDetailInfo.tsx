@@ -1,13 +1,15 @@
 import Image from "next/image";
+import ReportButton from "@/components/mateBoard/mateBoardDetail/ReportButton";
 
 export default function MateDetailPage() {
   return (
     <div className=" py-12 max-w-5xl mx-auto space-y-12">
       {/* 제목 */}
-      <div>
+      <div className="flex items-center w-full">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">
           6월 말 제주도 동행 구합니다.
         </h1>
+        <div className="ml-auto"></div>
       </div>
 
       {/* 여행 일정 */}
@@ -67,9 +69,10 @@ export default function MateDetailPage() {
               height={48}
             />
           </div>
-          <div>
-            <div className="text-[16px] font-semibold text-customBlack-200">
-              닉네임
+          <div className="w-full">
+            <div className="flex items-center justify-between text-[16px] font-semibold text-customBlack-200">
+              <span>닉네임</span>
+              <ReportButton />
             </div>
             <div className="text-[16px] text-customGray-600">나이 · 성별</div>
           </div>

@@ -4,22 +4,20 @@ import { CalendarIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { MateCardData } from "@/types/MateCardData";
-import { useMateDetailStore } from "@/lib/store/useMateDetailStore";
+import LikeButton from "@/components/mateBoard/mateBoardMain/LikeButton";
+import CommentCount from "@/components/mateBoard/mateBoardMain/CommentCount";
 
 export default function MateCard({ data }: { data: MateCardData }) {
-  //MateCard의 데이터들을 Zustand store에 저장
   const router = useRouter();
-  const setDetail = useMateDetailStore((state) => state.setDetail);
 
   const handleClick = () => {
-    setDetail(data);
     router.push(`/mateBoard/detail/${data.id}`);
   };
 
   return (
     <div
       onClick={handleClick}
-      className="w-full h-[300px] rounded-2xl bg-gray-50 p-6 flex justify-between
+      className="w-full h-[350px] rounded-2xl bg-gray-50 p-6 flex justify-between
       cursor-pointer hover:shadow-lg hover:scale-[1.02] transition-transform duration-300"
     >
       <div className="flex flex-col gap-3 w-[60%]">
@@ -42,12 +40,12 @@ export default function MateCard({ data }: { data: MateCardData }) {
         <h2 className="text-[28px] font-bold">{data.title}</h2>
 
         {/* 설명 */}
-        <p className="text-muted-foreground text-[24px] overflow-hidden">
+        <p className="text-muted-foreground text-[20px] overflow-hidden">
           {data.description}
         </p>
 
         {/* 유저 정보 */}
-        <div className="flex items-center gap-2 mt-auto">
+        <div className="flex items-center gap-x-2 mt-auto">
           <Image
             src={data.user.imageUrl}
             alt="프로필"
@@ -55,16 +53,26 @@ export default function MateCard({ data }: { data: MateCardData }) {
             height={24}
             className="rounded-full"
           />
-          <span className="text-[20px] text-muted-foreground">
+          <span className="text-[16px] text-muted-foreground">
             {data.user.name} · {data.user.age} · {data.user.gender}
           </span>
         </div>
 
         {/* 날짜 */}
-        <div className="flex items-center text-[20px] text-muted-foreground">
+        <div className="flex items-center text-sm text-muted-foreground">
           <CalendarIcon className="w-4 h-4 mr-2" />
           {data.period.startDate} - {data.period.endDate}(
           {data.period.durationText})
+        </div>
+        <div className="flex items-center gap-x-3 text-sm">
+          <LikeButton
+            count={5}
+            onclick={(e) => {
+              e.stopPropagation();
+              alert("좋아요 완료");
+            }}
+          />
+          <CommentCount count={2} />
         </div>
       </div>
 
