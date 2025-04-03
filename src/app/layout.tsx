@@ -5,6 +5,7 @@ import Container from "@/components/global/Container";
 import Providers from "./providers";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "PlanIt",
@@ -37,6 +38,12 @@ export default function RootLayout({
       className={`${pretendard.variable} ${paperlogy.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <Script
+          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=services&autoload=false`}
+          strategy="beforeInteractive"
+        />
+      </head>
       <body className={pretendard.className}>
         <Providers>
           <Header />
