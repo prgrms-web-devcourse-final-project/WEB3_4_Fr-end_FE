@@ -3,6 +3,7 @@ import Accompany from "./accompany";
 import Comment from "./comment";
 import Post from "./post";
 import { dummyTravelPosts } from "@/dummyData/TravelPosts";
+import { commentDummyData } from "@/dummyData/CommentDummyData";
 
 export default function ActiveLog() {
   const [selectedMenu, setSelectedMenu] = useState<string>("작성한 게시물");
@@ -11,7 +12,7 @@ export default function ActiveLog() {
       case "작성한 게시물":
         return <Post posts={dummyTravelPosts} />;
       case "작성한 댓글":
-        return <Comment />;
+        return <Comment comments={commentDummyData}/>;
       case "동행 목록":
         return <Accompany />;
       default:
