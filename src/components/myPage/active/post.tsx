@@ -22,7 +22,6 @@ export default function Post({ posts }: PostProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = 9;
 
-  const startIdx = (currentPage - 1) * postsPerPage;
   const currentPosts = posts.slice(0, currentPage * postsPerPage);
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
@@ -50,7 +49,7 @@ export default function Post({ posts }: PostProps) {
                 className="rounded-t-[16px] w-[210px] h-[181px] mb-[5px] object-cover"
               />
               <div className="px-[20px] pb-[20px] flex-col justify-start items-start gap-[5px]">
-                <div className="font-bold text-[13px] font-pretendard text-customGray-300">
+                <div className="font-bold text-[13px] font-pretendard text-customGray-700">
                   {post.city}
                 </div>
                 <div className="font-semibold text-black text-[16px]">

@@ -28,7 +28,7 @@ export default function MyPage() {
           return <ReservationHistory />;
         case "내 활동 내역":
           return <ActiveLog />;
-        case "내 스케줄 관리":
+        case "내 캘린더 관리":
           return <ScheduleManager />;
         default:
           return null;
