@@ -1,28 +1,43 @@
 "use client";
 
-import { FormItem, FormLabel, FormControl } from "@/components/ui/form";
-import { DateRange } from "react-day-picker";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import { DatePickerWithRange } from "@/components/mateBoard/mateBoardWriting/DatePickerWithRange";
+import { Control } from "react-hook-form";
+import { MateFormType } from "@/lib/mate/mateFormSchema";
+import { DateRange } from "react-day-picker";
 
 type MateDateRangeFieldProps = {
-  date: DateRange | undefined;
-  onChange: (range: DateRange | undefined) => void;
+  control: Control<MateFormType>;
 };
 
 export default function MateDateRangeField({
-  date,
-  onChange,
+  control,
 }: MateDateRangeFieldProps) {
   return (
-    <FormItem className="w-1/2">
-      <FormLabel className="text-[20px] font-bold mb-2">여행 날짜</FormLabel>
-      <FormControl>
-        <DatePickerWithRange
-          date={date}
-          onChange={onChange}
-          className="w-full"
-        />
-      </FormControl>
-    </FormItem>
+    <FormField
+      control={control}
+      name="dateRange"
+      render={({ field }) => (
+        <FormItem className="w-1/2">
+          <FormLabel className="text-[20px] font-bold mb-2">
+            여행 날짜
+          </FormLabel>
+          <FormControl>
+            <DatePickerWithRange
+              date={field.value as DateRange}
+              onChange={field.onChange}
+              className="w-full"
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }

@@ -1,14 +1,12 @@
 import { DateRange } from "react-day-picker";
+import { MateFormType } from "@/lib/mate/mateFormSchema";
 
-export function buildMatePayload(form: {
-  title: string;
-  location: string;
-  dateRange?: DateRange;
-  people: number;
-  content: string;
-  images?: File[];
-  mateGender: string;
-}) {
+export function buildMatePayload(
+  form: MateFormType & {
+    mateGender: string;
+    images?: File[];
+  }
+) {
   const formData = new FormData();
   formData.append("title", form.title);
   formData.append("travel_region", form.location);

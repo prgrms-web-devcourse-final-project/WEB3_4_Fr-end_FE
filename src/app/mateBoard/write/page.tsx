@@ -3,11 +3,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { DateRange } from "react-day-picker";
-import { isBefore, startOfToday } from "date-fns";
 
 import MateTitleField from "@/components/mateBoard/mateBoardWriting/MateTitleField";
 import MateRegionField from "@/components/mateBoard/mateBoardWriting/MateRegionField";
@@ -17,59 +14,37 @@ import MateGenderSelect from "@/components/mateBoard/mateBoardWriting/MateGender
 import ImageUpload from "@/components/mateBoard/mateBoardWriting/MateImageUploader";
 import ContentTextarea from "@/components/mateBoard/mateBoardWriting/MateContentField";
 import { buildMatePayload } from "@/lib/mate/buildMatePayload";
-
-const formSchema = z.object({
-  title: z.string().min(5, "제목은 최소 5글자").max(30, "제목은 30글자 이하"),
-  dateRange: z
-    .object({
-      from: z.date({ required_error: "시작 날짜를 선택해주세요" }),
-      to: z.date({ required_error: "종료 날짜를 선택해주세요" }),
-    })
-    .refine((range) => !isBefore(range.from, startOfToday()), {
-      message: "오늘 이후 날짜를 선택해주세요",
-      path: ["from"],
-    }),
-  people: z
-    .number({ required_error: "모집 인원을 입력해주세요" })
-    .min(1, "1명 이상이어야 합니다"),
-  content: z.string().min(20, "내용은 최소 20자 이상이어야 합니다."),
-});
+import { mateFormSchema, type MateFormType } from "@/lib/mate/mateFormSchema";
 
 export default function MateWritingForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [images, setImages] = useState<File[]>([]);
+  const [mateGender, setMateGender] = useState<string>("NO_PREFERENCE");
+
+  const form = useForm<MateFormType>({
+    resolver: zodResolver(mateFormSchema),
     defaultValues: {
       title: "",
-      dateRange: undefined,
+      dateRange: {
+        from: undefined,
+        to: undefined,
+      },
       people: 1,
       content: "",
+      location: "지역 검색",
+      mateGender: "무관",
     },
   });
 
-  const [location, setLocation] = useState("지역 검색");
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [people, setPeople] = useState<number>(1);
-  const [content, setContent] = useState("");
-  const [images, setImages] = useState<File[]>([]);
-  const [mateGender, setMateGender] = useState("NO_PREFERENCE");
-
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: MateFormType) => {
     const formData = buildMatePayload({
       ...values,
-      location,
-      dateRange,
-      people,
-      content,
-      images,
       mateGender,
+      images,
     });
 
     console.log({
       ...values,
-      location,
-      dateRange,
-      people,
-      content,
+      mateGender,
       images,
     });
   };
@@ -87,17 +62,17 @@ export default function MateWritingForm() {
           <MateTitleField control={form.control} />
 
           <div className="flex justify-between gap-4">
-            <MateRegionField value={location} onChange={setLocation} />
-            <MateDateRangeField date={dateRange} onChange={setDateRange} />
+            <MateRegionField control={form.control} />
+            <MateDateRangeField control={form.control} />
           </div>
 
-          <MatePeopleField people={people} onChange={setPeople} />
+          <MatePeopleField control={form.control} />
 
           <MateGenderSelect value={mateGender} onChange={setMateGender} />
 
           <ImageUpload images={images} setImages={setImages} />
 
-          <ContentTextarea content={content} setContent={setContent} />
+          <ContentTextarea control={form.control} />
 
           <div className="text-center">
             <Button

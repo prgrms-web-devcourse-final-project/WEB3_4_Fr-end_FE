@@ -1,30 +1,43 @@
 "use client";
 
-import { FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import { Control } from "react-hook-form";
 import { Input } from "@/components/ui/input";
+import { MateFormType } from "@/lib/mate/mateFormSchema";
 
 type MatePeopleFieldProps = {
-  people: number;
-  onChange: (value: number) => void;
+  control: Control<MateFormType>;
 };
 
-export default function MatePeopleField({
-  people,
-  onChange,
-}: MatePeopleFieldProps) {
+export default function MatePeopleField({ control }: MatePeopleFieldProps) {
   return (
-    <FormItem>
-      <FormLabel className="text-[20px] font-bold mb-2">모집 인원</FormLabel>
-      <FormControl>
-        <Input
-          type="number"
-          name="people"
-          className="w-1/4"
-          placeholder="모집 인원"
-          value={people}
-          onChange={(e) => onChange(Number(e.target.value))}
-        />
-      </FormControl>
-    </FormItem>
+    <FormField
+      control={control}
+      name="people"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="text-[20px] font-bold mb-2">
+            모집 인원
+          </FormLabel>
+          <FormControl>
+            <Input
+              {...field}
+              type="number"
+              className="w-1/4"
+              placeholder="모집 인원"
+              value={field.value ?? ""}
+              onChange={(e) => field.onChange(Number(e.target.value))}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }

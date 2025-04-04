@@ -1,30 +1,39 @@
 "use client";
 
-import { FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import {
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormField,
+  FormMessage,
+} from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { Dispatch, SetStateAction } from "react";
+import { Control } from "react-hook-form";
+import { MateFormType } from "@/lib/mate/mateFormSchema";
 
 type ContentTextareaProps = {
-  content: string;
-  setContent: Dispatch<SetStateAction<string>>;
+  control: Control<MateFormType>;
 };
 
-export default function ContentTextarea({
-  content,
-  setContent,
-}: ContentTextareaProps) {
+export default function ContentTextarea({ control }: ContentTextareaProps) {
   return (
-    <FormItem>
-      <FormLabel className="text-[20px] font-bold mb-2">내용</FormLabel>
-      <FormControl>
-        <Textarea
-          placeholder="내용을 입력해주세요"
-          id="content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="h-40"
-        />
-      </FormControl>
-    </FormItem>
+    <FormField
+      control={control}
+      name="content"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="text-[20px] font-bold mb-2">내용</FormLabel>
+          <FormControl>
+            <Textarea
+              placeholder="내용을 입력해주세요"
+              className="h-40"
+              {...field}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }
