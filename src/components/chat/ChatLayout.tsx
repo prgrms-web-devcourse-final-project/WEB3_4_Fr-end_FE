@@ -34,7 +34,7 @@ export default function ChatLayout() {
   const [selectedChat, setSelectedChat] = useState<GroupChat | null>(null);
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-170 bg-white gap-x-5">
       <ChatSidebar
         chats={sampleChats}
         onSelectChat={setSelectedChat}
