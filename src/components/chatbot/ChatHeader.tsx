@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { DialogTitle } from "@/components/ui/dialog";
-import { MessageSquare } from "lucide-react";
 import Image from "next/image";
 
 interface ChatHeaderProps {
