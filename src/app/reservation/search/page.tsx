@@ -4,7 +4,8 @@ import ReservationPagination from "@/components/reservation/ReservationPaginatio
 import ReservationSearchCard from "@/components/reservation/ReservationSearchCard";
 import { useDebounce } from "@/hooks/useDebounce";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 
 const mockData = [
@@ -14,6 +15,7 @@ const mockData = [
     houseType: "게스트하우스",
     houseName: "강남스테이힐(Gangnam Stay Hill)",
     location: "서울특별시 강남구 테헤란로13길 65",
+    id: "1",
   },
   {
     imageSrc: "/reservationImg/testImg.webp",
@@ -21,6 +23,7 @@ const mockData = [
     houseType: "호텔",
     houseName: "해운대블리스(Bliss Hotel)",
     location: "부산광역시 해운대구 우동 123-45",
+    id: "1",
   },
   {
     imageSrc: "/reservationImg/testImg.webp",
@@ -28,6 +31,7 @@ const mockData = [
     houseType: "리조트",
     houseName: "제주오션뷰(Jeju Ocean View)",
     location: "제주특별자치도 서귀포시 중문로 99",
+    id: "1",
   },
   {
     imageSrc: "/reservationImg/testImg.webp",
@@ -35,6 +39,7 @@ const mockData = [
     houseType: "펜션",
     houseName: "인천바다향기(Incheon Sea Breeze)",
     location: "인천광역시 연수구 송도동 89-12",
+    id: "1",
   },
   {
     imageSrc: "/reservationImg/testImg.webp",
@@ -42,6 +47,7 @@ const mockData = [
     houseType: "게스트하우스",
     houseName: "강남스테이힐(Gangnam Stay Hill)",
     location: "서울특별시 강남구 테헤란로13길 65",
+    id: "1",
   },
   {
     imageSrc: "/reservationImg/testImg.webp",
@@ -49,6 +55,7 @@ const mockData = [
     houseType: "호텔",
     houseName: "해운대블리스(Bliss Hotel)",
     location: "부산광역시 해운대구 우동 123-45",
+    id: "1",
   },
   {
     imageSrc: "/reservationImg/testImg.webp",
@@ -56,6 +63,7 @@ const mockData = [
     houseType: "리조트",
     houseName: "제주오션뷰(Jeju Ocean View)",
     location: "제주특별자치도 서귀포시 중문로 99",
+    id: "1",
   },
   {
     imageSrc: "/reservationImg/testImg.webp",
@@ -63,6 +71,7 @@ const mockData = [
     houseType: "펜션",
     houseName: "인천바다향기(Incheon Sea Breeze)",
     location: "인천광역시 연수구 송도동 89-12",
+    id: "1",
   },
   {
     imageSrc: "/reservationImg/testImg.webp",
@@ -70,6 +79,7 @@ const mockData = [
     houseType: "리조트",
     houseName: "제주오션뷰(Jeju Ocean View)",
     location: "제주특별자치도 서귀포시 중문로 99",
+    id: "1",
   },
   {
     imageSrc: "/reservationImg/testImg.webp",
@@ -77,18 +87,48 @@ const mockData = [
     houseType: "펜션",
     houseName: "바다향기(Incheon Sea Breeze)",
     location: "인천광역시 연수구 송도동 89-12",
+    id: "1",
   },
 ];
 
 export default function Search() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 8;
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
-  const [searchInput, setSearchInput] = useState("");
-  const [finalSearch, setFinalSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(
+    parseInt(searchParams.get("page") || "1")
+  );
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    searchParams.get("categories")?.split(",") || [] // 쿼리에서 카테고리 설정
+  );
+  const [selectedRegions, setSelectedRegions] = useState<string[]>(
+    searchParams.get("regions")?.split(",") || []
+  );
+  const [searchInput, setSearchInput] = useState(
+    searchParams.get("query") || ""
+  );
+  const [finalSearch, setFinalSearch] = useState(searchInput);
   const debouncedSearch = useDebounce(searchInput, 1000);
+
+  const updateQueryParams = useCallback(() => {
+    const params = new URLSearchParams();
+    if (selectedCategories.length > 0) {
+      params.set("categories", selectedCategories.join(","));
+    }
+    if (selectedRegions.length > 0) {
+      params.set("regions", selectedRegions.join(","));
+    }
+    if (finalSearch) {
+      params.set("query", finalSearch);
+    }
+    params.set("page", currentPage.toString());
+
+    router.push(`?${params.toString()}`);
+  }, [selectedCategories, selectedRegions, finalSearch, currentPage, router]);
+
+  useEffect(() => {
+    updateQueryParams();
+  }, [updateQueryParams]);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prev) =>
@@ -96,6 +136,7 @@ export default function Search() {
         ? prev.filter((item) => item !== category)
         : [...prev, category]
     );
+    setCurrentPage(1);
   };
 
   const handleRegionClick = (region: string) => {
@@ -104,10 +145,11 @@ export default function Search() {
         ? prev.filter((item) => item !== region)
         : [...prev, region]
     );
+    setCurrentPage(1);
   };
 
   const handleSearchSubmit = () => {
-    setFinalSearch(searchInput); // Enter 키를 누르면 최종 검색값을 업데이트
+    setFinalSearch(searchInput);
     setCurrentPage(1);
   };
 
@@ -117,17 +159,17 @@ export default function Search() {
         ? selectedCategories.includes(item.houseType)
         : true) &&
       (selectedRegions.length > 0
-        ? selectedRegions.includes(item.area) // 선택된 지역 필터링
+        ? selectedRegions.includes(item.area)
         : true) &&
       (finalSearch
         ? item.houseName.includes(finalSearch)
-        : item.houseName.includes(debouncedSearch)) // 조건에 따라 반영
+        : item.houseName.includes(debouncedSearch))
   );
 
-  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredData.length / 8);
   const paginatedData = filteredData.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    (currentPage - 1) * 8,
+    currentPage * 8
   );
 
   return (
@@ -241,6 +283,7 @@ export default function Search() {
                 houseType={item.houseType}
                 houseName={item.houseName}
                 location={item.location}
+                id={item.id}
               />
             ))}
           </div>
