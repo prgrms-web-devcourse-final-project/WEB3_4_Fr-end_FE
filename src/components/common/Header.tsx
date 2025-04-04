@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -11,12 +10,16 @@ const Header: React.FC = () => {
   const pathname = usePathname();
 
   useEffect(() => {
+    if (pathname === "/auth/login") return;
+
     if (pathname === "/") {
       setIconPath("/svg");
     } else {
       setIconPath("/icons");
     }
   }, [pathname]);
+
+  if (pathname === "/auth/login") return null;
 
   // 경로가 /일 때 설정
   const isMainPage = pathname === "/";
@@ -25,6 +28,8 @@ const Header: React.FC = () => {
     ? "outline-customGray-100"
     : "outline-[#202020]";
   const logoColor = isMainPage ? "/logo/white2.png" : "/logo/blue.png";
+
+  const isLoggedIn = false;
 
   return (
     <>
@@ -67,7 +72,11 @@ const Header: React.FC = () => {
               />
             </div>
             <div className="flex justify-start items-center gap-[27px]">
-              <div className="w-5 h-5 relative overflow-hidden">
+              <div
+                className={`w-5 h-5 relative overflow-hidden ${
+                  !isLoggedIn ? "invisible" : ""
+                }`}
+              >
                 <Image
                   src={`${iconPath}/cart3.svg`}
                   alt="cart"
@@ -75,7 +84,11 @@ const Header: React.FC = () => {
                   height={20}
                 />
               </div>
-              <div className="w-5 h-5 relative overflow-hidden">
+              <div
+                className={`w-5 h-5 relative overflow-hidden ${
+                  !isLoggedIn ? "invisible" : ""
+                }`}
+              >
                 <Image
                   src={`${iconPath}/bell3.svg`}
                   alt="alert"
@@ -84,9 +97,9 @@ const Header: React.FC = () => {
                 />
               </div>
               <div className="w-[21px] h-[21px] relative overflow-hidden">
-                <Link href="/myPage">
+                <Link href={isLoggedIn ? "/myPage" : "/auth/login"}>
                   <Image
-                    src={`${iconPath}/user.svg`}
+                    src={`${iconPath}/${isLoggedIn ? "user.svg" : "login.png"}`}
                     alt="user"
                     width={20}
                     height={20}
