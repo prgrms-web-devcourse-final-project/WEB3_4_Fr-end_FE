@@ -79,27 +79,33 @@ export default function Login() {
           </div>
 
           <div className="flex justify-center gap-4">
-            <Image
-              src="/login/kakao.svg"
-              alt="kakao"
-              width={50}
-              height={50}
-              className="cursor-pointer"
-            />
-            <Image
-              src="/login/naver.png"
-              alt="naver"
-              width={50}
-              height={50}
-              className="cursor-pointer"
-            />
-            <Image
-              src="/login/google.svg"
-              alt="google"
-              width={50}
-              height={50}
-              className="cursor-pointer"
-            />
+            <Link href="/auth/socialLogin">
+              <Image
+                src="/login/kakao.svg"
+                alt="kakao"
+                width={50}
+                height={50}
+                className="cursor-pointer"
+              />
+            </Link>
+            <Link href="/auth/socialLogin">
+              <Image
+                src="/login/naver.png"
+                alt="naver"
+                width={50}
+                height={50}
+                className="cursor-pointer"
+              />
+            </Link>
+            <Link href="/auth/socialLogin">
+              <Image
+                src="/login/google.svg"
+                alt="google"
+                width={50}
+                height={50}
+                className="cursor-pointer"
+              />
+            </Link>
           </div>
           <div className="mt-[100px] w-full text-center text-sm text-customGray-600 z-10 opacity-80">
             ⓒ 2025 PlanIt. All rights reserved.

@@ -8,15 +8,6 @@ import CheckboxField from "@/components/login/register/CheckboxField";
 import SelectField from "@/components/login/register/SelectField";
 import { SignupFormData } from "@/types/loginForm";
 
-type FormData = {
-  username: string;
-  password: string;
-  confirmPassword: string;
-  nickname: string;
-  email: string;
-  phone: string;
-};
-
 function validatePasswordComplexity(value: string) {
   const pattern =
     /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
@@ -36,7 +27,7 @@ export default function Register() {
     mode: "onChange",
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: SignupFormData) => {
     console.log("회원가입 데이터:", data);
   };
 
@@ -128,7 +119,7 @@ export default function Register() {
           }}
           error={errors.phone?.message}
         />
-        <SelectField label="성별" options={["성별", "남자", "여자", "기타"]} />
+        <SelectField label="성별" options={["성별", "남자", "여자"]} />
         <CheckboxField
           id="email-agree"
           label="이메일 메일링 서비스에 동의합니다."
