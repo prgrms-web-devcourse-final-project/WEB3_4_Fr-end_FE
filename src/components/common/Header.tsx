@@ -77,12 +77,15 @@ const Header: React.FC = () => {
                   !isLoggedIn ? "invisible" : ""
                 }`}
               >
-                <Image
-                  src={`${iconPath}/cart3.svg`}
-                  alt="cart"
-                  width={20}
-                  height={20}
-                />
+                <Link href="/chat">
+                  <Image
+                    src={`${iconPath}/chat.svg`}
+                    alt="chat"
+                    width={20}
+                    height={20}
+                    className={isMainPage ? "invert" : ""}
+                  />
+                </Link>
               </div>
               <div
                 className={`w-5 h-5 relative overflow-hidden ${
