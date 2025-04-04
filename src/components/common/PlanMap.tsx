@@ -3,15 +3,29 @@
 import { useEffect, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
-interface MapCenter {
-  lat: number;
-  lng: number;
+
+interface SearchResult {
+  place_name: string;
+  category_name: string;
+  address_name: string;
+  x: number;
+  y: number;
 }
 
+interface KakaoPlace {
+  place_name: string;
+  category_group_name: string;
+  address_name: string;
+  x: string;
+  y: string;
+}
+
+type KakaoStatus = typeof window.kakao.maps.services.Status[keyof typeof window.kakao.maps.services.Status];
+
 const PlanMap = () => {
-  const [placeName, setPlaceName] = useState('');
-  const [searchResult, setSearchResult] = useState<any>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [placeName, setPlaceName] = useState<string>('');
+  const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
@@ -34,23 +48,30 @@ const PlanMap = () => {
     const ps = new window.kakao.maps.services.Places();
 
     // 장소 이름을 이용한 키워드 검색
-    ps.keywordSearch(placeName, (data: any[], status: any) => {
+    ps.keywordSearch(placeName, (data: KakaoPlace[], status: KakaoStatus) => {
       if (status === window.kakao.maps.services.Status.OK) {
         console.log('키워드 검색 결과:', data);
         if (data.length > 0) {
           const place = data[0];
           setSearchResult({
             place_name: place.place_name,
-            category_name: place.category_group_name,  // 대분류 카테고리명
+            category_name: place.category_group_name,
             address_name: place.address_name,
-            x: Number(place.x),
-            y: Number(place.y),
+            x: parseFloat(place.x), // 문자열을 숫자로 변환
+            y: parseFloat(place.y), // 문자열을 숫자로 변환
           });
           console.log('장소 이름:', place.place_name);
-          console.log('카테고리:', place.category_group_name);  // 간단한 카테고리명
+          console.log('카테고리:', place.category_group_name);
         }
+      } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
+        console.error('검색 결과가 없습니다.');
+        setSearchResult(null);
+      } else if (status === window.kakao.maps.services.Status.ERROR) {
+        console.error('검색 중 오류가 발생했습니다.');
+        setSearchResult(null);
       } else {
-        console.error('장소 검색 실패:', status);
+        console.error('알 수 없는 오류:', status);
+        setSearchResult(null);
       }
     });
   };
