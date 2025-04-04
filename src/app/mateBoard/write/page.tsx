@@ -1,93 +1,89 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import Dropdown from "@/components/mateBoard/common/Dropdown";
-import { DatePickerWithRange } from "@/components/mateBoard/mateBoardWriting/DatePickerWithRange";
-import { DateRange } from "react-day-picker";
 
-export default function MateWritePage() {
-  const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("지역 검색");
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [people, setPeople] = useState("");
-  const [content, setContent] = useState("");
+import MateTitleField from "@/components/mateBoard/mateBoardWriting/MateTitleField";
+import MateRegionField from "@/components/mateBoard/mateBoardWriting/MateRegionField";
+import MateDateRangeField from "@/components/mateBoard/mateBoardWriting/MateDateRangeField";
+import MatePeopleField from "@/components/mateBoard/mateBoardWriting/MatePeopleField";
+import MateGenderSelect from "@/components/mateBoard/mateBoardWriting/MateGenderSelector";
+import ImageUpload from "@/components/mateBoard/mateBoardWriting/MateImageUploader";
+import ContentTextarea from "@/components/mateBoard/mateBoardWriting/MateContentField";
+import { buildMatePayload } from "@/lib/mate/buildMatePayload";
+import { mateFormSchema, type MateFormType } from "@/lib/mate/mateFormSchema";
+
+export default function MateWritingForm() {
   const [images, setImages] = useState<File[]>([]);
+  const [mateGender, setMateGender] = useState<string>("NO_PREFERENCE");
 
-  const handleSubmit = () => {
-    // post logic 여기에
-    console.log({ title, location, dateRange, people, content, images });
+  const form = useForm<MateFormType>({
+    resolver: zodResolver(mateFormSchema),
+    defaultValues: {
+      title: "",
+      dateRange: {
+        from: undefined,
+        to: undefined,
+      },
+      people: 1,
+      content: "",
+      location: "지역 검색",
+      mateGender: "무관",
+    },
+  });
+
+  const onSubmit = (values: MateFormType) => {
+    const formData = buildMatePayload({
+      ...values,
+      mateGender,
+      images,
+    });
+
+    console.log({
+      ...values,
+      mateGender,
+      images,
+    });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-3xl mx-auto px-4 py-10 space-y-6"
-    >
-      <h1 className="text-2xl font-bold text-center">게시글 작성</h1>
-
-      {/* 제목 */}
-      <Input
-        placeholder="제목을 입력해주세요"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-
-      {/* 여행지 & 날짜 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="md:col-span-1">
-          <Dropdown value={location} className="w-40" onChange={setLocation} />
-        </div>
-        <DatePickerWithRange date={dateRange} onChange={setDateRange} />
-      </div>
-
-      {/* 모집 인원 */}
-      <Input
-        type="number"
-        placeholder="모집 인원"
-        value={people}
-        onChange={(e) => setPeople(e.target.value)}
-      />
-
-      {/* 이미지 업로드 (기본 UI) */}
-      <div className="space-y-2">
-        <p className="text-sm font-medium">첨부사진</p>
-        <input
-          type="file"
-          multiple
-          onChange={(e) => setImages(Array.from(e.target.files ?? []))}
-        />
-        <div className="flex gap-2">
-          {images.map((img, idx) => (
-            <div
-              key={idx}
-              className="w-[100px] h-[100px] bg-gray-200 rounded-lg flex items-center justify-center text-xs"
-            >
-              {img.name}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 내용 */}
-      <Textarea
-        placeholder="내용을 입력해주세요"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        className="h-40"
-      />
-
-      {/* 제출 버튼 */}
-      <div className="text-center">
-        <Button
-          onClick={handleSubmit}
-          className="px-6 py-2 text-white bg-black hover:bg-gray-800"
+    <div>
+      <h1 className="font-paperlogy text-center text-[48px] mb-20">
+        게시글 작성
+      </h1>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="max-w-3xl mx-auto px-4 py-10 space-y-6"
         >
-          작성하기
-        </Button>
-      </div>
-    </form>
+          <MateTitleField control={form.control} />
+
+          <div className="flex justify-between gap-4">
+            <MateRegionField control={form.control} />
+            <MateDateRangeField control={form.control} />
+          </div>
+
+          <MatePeopleField control={form.control} />
+
+          <MateGenderSelect value={mateGender} onChange={setMateGender} />
+
+          <ImageUpload images={images} setImages={setImages} />
+
+          <ContentTextarea control={form.control} />
+
+          <div className="text-center">
+            <Button
+              type="submit"
+              className="px-6 py-2 text-white bg-black hover:bg-gray-800"
+            >
+              작성하기
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }
