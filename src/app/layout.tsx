@@ -6,6 +6,7 @@ import Providers from "./providers";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import Script from "next/script";
+import { ChatBot } from "@/components/chatbot/ChatBot";
 
 export const metadata: Metadata = {
   title: "PlanIt",
@@ -48,6 +49,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           <Container>{children}</Container>
+          <ChatBot />
           <Footer />
         </Providers>
       </body>
