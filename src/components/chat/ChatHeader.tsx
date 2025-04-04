@@ -7,7 +7,7 @@ interface ChatHeaderProps {
 
 export function ChatHeader({ chat }: ChatHeaderProps) {
   return (
-    <div className="p-4 border-b bg-white">
+    <div className="p-4 border-b border-indigo-300 bg-white rounded-t-2xl">
       <div className="flex items-center space-x-4">
         <div className="flex -space-x-2">
           {chat.members.slice(0, 3).map((member) => (
