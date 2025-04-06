@@ -47,7 +47,7 @@ const FCalendar = () => {
   };
 
   return (
-    <div className="p-4 h-[720px]">
+    <div className="-mx-24 h-full w-full overflow-hidden">
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -55,12 +55,12 @@ const FCalendar = () => {
         selectable={true}
         dateClick={handleDateClick}
         events={events}
-        height="auto"
-        contentHeight="100%"
+        height="100%"
+        contentHeight="auto"
         headerToolbar={{
-          start: 'prev,next today',
+          start: 'prev today next',
           center: 'title',
-          end: 'dayGridMonth,timeGridWeek,timeGridDay',
+          end: 'dayGridMonth'
         }}
       />
 
@@ -176,10 +176,10 @@ const FCalendar = () => {
   {/* 버튼 */}
   <div className="flex gap-4 mr-2">
     <Button onClick={closeModal} className='w-[90px] bg-customGray-100 text-customBlack-200 hover:bg-customGray-400
-        transition-transform duration-300 ease-in-out hover:scale-110 font-bold rounded-lg'>취소</Button>
+        transition-transform duration-300 ease-in-out hover:scale-105 font-bold rounded-lg'>취소</Button>
     <Button
       onClick={addEvent}
-      className="rounded-lg w-[90px] font-bold bg-customBlack-300">
+      className="rounded-lg w-[90px] font-bold bg-customBlack-300 transition-transform duration-300 ease-in-out hover:scale-105">
       확인
       </Button>
   </div>

@@ -76,11 +76,11 @@ export default function CalendarNavTree() {
       <div
         ref={setNodeRef}
         style={style}
-        className="flex items-center gap-2 p-3 my-1 rounded-md hover:bg-customGray-100 relative transition-transform duration-200 ease-in-out transform hover:scale-105"
+        className="flex items-center gap-2 p-3 my-1 rounded-md hover:bg-gray-100 relative transition-transform duration-200 ease-in-out transform hover:scale-105"
       >
         <div {...listeners} className="flex items-center gap-2 cursor-grab w-full pr-10">
           <Image src="/svg/calendar.svg" alt="calendar" width={14} height={13} className="cursor-pointer" />
-          <span className="ml-1 font-semibold text-customBlack-200">{label}</span>
+          <span className="ml-1 font-semibold text-gray-800">{label}</span>
         </div>
         <div className="ml-auto flex gap-4 mr-4 relative z-20">
           <div
@@ -120,7 +120,7 @@ export default function CalendarNavTree() {
 
   return (
     <div className="p-4">
-      <div className="-mx-20 mr-30 relative border border-gray-200 bg-white h-[700px] w-[343px] shadow-md rounded-lg">
+      <div className="-mx-20 mr-30 relative border border-gray-200 bg-white h-[700px] w-[343px] shadow-md rounded-lg overflow-hidden">
         <p
           onClick={addItem}
           className="relative font-semibold text-xl pl-8 pt-8 text-gray-800 select-none cursor-pointer transition-transform duration-200 ease-in-out transform hover:scale-105"
@@ -145,7 +145,7 @@ export default function CalendarNavTree() {
             transition: 'height 0.7s ease-in-out, opacity 1s ease-in-out',
             opacity: isOpen ? 1 : 0,
           }}
-          className="p-4 overflow-hidden"
+          className={`p-4 ${items.length > 10 ? 'overflow-y-auto max-h-[600px]' : ''} scroll-smooth`}
         >
           <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={items} strategy={verticalListSortingStrategy}>
