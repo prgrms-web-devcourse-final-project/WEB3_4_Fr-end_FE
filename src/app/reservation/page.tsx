@@ -5,6 +5,8 @@ import SchedulerLinkBannerSection from "@/components/reservation/SchedulerLinkBa
 import TodayReservationSection from "@/components/reservation/TodayReservationSection";
 import Image from "next/image";
 
+import { dummyCards } from "@/dummyData/mateCards";
+
 export default function Reservation() {
   return (
     <>
@@ -40,7 +42,7 @@ export default function Reservation() {
       <ReservationlocationCategorySection />
 
       {/* 여행메이트 섹션 */}
-      <ReservationMateSection />
+      <ReservationMateSection cards={dummyCards} />
     </>
   );
 }

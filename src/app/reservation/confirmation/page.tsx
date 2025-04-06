@@ -152,7 +152,7 @@ export default function Confirmation() {
           <div>예약 일정 :</div>
           <div>금액 :</div>
         </div>
-        <button className="bg-customBlue-100 mt-4 py-3 px-13 rounded-lg mx-auto block">
+        <button className="bg-customBlue-100 text-white mt-4 py-3 px-13 rounded-lg mx-auto block">
           결제하기
         </button>
       </div>

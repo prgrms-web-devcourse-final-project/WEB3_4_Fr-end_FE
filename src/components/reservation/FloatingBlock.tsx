@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function FloatingReservationBlock() {
   const [checkIn, setCheckIn] = useState<string>(""); // 체크인 날짜 상태
   const [checkOut, setCheckOut] = useState<string>(""); // 체크아웃 날짜 상태
-  const [totalNights, setTotalNights] = useState<number>(0); // 숙박 기간 상태
+  const [totalNights, setTotalNights] = useState<number>(1); // 숙박 기간 상태
   const pricePerNight: number = 100000; // 1박당 가격
 
   const calculateNights = (start: string, end: string): void => {
