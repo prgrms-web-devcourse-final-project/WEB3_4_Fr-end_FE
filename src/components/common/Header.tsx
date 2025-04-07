@@ -29,7 +29,7 @@ const Header: React.FC = () => {
     : "outline-[#202020]";
   const logoColor = isMainPage ? "/logo/white2.png" : "/logo/blue.png";
 
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   return (
     <>

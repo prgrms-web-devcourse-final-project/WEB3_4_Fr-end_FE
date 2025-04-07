@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { UserDummyData } from "@/dummyData/UserDummyData";
 
 export default function ProfileChangeForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -9,10 +10,10 @@ export default function ProfileChangeForm() {
     fileInputRef.current?.click();
   };
   const [isEditing, setIsEditing] = useState(false);
-  const [nickname, setNickname] = useState("PlanitTest1");
-  const [intro, setIntro] = useState(
-    "자연을 사랑하는 여행자와 함께할 메이트를 찾습니다! 🌿✈️"
-  );
+  const [nickname, setNickname] = useState(UserDummyData.nickname);
+  const [intro, setIntro] = useState(UserDummyData.introduction);
+  const [email, setEmail] = useState(UserDummyData.email);
+  const [phone, setPhone] = useState(UserDummyData.phone);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const toggleSubscribed = () => {
     setIsSubscribed((prev) => !prev);
@@ -20,8 +21,6 @@ export default function ProfileChangeForm() {
   const toggleEdit = () => {
     setIsEditing((prev) => !prev);
   };
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const phoneValid = /^01[016789]\d{7,8}$/.test(phone);
 
@@ -53,7 +52,7 @@ export default function ProfileChangeForm() {
       <div className="flex gap-8">
         <div className="flex flex-col items-center mt-[95px] ml-[95px]">
           <Image
-            src="/defaultAvatar/31.png"
+            src={`/defaultAvatar/${UserDummyData.avatar}`}
             alt="프로필 이미지"
             width={150}
             height={150}
@@ -112,29 +111,52 @@ export default function ProfileChangeForm() {
                 {intro}
               </p>
             )}
-            {fields.map((f, i) => (
-              <div key={i} className="w-[408px] mb-4">
-                <label className="text-base text-black font-[pretendard]">
-                  {f.label}
-                </label>
-                <input
-                  type={f.type}
-                  value={f.value}
-                  onChange={f.onChange}
-                  placeholder={f.placeholder}
-                  className="w-full h-[50px] px-2.5 py-2 bg-white rounded outline outline-customGray-300 mt-1 focus:outline-customGray-600"
-                />
-                <p
-                  className={`text-customPink-300 text-[13px] mt-1 ${
-                    f.isValid ? "hidden" : ""
-                  }`}
-                >
-                  {f.e}
+            {isEditing ? (
+              <>
+                {fields.map((f, i) => (
+                  <div key={i} className="w-[408px] mb-4">
+                    <label className="text-base text-black font-[pretendard]">
+                      {f.label}
+                    </label>
+                    <input
+                      type={f.type}
+                      value={f.value}
+                      onChange={f.onChange}
+                      placeholder={f.placeholder}
+                      className="w-full h-[50px] px-2.5 py-2 bg-white rounded outline outline-customGray-300 mt-1 focus:outline-customGray-600"
+                    />
+                    <p
+                      className={`text-customPink-300 text-[13px] mt-1 ${
+                        f.isValid ? "hidden" : ""
+                      }`}
+                    >
+                      {f.e}
+                    </p>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <div>
+                <div className="text-base text-black font-[pretendard]">
+                  이메일
+                </div>
+                <p className="w-full h-[50px] px-2.5 py-2 bg-white mb-4">
+                  {email}
+                </p>
+                <div className="text-base text-black font-[pretendard]">
+                  휴대폰 번호
+                </div>
+                <p className="w-full h-[50px] px-2.5 py-2 bg-white mb-4">
+                  {phone}
                 </p>
               </div>
-            ))}
-            <button className=" ml-[272px] mt-[18px] bg-black text-white w-[93px] h-[30px] rounded-[8px] text-[13px] font-bold font-pretendard hover:bg-customBlue-200 cursor-pointer">
-              수정 완료
+            )}
+
+            <button
+              onClick={toggleEdit}
+              className=" ml-[272px] mt-[18px] bg-black text-white w-[93px] h-[30px] rounded-[8px] text-[13px] font-bold font-pretendard hover:bg-customBlue-200 cursor-pointer"
+            >
+              {isEditing ? "확인" : "수정"}
             </button>
             {isSubscribed === true ? (
               <div className="mt-8 w-[408px] h-[115px] border border-customGray-300 rounded">

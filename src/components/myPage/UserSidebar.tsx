@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import MenuSection from "./MenuSection";
+import { UserDummyData } from "@/dummyData/UserDummyData";
 
 interface UserSidebarProps {
   selectedSection: string;
@@ -19,7 +20,7 @@ export default function UserSidebar({
   return (
     <div className="w-[197px] h-[447px] flex flex-col items-center">
       <Image
-        src="/defaultAvatar/31.png"
+        src={`/defaultAvatar/${UserDummyData.avatar}`}
         alt="user"
         width={196}
         height={196}
@@ -27,7 +28,9 @@ export default function UserSidebar({
       />
       <p className="mt-4 text-black text-xl">반갑습니다!</p>
       <div className="flex">
-        <span className="text-customViloet-200 text-xl">PlanitTest1</span>
+        <span className="text-customViloet-200 text-xl">
+          {UserDummyData.nickname}
+        </span>
         <p className="text-black text-xl">님!</p>
       </div>
       <div className="mt-6 w-full border-t border-gray-300 pt-4 flex flex-col mb-[10px]">
