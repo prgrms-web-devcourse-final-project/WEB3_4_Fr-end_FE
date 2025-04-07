@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ChatBotMessage } from "@/types/chatbot";
+import { ChatBotMessage } from "@/types/ChatBot";
 import { ChatMessageBubble } from "@/components/chatbot/ChatMessagesBubble";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";

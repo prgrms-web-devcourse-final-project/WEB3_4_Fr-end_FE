@@ -1,4 +1,4 @@
-import { type GroupChat } from "@/types/chat";
+import { type GroupChat } from "@/types/Chat";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
