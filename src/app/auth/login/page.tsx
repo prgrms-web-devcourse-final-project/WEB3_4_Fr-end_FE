@@ -14,7 +14,6 @@ export default function Login() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden m-0 p-0">
-      {/* 배경 이미지 */}
       <div className="fixed inset-0 w-screen h-screen overflow-hidden m-0 p-0 z-0">
         <Image
           src={bgImage}
@@ -24,11 +23,8 @@ export default function Login() {
           priority
         />
       </div>
-
-      {/* 로그인 박스 wrapper */}
       <div className="absolute inset-0 flex justify-end items-center pr-[30%] z-10">
         <div className="flex flex-col items-center bg-white w-[90vw] max-w-[514px] h-[547px] rounded-xl shadow-xl">
-          {/* 폼 내용 */}
           <Link href="/">
             <Image
               src="/logo/blue.png"
@@ -61,7 +57,6 @@ export default function Login() {
               아이디 저장
             </label>
           </div>
-
           <div className="flex gap-4 mb-4">
             <button className="bg-customGray-100 w-[150px] h-[48px] text-black px-[49px] py-[12px] rounded-[8px] font-pretendard font-normal text-[20px] hover:bg-customBlue-200 hover:text-white cursor-pointer">
               로그인
