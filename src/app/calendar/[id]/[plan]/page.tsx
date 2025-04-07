@@ -1,11 +1,5 @@
-import Plan from "@/components/plan/Plan";
-import PlanMap from "@/components/plan/PlanMap";
+import PlanContainerClient from "@/components/plan/clientOnly/ClientOnly";
 
 export default function PlanPage() {
-  return (
-    <div>
-      <Plan/>
-      <PlanMap/>
-    </div>
-  );
+  return <PlanContainerClient />;
 }

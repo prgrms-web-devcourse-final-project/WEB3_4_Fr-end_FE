@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { DateClickArg } from '@fullcalendar/interaction';
 
+
 export default function FCalendar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,13 +22,13 @@ export default function FCalendar() {
   };
 
   return (
-    <div className="-mx-24 h-full w-full overflow-hidden">
+    <div className="h-full w-full overflow-hidden">
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         editable={true}
         selectable={true}
-        dateClick={(arg) => dateClick(arg)}  // 인자를 넘겨줌
+        dateClick={dateClick}
         height="100%"
         contentHeight="auto"
         headerToolbar={{
@@ -65,8 +66,6 @@ export default function FCalendar() {
                 <option>친구와 함께</option>
                 <option>일반 일정</option>
                 <option>여행</option>
-                <option>공부</option>
-                <option>운동</option>
               </select>
             </div>
 
