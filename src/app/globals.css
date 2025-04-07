@@ -200,6 +200,80 @@
   border-radius: 0.625rem; /* 둥근 모서리 설정 (예시) */
 }
 
+/* 헤더 툴바 전체 영역 스타일 */
+.fc-header-toolbar {
+  padding-top : 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
+/* 헤더 타이틀 (날짜 또는 제목) 스타일 */
+.fc-toolbar-title {
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--color-customBlack-400);
+  margin: 0;
+}
+
+/* 버튼 그룹 (왼쪽/오른쪽 영역) 스타일 */
+.fc-button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.fc .fc-prev-button.fc-button.fc-button-primary {
+  background-color: var(--color-customGray-50, #f9fafb) !important;
+  border: 1px solid var(--color-customGray-200, #e5e7eb) !important;
+  color: var(--color-customBlack-400, #4b5563) !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease !important;
+}
+
+.fc .fc-next-button.fc-button.fc-button-primary {
+  background-color: var(--color-customGray-50, #f9fafb) !important;
+  border: 1px solid var(--color-customGray-200, #e5e7eb) !important;
+  color: var(--color-customBlack-400, #4b5563) !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* Today 버튼 스타일 */
+.fc .fc-today-button.fc-button.fc-button-primary {
+  background-color: var(--color-customGreen-50, #ecfdf5);
+  border: 1px solid var(--color-customGreen-200, #bbf7d0);
+  color: var(--color-customBlack-400, #4b5563);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.fc .fc-prev-button.fc-button.fc-button-primary:hover {
+  background-color: var(--color-customGray-200, #e5e7eb) !important;
+  border-color: var(--color-customGray-300, #d1d5db) !important;
+}
+
+.fc .fc-next-button.fc-button.fc-button-primary:hover {
+  background-color: var(--color-customGray-200, #e5e7eb) !important;
+  border-color: var(--color-customGray-300, #d1d5db) !important;
+}
+
+.fc .fc-next-button.fc-button.fc-button-primary:active,
+.fc .fc-prev-button.fc-button.fc-button-primary:active {
+  background-color: var(--color-customGray-100) !important;
+  border-color: var(--color-customGray-100) !important;
+}
+
+.fc .fc-dayGridMonth-button.fc-button.fc-button-primary.fc-button-active {
+  background-color: var(--color-customGray-100) !important;
+  border : var(--color-customGray-200) !important;
+  color: var(--color-customBlack-200) !important;
+  font-weight: 600 !important;
+}
 
 }
