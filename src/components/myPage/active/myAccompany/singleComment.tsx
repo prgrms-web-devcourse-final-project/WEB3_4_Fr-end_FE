@@ -6,6 +6,8 @@ interface SingleCommentProps {
   comment: CommentData;
 }
 
+// 코멘트를 가져왔지만 연결하려면 게시물 이름, 작성자, 작성날짜, 게시물 내용(string)을 가져오면 됌.
+
 export default function SingleComment({ comment }: SingleCommentProps) {
   const now = dayjs();
   const created = dayjs(comment.date);
@@ -25,13 +27,6 @@ export default function SingleComment({ comment }: SingleCommentProps) {
         <div className="text-black text-[24px] font-semibold font-pretendard ml-[4px]">
           {comment.title}
         </div>
-        <Image
-          src="/icons/trashcan.png"
-          alt="trashcan"
-          width={13}
-          height={16.22}
-          className="w-[13px] h-[16.22px] mr-[30px]"
-        />
       </div>
       <div className="w-[672px] h-[1px] bg-customGray-500 my-[10px] ml-[4px] mr-[30px]" />
       <div className="p-[16px]">
