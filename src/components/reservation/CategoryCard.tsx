@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type ReservationCardProps = {
   imageSrc: string;
@@ -11,8 +14,15 @@ export default function ReservationCard({
   altText,
   label,
 }: ReservationCardProps) {
+  const router = useRouter();
+
   return (
-    <div className="relative rounded-2xl overflow-hidden h-full">
+    <button
+      className="relative rounded-2xl overflow-hidden h-full cursor-pointer"
+      onClick={() => {
+        router.push(`/reservation/search?categories=${label}`); // 카테고리를 쿼리 파라미터로 전달
+      }}
+    >
       <Image
         src={imageSrc}
         alt={altText}
@@ -25,6 +35,6 @@ export default function ReservationCard({
       <div className="absolute inset-0 flex items-center justify-center text-customGray-100 text-3xl font-paperlogy">
         {label}
       </div>
-    </div>
+    </button>
   );
 }

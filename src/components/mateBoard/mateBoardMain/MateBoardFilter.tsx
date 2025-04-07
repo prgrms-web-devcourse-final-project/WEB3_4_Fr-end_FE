@@ -12,7 +12,7 @@ import WritingButton from "@/components/mateBoard/mateBoardMain/WritingButton";
 export default function MateBoardFilter({ cards }: { cards: MateCardData[] }) {
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
-  const [region, setRegion] = useState("전체");
+  const [region, setRegion] = useState("전국");
   const [category, setCategory] = useState("전체");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -25,7 +25,7 @@ export default function MateBoardFilter({ cards }: { cards: MateCardData[] }) {
   }, [debouncedSearch]);
 
   const filtered = cards.filter((card) => {
-    const matchesRegion = region === "전체" ? true : card.region === region;
+    const matchesRegion = region === "전국" ? true : card.region === region;
     const matchesCategory =
       category === "전체"
         ? true

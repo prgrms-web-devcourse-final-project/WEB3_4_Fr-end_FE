@@ -1,7 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 export default function SchedulerLinkBannerSection() {
+  const router = useRouter();
+
   return (
     <>
       <section className="relative h-71 w-full overflow-hidden bg-amber-500 mt-20 rounded-2xl">
@@ -15,7 +20,15 @@ export default function SchedulerLinkBannerSection() {
         <div className="absolute inset-y-15 inset-x-29 text-customGray-100 text-4xl font-paperlogy">
           <div className="mb-4">여행을 계획하고 계신가요?</div>
           <div className="mb-8">Planit이 도와드릴게요!</div>
-          <Button size={"lg"}>스케쥴러 바로가기</Button>
+          <Button
+            className="cursor-pointer"
+            size={"lg"}
+            onClick={() => {
+              router.push("/calendar");
+            }}
+          >
+            스케쥴러 바로가기
+          </Button>
         </div>
       </section>
     </>

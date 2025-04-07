@@ -3,15 +3,15 @@ module.exports = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'example.com',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "example.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
       },
     ],
-  },
-  eslint: {
-    // 빌드 중 ESLint 오류 무시
-    ignoreDuringBuilds: true,
   },
 };
