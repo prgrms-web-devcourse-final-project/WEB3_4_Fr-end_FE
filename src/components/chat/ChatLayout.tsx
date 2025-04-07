@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ChatSidebar } from "@/components/chat/ChatSidebar";
 import { ChatArea } from "@/components/chat/ChatArea";
-import { GroupChat } from "@/types/chat";
+import { GroupChat } from "@/types/Chat";
 
 const sampleChats: GroupChat[] = [
   {
