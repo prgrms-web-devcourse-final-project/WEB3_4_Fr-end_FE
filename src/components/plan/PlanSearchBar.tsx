@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, Trash2Icon } from "lucide-react";
 import { PlanSearchBarProps, SearchResult } from "@/types/PlanSearchBarProps";
 
 export interface KakaoPlace {
@@ -17,6 +17,7 @@ const PlanSearchBar: React.FC<PlanSearchBarProps> = ({
   placeName,
   onPlaceNameChange,
   onSearchResult,
+  onDelete, // 부모에서 삭제 기능을 구현할 콜백
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -73,23 +74,25 @@ const PlanSearchBar: React.FC<PlanSearchBarProps> = ({
   };
 
   return (
-    <div>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <input
-          type="text"
-          placeholder="장소 이름을 입력하세요"
-          value={placeName}
-          onChange={(e) => onPlaceNameChange(e.target.value)}
-          onKeyDown={handleKeyDown}
-          style={{ marginBottom: "10px", padding: "5px" }}
-        />
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleSearch}
-          style={{ marginLeft: "5px" }}
-        >
-          <SearchIcon />
+    <div className="flex items-center ">
+      <input
+        type="text"
+        placeholder="장소 이름을 입력하세요"
+        value={placeName}
+        onChange={(e) => onPlaceNameChange(e.target.value)}
+        onKeyDown={handleKeyDown}
+        className="flex-1 border-none outline-none bg-transparent font-bold"
+      />
+      <div className="flex items-center">
+        <Button variant="ghost" size="icon" onClick={handleSearch} asChild>
+          <span>
+            <SearchIcon className="w-4 h-4" />
+          </span>
+        </Button>
+        <Button variant="ghost" size="icon" onClick={onDelete} asChild>
+          <span>
+            <Trash2Icon className="w-4 h-4" />
+          </span>
         </Button>
       </div>
     </div>

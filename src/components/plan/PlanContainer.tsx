@@ -10,16 +10,19 @@ const PlanContainer: React.FC = () => {
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
 
   return (
-    <div style={{ display: "flex" }}>
+    <div className="flex">
       {/* 왼쪽 사이드바 */}
-      <PlanSidebar
-        placeName={placeName}
-        onPlaceNameChange={setPlaceName}
-        onSearchResult={setSearchResult}
-      />
-
+      <div className="w-1/4">
+        <PlanSidebar
+          placeName={placeName}
+          onPlaceNameChange={setPlaceName}
+          onSearchResult={setSearchResult}
+        />
+      </div>
       {/* 오른쪽 지도 영역 */}
-      <PlanMap searchResult={searchResult} />
+      <div className="w-3/4">
+        <PlanMap searchResult={searchResult} />
+      </div>
     </div>
   );
 };

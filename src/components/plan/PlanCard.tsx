@@ -15,14 +15,27 @@ const PlanCard: React.FC<PlanCardProps> = ({
   onPlaceNameChange,
   onSearchResult,
 }) => {
+  const handleDelete = () => {
+    alert("카드삭제");
+  };
   return (
-    <div>
+    <div className="w-80 grid grid-flow-col grid-rows-3 gap-4">
       {/* PlanSearchBar를 포함한 카드 */}
-      <PlanSearchBar
-        placeName={placeName}
-        onPlaceNameChange={onPlaceNameChange}
-        onSearchResult={onSearchResult}
-      />
+      <div className="row-span-3">시간</div>
+      <div className="col-span-2">
+        <PlanSearchBar
+          placeName={placeName}
+          onPlaceNameChange={onPlaceNameChange}
+          onSearchResult={onSearchResult}
+          onDelete={handleDelete}
+        />
+      </div>
+      <div className="col-span-2 row-span-2 flex-col">
+        <div className="flex justify-between items-center">
+          <span>카테고리</span>
+          <span>버튼</span>
+        </div>
+      </div>
     </div>
   );
 };

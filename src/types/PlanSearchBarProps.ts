@@ -2,6 +2,7 @@ export interface PlanSearchBarProps {
   placeName: string;
   onPlaceNameChange: (newPlaceName: string) => void;
   onSearchResult: (result: SearchResult | null) => void;
+  onDelete?: () => void;
 }
 
 export interface SearchResult {
