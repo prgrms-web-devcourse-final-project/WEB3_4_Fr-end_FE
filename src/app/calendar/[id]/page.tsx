@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import type { EventClickArg } from '@fullcalendar/core'; 
 import interactionPlugin, { DateClickArg, EventDragStopArg } from '@fullcalendar/interaction';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -29,6 +31,7 @@ export default function CalendarPage({ params }: CalendarPageProps) {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [events, setEvents] = useState<Event[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -52,6 +55,13 @@ export default function CalendarPage({ params }: CalendarPageProps) {
   const dateClick = (arg: DateClickArg) => {
     setStartDate(arg.dateStr);
     setIsModalOpen(true);
+  };
+
+  // EventClickArg 타입을 사용하여 타입 안전하게 작성
+  const eventClick = (clickInfo: EventClickArg) => {
+    const eventId = clickInfo.event.id;
+    // 캘린더 id와 이벤트 id를 모두 사용하여 URL 이동
+    router.push(`/calendar/${calendarId}/${eventId}`);
   };
 
   const closeModal = () => {
@@ -98,13 +108,13 @@ export default function CalendarPage({ params }: CalendarPageProps) {
     <div className="flex h-screen relative">
       <CalendarNav />
       <div className="h-full w-full overflow-hidden">
-        {/* 캘린더 이름(label) 영역 삭제 */}
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
           editable={true}
           selectable={true}
           dateClick={dateClick}
+          eventClick={eventClick}  // 이벤트 클릭 시 동적 라우트로 이동
           eventDragStop={handleEventDragStop}
           events={events}
           height="100%"
@@ -164,12 +174,12 @@ export default function CalendarPage({ params }: CalendarPageProps) {
               <label className="block text-sm font-semibold mb-1">
                 일정 제목
               </label>
-              <input
+             <input
                 type="text"
                 value={eventTitle}
                 onChange={(e) => setEventTitle(e.target.value)}
                 className="w-full p-2 mb-4 border border-gray-300 rounded-md"
-              />
+              /> 
               <div className="flex gap-4 mb-4">
                 <div className="w-1/2">
                   <label className="block text-sm font-semibold mb-1">
