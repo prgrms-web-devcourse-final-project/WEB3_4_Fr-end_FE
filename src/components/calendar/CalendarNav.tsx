@@ -21,9 +21,7 @@ export default function CalendarNavTree() {
       if (stored) return JSON.parse(stored);
     }
     const defaultItems: NavItem[] = [
-      { id: '1', label: '부산', shareOpen: false },
-      { id: '2', label: '제주도', shareOpen: false },
-      { id: '3', label: '인천', shareOpen: false },
+      { id: '1', label: '캘린더 1', shareOpen: false },
     ];
     if (typeof window !== 'undefined') localStorage.setItem('calendars', JSON.stringify(defaultItems));
     return defaultItems;
@@ -33,8 +31,8 @@ export default function CalendarNavTree() {
   const [isOpen, setIsOpen] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<string>('auto');
+  const [copyMessage, setCopyMessage] = useState("");
 
-  // Hook은 항상 최상위에 있으므로 조건 없이 선언
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -51,7 +49,6 @@ export default function CalendarNavTree() {
     }
   }, [isOpen, items]);
 
-  // 함수 선언 (조건 없음)
   const addItem = () => {
     setItems(prevItems => {
       const newItem: NavItem = {
@@ -67,12 +64,17 @@ export default function CalendarNavTree() {
     setIsOpen(prev => !prev);
   };
 
-  const toggleShare = (id: string) => {
-    setItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, shareOpen: !item.shareOpen } : item
-      )
-    );
+  // 기존 toggleShare 대신 handleCopyUrl 함수로 URL 복사 처리
+  const handleCopyUrl = (id: string) => {
+    const url = `${window.location.origin}/calendar/${id}`;
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        setCopyMessage("URL이 복사되었습니다!");
+        setTimeout(() => setCopyMessage(""), 2000);
+      })
+      .catch(err => {
+        console.error("URL 복사 실패", err);
+      });
   };
 
   const handleClick = (e: React.MouseEvent) => {
@@ -89,7 +91,6 @@ export default function CalendarNavTree() {
       localStorage.setItem('calendars', JSON.stringify(newItems));
       return newItems;
     });
-    // 해당 캘린더 이벤트 삭제 (추후 백엔드 연동 시 API 호출로 변경)
     localStorage.removeItem(`calendarEvents-${id}`);
   };
 
@@ -103,14 +104,13 @@ export default function CalendarNavTree() {
     setEditingLabel('');
   };
 
-  // 렌더링은 모든 Hook이 호출된 후에 조건부로 처리
   if (!mounted) {
     return <div />;
   }
 
   return (
     <div className="p-4 select-none">
-      <div className="-mx-20 mr-30 relative border border-gray-200 bg-white h-[700px] w-[343px] shadow-md rounded-lg overflow-hidden">
+      <div className="elative border border-gray-200 bg-white h-[700px] w-[343px] shadow-md rounded-lg overflow-hidden">
         <p
           onClick={addItem}
           className="relative font-semibold text-xl pl-8 pt-8 text-gray-800 cursor-pointer transition-transform duration-200 ease-in-out hover:scale-105"
@@ -141,7 +141,7 @@ export default function CalendarNavTree() {
             <div
               key={item.id}
               onClick={() => handleItemClick(item.id)}
-              className="flex items-center gap-2 p-3 my-1 rounded-md hover:bg-gray-100 transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer"
+              className="flex items-center gap-2 p-3 my-1 rounded-md bg-white transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer hover:bg-gray-100"
             >
               <div className="flex items-center gap-2 w-full pr-10">
                 <Image src="/svg/calendar.svg" alt="calendar" width={14} height={13} className="cursor-pointer" />
@@ -151,9 +151,7 @@ export default function CalendarNavTree() {
                     value={editingLabel}
                     onChange={(e) => setEditingLabel(e.target.value)}
                     onBlur={() => handleEditComplete(item.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') handleEditComplete(item.id);
-                    }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleEditComplete(item.id); }}
                     className="ml-1 font-semibold text-gray-800 border-b border-gray-400 focus:outline-none"
                     autoFocus
                   />
@@ -170,12 +168,12 @@ export default function CalendarNavTree() {
                   </span>
                 )}
               </div>
-              <div className="ml-auto flex gap-4 mr-4 relative z-20">
+              <div className="ml-auto flex gap-4 mr-4 relative">
                 <div
                   className="p-1 cursor-pointer"
                   onClick={(e) => {
                     handleClick(e);
-                    toggleShare(item.id);
+                    handleCopyUrl(item.id);
                   }}
                 >
                   <Image
@@ -202,17 +200,17 @@ export default function CalendarNavTree() {
                   />
                 </div>
               </div>
-              {item.shareOpen && (
-                <div className="absolute top-10 left-20 p-2 bg-white shadow-md rounded-md z-50">
-                  <p className="text-sm">
-                    공유 링크: {`${window.location.origin}/calendar/${item.id}`}
-                  </p>
-                </div>
-              )}
             </div>
           ))}
         </div>
       </div>
+      
+      {/* 토스트 메시지 */}
+      {copyMessage && (
+        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-md">
+          {copyMessage}
+        </div>
+      )}
     </div>
   );
 }

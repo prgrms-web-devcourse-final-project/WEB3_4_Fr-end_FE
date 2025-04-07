@@ -97,7 +97,7 @@ export default function CalendarPage({ params }: CalendarPageProps) {
   return (
     <div className="flex h-screen relative">
       <CalendarNav />
-      <div className="-mx-24 h-full w-full overflow-hidden">
+      <div className="h-full w-full overflow-hidden">
         {/* 캘린더 이름(label) 영역 삭제 */}
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}
