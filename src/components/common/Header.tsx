@@ -128,7 +128,7 @@ const Header: React.FC = () => {
           <div
             className={`justify-start ${textColor} text-base font-semibold font-['Pretendard']`}
           >
-            <Link href="/calendar">Schedule</Link>
+            <Link href="/calendar/1">Schedule</Link>
           </div>
           <div
             className={`justify-start ${textColor} text-base font-semibold font-['Pretendard']`}
