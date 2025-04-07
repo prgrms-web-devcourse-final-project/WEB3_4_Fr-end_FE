@@ -1,46 +1,31 @@
 'use client';
 
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import { useState, useRef, useEffect } from 'react';
-import { useSortable } from '@dnd-kit/sortable';
-import { DragEndEvent } from '@dnd-kit/core';
 import Image from 'next/image';
 
 interface NavItem {
   id: string;
   label: string;
+  shareOpen: boolean;
 }
 
 export default function CalendarNavTree() {
   const [items, setItems] = useState<NavItem[]>([
-    { id: '1', label: '부산' },
-    { id: '2', label: '제주도' },
-    { id: '3', label: '인천' },
+    { id: '1', label: '부산', shareOpen: false },
+    { id: '2', label: '제주도', shareOpen: false },
+    { id: '3', label: '인천', shareOpen: false },
   ]);
   const [isOpen, setIsOpen] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<string>('auto');
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (over && active.id !== over.id) {
-      const oldIndex = items.findIndex((item) => item.id === active.id);
-      const newIndex = items.findIndex((item) => item.id === over.id);
-      const updatedItems = arrayMove(items, oldIndex, newIndex);
-      setItems(updatedItems);
-    }
-  };
-
   const addItem = () => {
-    const newItem = {
+    const newItem: NavItem = {
       id: (items.length + 1).toString(),
       label: `캘린더 ${items.length + 1}`,
+      shareOpen: false,
     };
-    setItems([...items, newItem]);
+    setItems((prevItems) => [...prevItems, newItem]);
   };
 
   const toggleCalendar = () => {
@@ -53,69 +38,16 @@ export default function CalendarNavTree() {
     }
   }, [isOpen, items]);
 
-  // 캘린더 항목 컴포넌트
-  const CalendarNavItem = ({ id, label }: NavItem) => {
-    const [shareOpen, setShareOpen] = useState(false);
-    const { listeners, setNodeRef, transform, transition } = useSortable({ id });
-
-    const style = {
-      transform: CSS.Transform.toString(transform),
-      transition,
-    };
-
-    const toggleShare = (e: React.MouseEvent) => {
-      e.stopPropagation();
-      setShareOpen((prev) => !prev);
-    };
-
-    const handleClick = (e: React.MouseEvent) => {
-      e.stopPropagation();
-    };
-
-    return (
-      <div
-        ref={setNodeRef}
-        style={style}
-        className="flex items-center gap-2 p-3 my-1 rounded-md hover:bg-gray-100 relative transition-transform duration-200 ease-in-out transform hover:scale-105"
-      >
-        <div {...listeners} className="flex items-center gap-2 cursor-grab w-full pr-10">
-          <Image src="/svg/calendar.svg" alt="calendar" width={14} height={13} className="cursor-pointer" />
-          <span className="ml-1 font-semibold text-gray-800">{label}</span>
-        </div>
-        <div className="ml-auto flex gap-4 mr-4 relative z-20">
-          <div
-            className="p-1 rounded-md cursor-pointer"
-            onClick={toggleShare}
-            onMouseDown={handleClick}
-          >
-            <Image
-              src="/svg/share.svg"
-              alt="share"
-              width={30}
-              height={24}
-              className="transition-transform duration-200 ease-in-out transform hover:scale-125"
-            />
-          </div>
-          <div
-            className="p-1 rounded-md cursor-pointer"
-            onMouseDown={handleClick}
-          >
-            <Image
-              src="/svg/trash.svg"
-              alt="trash"
-              width={34}
-              height={24}
-              className="transition-transform duration-200 ease-in-out transform hover:scale-125"
-            />
-          </div>
-        </div>
-        {shareOpen && (
-          <div className="absolute top-10 left-20 p-2 bg-white shadow-md rounded-md z-50">
-            <p className="text-sm">공유 링크: https://example.com</p>
-          </div>
-        )}
-      </div>
+  const toggleShare = (id: string) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === id ? { ...item, shareOpen: !item.shareOpen } : item
+      )
     );
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
   };
 
   return (
@@ -147,13 +79,48 @@ export default function CalendarNavTree() {
           }}
           className={`p-4 ${items.length > 10 ? 'overflow-y-auto max-h-[600px]' : ''} scroll-smooth`}
         >
-          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={items} strategy={verticalListSortingStrategy}>
-              {items.map((item) => (
-                <CalendarNavItem key={item.id} id={item.id} label={item.label} />
-              ))}
-            </SortableContext>
-          </DndContext>
+          {items.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center gap-2 p-3 my-1 rounded-md hover:bg-gray-100 relative transition-transform duration-200 ease-in-out transform hover:scale-105"
+            >
+              <div className="flex items-center gap-2 w-full pr-10">
+                <Image src="/svg/calendar.svg" alt="calendar" width={14} height={13} className="cursor-pointer" />
+                <span className="ml-1 font-semibold text-gray-800">{item.label}</span>
+              </div>
+              <div className="ml-auto flex gap-4 mr-4 relative z-20">
+                <div
+                  className="p-1 rounded-md cursor-pointer"
+                  onClick={(e) => {
+                    handleClick(e);
+                    toggleShare(item.id);
+                  }}
+                >
+                  <Image
+                    src="/svg/share.svg"
+                    alt="share"
+                    width={30}
+                    height={24}
+                    className="transition-transform duration-200 ease-in-out transform hover:scale-125"
+                  />
+                </div>
+                <div className="p-1 rounded-md cursor-pointer" onMouseDown={handleClick}>
+                  <Image
+                    src="/svg/trash.svg"
+                    alt="trash"
+                    width={34}
+                    height={24}
+                    className="transition-transform duration-200 ease-in-out transform hover:scale-125"
+                  />
+                </div>
+              </div>
+              {item.shareOpen && (
+                <div className="absolute top-10 left-20 p-2 bg-white shadow-md rounded-md z-50">
+                  <p className="text-sm">공유 링크: https://example.com</p>
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>

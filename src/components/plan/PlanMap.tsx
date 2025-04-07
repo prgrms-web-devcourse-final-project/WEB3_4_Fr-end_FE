@@ -93,7 +93,7 @@ const PlanMap = () => {
           lat: searchResult ? searchResult.y : 37.5665,
           lng: searchResult ? searchResult.x : 126.9780,
         }}
-        style={{ width: '100%', height: '400px', marginTop: '10px' }}
+        style={{ width: '1200px', height: '400px', marginTop: '10px' }}
         level={3}
       >
         {searchResult && (
