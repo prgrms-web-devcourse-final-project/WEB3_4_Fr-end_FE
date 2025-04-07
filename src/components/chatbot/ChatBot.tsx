@@ -8,7 +8,7 @@ import Image from "next/image";
 import { ChatHeader } from "./ChatHeader";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
-import { ChatBotMessage } from "@/types/chatbot";
+import { ChatBotMessage } from "@/types/ChatBot";
 
 export function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);

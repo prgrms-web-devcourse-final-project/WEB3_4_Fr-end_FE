@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { GroupChat, ChatMessage } from "@/types/chat";
+import { GroupChat, ChatMessage } from "@/types/Chat";
 import { ChatHeader } from "@/components/chat/ChatHeader";
 import { MessageInput } from "@/components/chat/MessageInput";
 import Image from "next/image";
