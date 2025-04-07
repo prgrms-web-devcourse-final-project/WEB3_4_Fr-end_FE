@@ -1,20 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { SearchResult } from "@/types/PlanSearchBarProps";
 
-interface PlanMapProps {
+export interface PlanMapProps {
   searchResult: SearchResult | null;
 }
 
 const PlanMap: React.FC<PlanMapProps> = ({ searchResult }) => {
+  // 지도 중심 좌표: 검색 결과가 있으면 해당 좌표, 없으면 기본 좌표(서울)
+  const [center, setCenter] = useState<{ lat: number; lng: number }>({
+    lat: 37.5665,
+    lng: 126.978,
+  });
+
+  useEffect(() => {
+    if (searchResult) {
+      setCenter({
+        lat: searchResult.y,
+        lng: searchResult.x,
+      });
+    }
+  }, [searchResult]);
+
   return (
     <Map
-      center={{
-        lat: searchResult ? searchResult.y : 37.5665,
-        lng: searchResult ? searchResult.x : 126.978,
-      }}
+      center={center}
       className="w-full h-full"
       level={3}
     >
