@@ -5,18 +5,10 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko"; // 한국어 locale
 import { useState } from "react";
+import { CommentData } from "@/types/CommentData";
 
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
-
-interface CommentData {
-  id: number;
-  title: string;
-  author: string;
-  date: string;
-  content: string;
-  avatar: string;
-}
 
 interface CommentProps {
   comments: CommentData[];
@@ -69,7 +61,6 @@ export default function Comment({ comments }: CommentProps) {
                       const now = dayjs();
                       const created = dayjs(comment.date);
                       const diffDays = now.diff(created, "day");
-
                       if (diffDays > 30) {
                         return created.format("YYYY.MM.DD");
                       } else if (diffDays === 0) {
