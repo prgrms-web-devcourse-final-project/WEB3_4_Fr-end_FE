@@ -5,25 +5,77 @@ import { IoCall } from "react-icons/io5";
 import { CiLocationOn } from "react-icons/ci";
 import Yaggwan from "@/components/reservation/Yaggwan";
 import { useState } from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import { ko } from "date-fns/locale";
+import useReservationStore from "@/store/reservationStore";
 
 export default function Confirmation() {
-  const [reservationData, setReservationData] = useState({
-    name: "",
-    phone: "",
-  });
-
+  // 예약자 정보와 이용자 정보 통합 상태
   const [userData, setUserData] = useState({
-    name: "",
-    phone: "",
-    people: "",
+    reserverName: "홍길동", // 예약자 이름
+    reserverPhone: "010-1234-5678", // 예약자 전화번호
+    userName: "", // 이용자 이름
+    userPhone: "", // 이용자 전화번호
+    people: "", // 인원
   });
 
-  const handleReservationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setReservationData({ ...reservationData, [e.target.name]: e.target.value });
+  const { checkIn, checkOut } = useReservationStore();
+
+  // 입력 상태 변경 핸들러
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-  const handleUserChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
+  // 유효성 검사
+  const validateUserData = () => {
+    if (
+      !userData.reserverName ||
+      !userData.reserverPhone ||
+      !userData.userName ||
+      !userData.userPhone ||
+      !userData.people
+    ) {
+      alert("모든 필수 정보를 입력해주세요!");
+      return false;
+    }
+    if (parseInt(userData.people, 10) <= 0) {
+      alert("인원은 1명 이상이어야 합니다.");
+      return false;
+    }
+    return true;
+  };
+
+  // 금액 계산
+  const pricePerNight = 100000; // 1박당 가격
+  const calculateTotalPrice = () => {
+    const startDate = new Date(checkIn);
+    const endDate = new Date(checkOut);
+    const nights = Math.ceil(
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    return nights > 0
+      ? nights * pricePerNight * Number(userData.people || 1)
+      : 0;
+  };
+
+  // FullCalendar 이벤트 데이터
+  const eventDate = [
+    {
+      title: "투숙 일정",
+      start: checkIn,
+      end: checkOut,
+      backgroundColor: "#80caff",
+      borderColor: "#80caff",
+    },
+  ];
+
+  // 예약 확인 처리
+  const handleConfirmReservation = () => {
+    if (validateUserData()) {
+      alert("예약이 완료되었습니다!");
+      // 서버 연동 로직 추가 가능
+    }
   };
 
   return (
@@ -59,31 +111,37 @@ export default function Confirmation() {
           <div className="w-full h-full border border-customGray-300 rounded-xl pt-8 pl-9">
             <div className="font-medium text-xl mb-8">예약자 정보</div>
             <div className="flex items-center mb-4 ml-10">
-              <label className="w-24 text-lg font-medium" htmlFor="name">
-                이름
+              <label
+                className="w-32 text-lg font-medium"
+                htmlFor="reserverName"
+              >
+                예약자 이름
               </label>
               <input
-                id="name"
+                id="reserverName"
                 type="text"
-                name="name"
-                placeholder="이름"
-                value={reservationData.name}
-                onChange={handleReservationChange}
+                name="reserverName"
+                placeholder="예약자 이름"
+                value={userData.reserverName}
+                onChange={handleInputChange}
                 className="w-49 h-8 border border-customGray-500 p-2 rounded"
                 readOnly
               />
             </div>
             <div className="flex items-center mb-4 ml-10">
-              <label className="w-24 text-lg font-medium" htmlFor="phone">
-                전화번호
+              <label
+                className="w-32 text-lg font-medium"
+                htmlFor="reserverPhone"
+              >
+                예약자 전화번호
               </label>
               <input
-                id="phone"
+                id="reserverPhone"
                 type="tel"
-                name="phone"
-                placeholder="전화번호"
-                value={reservationData.phone}
-                onChange={handleReservationChange}
+                name="reserverPhone"
+                placeholder="예약자 전화번호"
+                value={userData.reserverPhone}
+                onChange={handleInputChange}
                 className="w-49 h-8 border border-customGray-500 p-2 rounded"
                 readOnly
               />
@@ -93,35 +151,35 @@ export default function Confirmation() {
           <div className="w-full h-full border border-customGray-300 rounded-xl pt-8 pl-9">
             <div className="font-medium text-xl mb-8">이용자 정보</div>
             <div className="flex items-center mb-4 ml-10">
-              <label className="w-24 text-lg font-medium" htmlFor="userName">
-                이름
+              <label className="w-32 text-lg font-medium" htmlFor="userName">
+                이용자 이름
               </label>
               <input
                 id="userName"
                 type="text"
-                name="name"
-                placeholder="이름"
-                value={userData.name}
-                onChange={handleUserChange}
+                name="userName"
+                placeholder="이용자 이름"
+                value={userData.userName}
+                onChange={handleInputChange}
                 className="w-49 h-8 border border-customGray-500 p-2 rounded"
               />
             </div>
             <div className="flex items-center mb-4 ml-10">
-              <label className="w-24 text-lg font-medium" htmlFor="userPhone">
-                전화번호
+              <label className="w-32 text-lg font-medium" htmlFor="userPhone">
+                이용자 전화번호
               </label>
               <input
                 id="userPhone"
                 type="tel"
-                name="phone"
-                placeholder="전화번호"
-                value={userData.phone}
-                onChange={handleUserChange}
+                name="userPhone"
+                placeholder="이용자 전화번호"
+                value={userData.userPhone}
+                onChange={handleInputChange}
                 className="w-49 h-8 border border-customGray-500 p-2 rounded"
               />
             </div>
             <div className="flex items-center mb-4 ml-10">
-              <label className="w-24 text-lg font-medium" htmlFor="people">
+              <label className="w-32 text-lg font-medium" htmlFor="people">
                 인원
               </label>
               <input
@@ -130,15 +188,30 @@ export default function Confirmation() {
                 name="people"
                 placeholder="인원"
                 value={userData.people}
-                onChange={handleUserChange}
+                onChange={handleInputChange}
                 className="w-49 h-8 border border-customGray-500 p-2 rounded"
               />
             </div>
           </div>
         </div>
         <div className="w-full h-full border border-customGray-300 rounded-xl pt-8 px-9">
-          <div className="font-medium text-xl mb-8">일정 확인</div>
-          <div className="h-94 bg-amber-200"></div>
+          <div className="font-medium text-xl mb-4">일정 확인</div>
+          <div className="w-full h-94 mx-auto overflow-hidden">
+            <FullCalendar
+              initialView="dayGridMonth"
+              plugins={[dayGridPlugin]}
+              stickyHeaderDates={true}
+              aspectRatio={2}
+              contentHeight="376px"
+              locale={ko}
+              headerToolbar={{
+                left: "",
+                center: "",
+                right: "",
+              }}
+              events={eventDate}
+            />
+          </div>
         </div>
       </div>
       <div className="border border-customGray-300 my-10 w-full"></div>
@@ -146,13 +219,18 @@ export default function Confirmation() {
         <div className="font-medium text-xl mb-8">예약 확정하기</div>
         <div className="w-208 h-39 mx-auto grid grid-cols-2 gap-x-57 gap-y-8">
           <div>예약 숙소 :</div>
-          <div>예약자 명 :</div>
-          <div>예약 인원 :</div>
-          <div>예약자 전화번호 :</div>
-          <div>예약 일정 :</div>
-          <div>금액 :</div>
+          <div>예약자 명 : {userData.reserverName}</div>
+          <div>예약 인원 : {userData.people}</div>
+          <div>예약자 전화번호 : {userData.reserverPhone}</div>
+          <div>
+            예약 일정 : {checkIn} ~ {checkOut}
+          </div>
+          <div>금액 : {calculateTotalPrice().toLocaleString()}원</div>
         </div>
-        <button className="bg-customBlue-100 text-white mt-4 py-3 px-13 rounded-lg mx-auto block">
+        <button
+          onClick={handleConfirmReservation}
+          className="bg-customBlue-100 text-white mt-4 py-3 px-13 rounded-lg mx-auto block"
+        >
           결제하기
         </button>
       </div>

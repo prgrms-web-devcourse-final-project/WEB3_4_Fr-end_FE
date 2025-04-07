@@ -1,10 +1,16 @@
 import { useState } from "react";
+import useReservationStore from "@/store/reservationStore"; // Zustand 스토어
+import { useRouter } from "next/navigation";
 
 export default function FloatingReservationBlock() {
   const [checkIn, setCheckIn] = useState<string>(""); // 체크인 날짜 상태
   const [checkOut, setCheckOut] = useState<string>(""); // 체크아웃 날짜 상태
   const [totalNights, setTotalNights] = useState<number>(1); // 숙박 기간 상태
   const pricePerNight: number = 100000; // 1박당 가격
+
+  const { setReservation } = useReservationStore(); // Zustand 상태 업데이트 함수
+
+  const router = useRouter();
 
   const calculateNights = (start: string, end: string): void => {
     if (start && end) {
@@ -22,7 +28,9 @@ export default function FloatingReservationBlock() {
 
   const handleReservation = (): void => {
     if (checkIn && checkOut) {
+      setReservation(checkIn, checkOut); // Zustand를 통해 날짜 상태 저장
       alert(`체크인 날짜: ${checkIn}\n체크아웃 날짜: ${checkOut}`);
+      router.push("/reservation/confirmation");
     } else {
       alert("체크인 및 체크아웃 날짜를 선택해주세요.");
     }
