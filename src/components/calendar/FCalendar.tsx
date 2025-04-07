@@ -19,18 +19,12 @@ export default function FCalendar() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  const handleEventClick = (clickInfo: any) => {
-    const calendarId = '1'; // 동적으로 받도록 수정 필요
-    const eventTitle = clickInfo.event.title; 
-    router.push(`/calendar/${calendarId}/map?title=${eventTitle}`);
-  };
 
   return (
     <div className="-mx-24 h-full w-full overflow-hidden">
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        eventClick={handleEventClick}
         editable={true}
         selectable={true}
         dateClick={(arg) => dateClick(arg)}  // 인자를 넘겨줌
@@ -123,4 +117,4 @@ export default function FCalendar() {
       )}
     </div>
   );
-}
+};
