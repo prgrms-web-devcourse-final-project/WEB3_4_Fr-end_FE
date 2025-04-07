@@ -10,17 +10,18 @@ const PlanContainer: React.FC = () => {
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
 
   return (
-    <div className="flex">
+    <div className="flex gap-4">
       {/* 왼쪽 사이드바 */}
-      <div className="w-1/4">
+      <div className="w-1/3">
         <PlanSidebar
           placeName={placeName}
           onPlaceNameChange={setPlaceName}
           onSearchResult={setSearchResult}
+          searchResult={searchResult}
         />
       </div>
       {/* 오른쪽 지도 영역 */}
-      <div className="w-3/4">
+      <div className="w-2/3 h-[80vh]">
         <PlanMap searchResult={searchResult} />
       </div>
     </div>

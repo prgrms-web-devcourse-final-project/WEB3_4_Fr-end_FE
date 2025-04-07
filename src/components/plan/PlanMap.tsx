@@ -15,7 +15,7 @@ const PlanMap: React.FC<PlanMapProps> = ({ searchResult }) => {
         lat: searchResult ? searchResult.y : 37.5665,
         lng: searchResult ? searchResult.x : 126.978,
       }}
-      style={{ width: "1200px", height: "400px", marginTop: "10px" }}
+      className="w-full h-full"
       level={3}
     >
       {searchResult && (

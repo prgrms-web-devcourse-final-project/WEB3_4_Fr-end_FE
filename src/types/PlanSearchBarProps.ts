@@ -2,7 +2,7 @@ export interface PlanSearchBarProps {
   placeName: string;
   onPlaceNameChange: (newPlaceName: string) => void;
   onSearchResult: (result: SearchResult | null) => void;
-  onDelete?: () => void;
+  onDelete?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface SearchResult {
