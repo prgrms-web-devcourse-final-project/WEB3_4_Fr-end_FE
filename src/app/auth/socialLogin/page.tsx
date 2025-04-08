@@ -37,7 +37,7 @@ export default function SocialLogin() {
         setTokens(accessToken, refreshToken);
 
         if (needAdditionalInfo) {
-          router.push("/auth/complete-profile");
+          router.push("/auth/completeProfile");
         } else {
           router.push("/");
         }
