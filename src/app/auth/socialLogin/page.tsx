@@ -14,7 +14,7 @@ export default function SocialLogin() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDotCount((prev) => (prev % 3) + 1); // 1 → 2 → 3 → 1 ...
+      setDotCount((prev) => (prev % 3) + 1);
     }, 500);
 
     return () => clearInterval(interval);
