@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ChatBotMessage } from "@/types/ChatBot";
+import { ChatBotMessage } from "@/types/chatbot";
 import Image from "next/image";
 
 interface ChatMessageBubbleProps {

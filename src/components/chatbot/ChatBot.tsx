@@ -4,11 +4,10 @@ import { useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-
 import { ChatHeader } from "./ChatHeader";
 import { ChatMessages } from "./ChatMessages";
 import { ChatInput } from "./ChatInput";
-import { ChatBotMessage } from "@/types/ChatBot";
+import { ChatBotMessage } from "@/types/chatbot";
 
 export function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,10 +52,10 @@ export function ChatBot() {
   return (
     <>
       {/* 챗봇 아이콘 버튼 + 툴팁 */}
-      <div className="fixed bottom-40 right-15 group z-50">
+      <div className="fixed bottom-16 right-15 group z-50">
         <Button
           onClick={() => setIsOpen(true)}
-          className="relative h-12 w-12 rounded-full shadow-2xl cursor-pointer p-2 bg-white"
+          className="relative h-24 w-24 rounded-full shadow-2xl cursor-pointer p-2 bg-white"
         >
           <Image
             src="/chat-bot.png"

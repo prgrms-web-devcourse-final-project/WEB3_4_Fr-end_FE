@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function PlanHeader() {
   return (
-    <div className="flex items-center h-24 pb-5 bg-white px-4 gap-14">
+    <div className="flex items-center h-24 pb-5 bg-white gap-14">
       <p className="font-bold text-4xl text-customBlack-400">부산 해운대 여행</p>
       <div className="flex items-center gap-6">
         <div className="text-center flex items-center gap-1 font-medium">

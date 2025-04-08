@@ -13,7 +13,6 @@ interface NavItem {
 export default function CalendarNavTree() {
   const router = useRouter();
 
-  // 모든 Hook을 조건 없이 호출
   const [mounted, setMounted] = useState(false);
   const [items, setItems] = useState<NavItem[]>(() => {
     if (typeof window !== 'undefined') {
@@ -23,9 +22,29 @@ export default function CalendarNavTree() {
     const defaultItems: NavItem[] = [
       { id: '1', label: '캘린더 1', shareOpen: false },
     ];
-    if (typeof window !== 'undefined') localStorage.setItem('calendars', JSON.stringify(defaultItems));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('calendars', JSON.stringify(defaultItems));
+    }
     return defaultItems;
   });
+
+  // localStorage에 저장된 항목들을 반영하여 고유한 nextId 초기값 설정
+  const [nextId, setNextId] = useState<number>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('calendars');
+      if (stored) {
+        const storedItems = JSON.parse(stored) as NavItem[];
+        // id가 문자열이므로 parseInt를 통해 숫자로 변환한 후 최댓값 계산
+        const maxId = storedItems.reduce((max, item) => {
+          const idNum = parseInt(item.id, 10);
+          return idNum > max ? idNum : max;
+        }, 0);
+        return maxId + 1;
+      }
+    }
+    return 2; // 저장된 항목이 없는 경우 초기 id 2 사용
+  });
+
   const [editingCalendarId, setEditingCalendarId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState<string>('');
   const [isOpen, setIsOpen] = useState(true);
@@ -52,19 +71,19 @@ export default function CalendarNavTree() {
   const addItem = () => {
     setItems(prevItems => {
       const newItem: NavItem = {
-        id: (prevItems.length + 1).toString(),
-        label: `캘린더 ${prevItems.length + 1}`,
+        id: nextId.toString(), // 고유한 nextId 사용
+        label: `캘린더 ${nextId}`,
         shareOpen: false,
       };
       return [...prevItems, newItem];
     });
+    setNextId(prev => prev + 1);
   };
 
   const toggleCalendar = () => {
     setIsOpen(prev => !prev);
   };
 
-  // 기존 toggleShare 대신 handleCopyUrl 함수로 URL 복사 처리
   const handleCopyUrl = (id: string) => {
     const url = `${window.location.origin}/calendar/${id}`;
     navigator.clipboard.writeText(url)
@@ -110,7 +129,7 @@ export default function CalendarNavTree() {
 
   return (
     <div className="p-4 select-none">
-      <div className="elative border border-gray-200 bg-white h-[700px] w-[343px] shadow-md rounded-lg overflow-hidden">
+      <div className="relative border border-gray-200 bg-white h-[700px] w-[343px] shadow-md rounded-lg overflow-hidden">
         <p
           onClick={addItem}
           className="relative font-semibold text-xl pl-8 pt-8 text-gray-800 cursor-pointer transition-transform duration-200 ease-in-out hover:scale-105"
@@ -139,7 +158,7 @@ export default function CalendarNavTree() {
         >
           {items.map(item => (
             <div
-              key={item.id}
+              key={item.id}  // 이제 중복된 key 문제가 발생하지 않습니다.
               onClick={() => handleItemClick(item.id)}
               className="flex items-center gap-2 p-3 my-1 rounded-md bg-white transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer hover:bg-gray-100"
             >
