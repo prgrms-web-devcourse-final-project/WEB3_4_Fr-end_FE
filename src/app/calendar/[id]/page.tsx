@@ -57,10 +57,8 @@ export default function CalendarPage({ params }: CalendarPageProps) {
     setIsModalOpen(true);
   };
 
-  // EventClickArg 타입을 사용하여 타입 안전하게 작성
   const eventClick = (clickInfo: EventClickArg) => {
     const eventId = clickInfo.event.id;
-    // 캘린더 id와 이벤트 id를 모두 사용하여 URL 이동
     router.push(`/calendar/${calendarId}/${eventId}`);
   };
 
@@ -83,7 +81,6 @@ export default function CalendarPage({ params }: CalendarPageProps) {
     closeModal();
   };
 
-  // 드래그 종료 시, 쓰레기통 영역 내에 드롭되면 바로 삭제
   const handleEventDragStop = (dragInfo: EventDragStopArg) => {
     const trashEl = document.getElementById('trash-drop-zone');
     if (!trashEl) return;
@@ -114,7 +111,7 @@ export default function CalendarPage({ params }: CalendarPageProps) {
           editable={true}
           selectable={true}
           dateClick={dateClick}
-          eventClick={eventClick}  // 이벤트 클릭 시 동적 라우트로 이동
+          eventClick={eventClick}
           eventDragStop={handleEventDragStop}
           events={events}
           height="100%"
@@ -126,7 +123,7 @@ export default function CalendarPage({ params }: CalendarPageProps) {
           }}
         />
 
-        {/* 모달: 이벤트 생성 */}
+        {/* 모달 */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white p-8 rounded-2xl shadow-lg w-[520px]">

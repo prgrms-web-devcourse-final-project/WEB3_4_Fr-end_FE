@@ -224,7 +224,6 @@ export default function CalendarNavTree() {
         </div>
       </div>
       
-      {/* 토스트 메시지 */}
       {copyMessage && (
         <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-md">
           {copyMessage}

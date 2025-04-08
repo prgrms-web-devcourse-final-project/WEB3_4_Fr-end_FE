@@ -6,7 +6,6 @@ import { FiBookmark } from "react-icons/fi";
 import { SearchIcon, Trash2Icon } from "lucide-react";
 import { PlanSearchBarProps, SearchResult } from "@/types/PlanSearchBarProps";
 
-// KakaoPlace 인터페이스 (카카오 API에서 받아올 데이터 형태)
 export interface KakaoPlace {
   place_name: string;
   category_group_name: string;
@@ -15,7 +14,6 @@ export interface KakaoPlace {
   y: string;
 }
 
-// PlanCardProps는 검색바 관련 props와 함께 onDelete 함수를 포함합니다.
 export interface PlanCardProps extends PlanSearchBarProps {
   searchResult: SearchResult | null;
   onDelete: () => void;
@@ -30,7 +28,6 @@ const PlanCard: React.FC<PlanCardProps> = ({
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Kakao Maps 서비스 로드 여부 확인
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
       window.kakao.maps.load(() => {
@@ -41,14 +38,12 @@ const PlanCard: React.FC<PlanCardProps> = ({
     }
   }, []);
 
-  // 엔터키 입력 시 검색 실행
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSearch();
     }
   };
 
-  // 장소 검색: placeName을 이용하여 Kakao Places API 호출
   const handleSearch = () => {
     if (!isLoaded || !window.kakao || !window.kakao.maps.services) {
       console.error("Kakao Maps 서비스 라이브러리가 로드되지 않았습니다.");
@@ -73,7 +68,6 @@ const PlanCard: React.FC<PlanCardProps> = ({
     });
   };
 
-  // 북마크 기능 (예시)
   const handleBookmark = () => {
     alert("북마크!");
   };
@@ -83,7 +77,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
       <div
         className="w-[92%] overflow-hidden shadow-md rounded-md grid grid-flow-col grid-rows-2 gap-4 p-4 border border-gray-300"
       >
-        {/* 시간 입력 영역 */}
+        {/* 시간  */}
         <div className="row-span-2 flex items-center justify-center ">
           <input
             type="time"
@@ -92,7 +86,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
           />
         </div>
 
-        {/* 검색창 영역 */}
+        {/* 검색창 */}
         <div className="col-span-2">
           <div className="flex items-center w-full pr-10">
             <input
@@ -103,7 +97,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
               onKeyDown={handleKeyDown}
               className="flex-1 border-none outline-none bg-transparent font-bold"
             />
-            {/* 아이콘 그룹 컨테이너 */}
+            {/* 아이콘  */}
             <div className="flex space-x-2">
               <Button variant="ghost" size="icon" onClick={handleSearch} asChild>
                 <span>
@@ -119,7 +113,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
           </div>
         </div>
 
-        {/* 하단 영역: 카테고리 정보와 북마크 버튼 */}
+        {/*  카테고리 북마크 */}
         <div className="col-span-2 row-span-1 pr-10">
           <div className="flex justify-between items-center">
             <span>
