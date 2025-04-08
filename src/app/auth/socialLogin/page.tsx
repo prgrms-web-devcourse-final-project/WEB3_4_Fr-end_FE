@@ -1,82 +1,61 @@
 "use client";
 
-import React from "react";
-import { useForm } from "react-hook-form";
-import InputField from "@/components/login/register/InputField";
-import BirthDateField from "@/components/login/register/BirthDateField";
-import CheckboxField from "@/components/login/register/CheckboxField";
-import SelectField from "@/components/login/register/SelectField";
-import { SignupFormData } from "@/types/loginForm";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import api from "@/lib/auth/axios";
+import { useAuthStore } from "@/store/useAuthStore";
 
-export default function StyledSignupForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignupFormData>({ mode: "onChange" });
+export default function SocialLogin() {
+  const searchParams = useSearchParams();
+  const code = searchParams.get("code");
+  const router = useRouter();
+  const setTokens = useAuthStore((state) => state.setTokens);
+  const [dotCount, setDotCount] = useState<number>(1);
 
-  const onSubmit = (data: SignupFormData) => {
-    console.log("회원가입 데이터:", data);
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDotCount((prev) => (prev % 3) + 1); // 1 → 2 → 3 → 1 ...
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleSocialLogin = async () => {
+      if (!code) return;
+
+      try {
+        const res = await api.post("/api/v1/auth/social-login", {
+          socialType: "GOOGLE",
+          code,
+        });
+
+        const { accessToken, refreshToken, needAdditionalInfo } = res.data;
+
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        setTokens(accessToken, refreshToken);
+
+        if (needAdditionalInfo) {
+          router.push("/auth/complete-profile");
+        } else {
+          router.push("/");
+        }
+      } catch (err) {
+        console.error("소셜 로그인 실패:", err);
+      }
+    };
+
+    handleSocialLogin();
+  }, [code, router, setTokens]);
+
+  const dots = ".".repeat(dotCount);
 
   return (
-    <div className="w-full flex justify-center items-center">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-[420px] mx-auto flex flex-col gap-4"
-      >
-        <InputField
-          label="닉네임"
-          placeholder="닉네임을 입력해 주세요."
-          name="nickname"
-          register={register}
-          rules={{
-            required: "닉네임은 필수 입력입니다.",
-            minLength: { value: 2, message: "닉네임은 2자 이상이어야 합니다." },
-          }}
-          error={errors.nickname?.message}
-        />
-        <InputField
-          label="이메일"
-          placeholder="이메일을 입력해 주세요."
-          name="email"
-          register={register}
-          rules={{
-            required: "이메일은 필수 입력입니다.",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "올바른 이메일 형식을 입력해주세요.",
-            },
-          }}
-          error={errors.email?.message}
-        />
-        <BirthDateField register={register} errors={errors} />
-        <InputField
-          label="휴대폰 번호"
-          placeholder="휴대폰 번호를 입력해 주세요.(-제외)"
-          name="phone"
-          register={register}
-          rules={{
-            required: "휴대폰 번호는 필수 입력입니다.",
-            pattern: {
-              value: /^\d{10,11}$/,
-              message: "-를 제외한 숫자만 입력해주세요.",
-            },
-          }}
-          error={errors.phone?.message}
-        />
-        <SelectField label="성별" options={["성별", "남자", "여자"]} />
-        <CheckboxField
-          id="email-agree"
-          label="이메일 메일링 서비스에 동의합니다."
-        />
-        <button
-          type="submit"
-          className="w-full h-[52px] bg-[#80caff] text-white text-[20px] font-bold rounded-lg mt-4 mb-[317px]"
-        >
-          회원가입
-        </button>
-      </form>
+    <div className="w-[726px] min-h-[770px] flex flex-col items-center mt-10">
+      <div className="flex flex-col items-center text-center font-paperlogy text-[60xp] font-bold">
+        로그인 처리 중입니다{dots}
+      </div>
     </div>
   );
 }
