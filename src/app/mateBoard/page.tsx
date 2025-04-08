@@ -1,19 +1,25 @@
+// app/mateBoard/page.jsx
 import MateHero from "@/components/mateBoard/mateBoardMain/MateHero";
 import MateBoardFilter from "@/components/mateBoard/mateBoardMain/MateBoardFilter";
+import { getMateBoardPosts } from "@/apis/mateBoard/getMateBoardPosts";
+import { MateCardData } from "@/types/MateCardData";
 
-import { dummyCards } from "@/dummyData/mateCards";
+export default async function MateBoard() {
+  let cards: MateCardData[] = [];
+  try {
+    cards = await getMateBoardPosts();
+  } catch (error) {
+    console.error("게시글 불러오기 에러:", error);
+  }
 
-function mateBoard() {
   return (
     <>
       <div className="pb-20">
         <MateHero />
       </div>
       <div className="pb-20">
-        <MateBoardFilter cards={dummyCards} />
+        <MateBoardFilter cards={cards} />
       </div>
     </>
   );
 }
-
-export default mateBoard;

@@ -1,4 +1,4 @@
-export type MateCardData = {
+export type MateDetailData = {
   id: number;
   nickname: string;
   profileImage: string | null;
@@ -12,4 +12,5 @@ export type MateCardData = {
   recruitmentStatus: string;
   mateGender: string;
   createdAt: string;
+  imageUrl: string;
 };

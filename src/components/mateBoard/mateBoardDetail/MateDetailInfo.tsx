@@ -1,14 +1,20 @@
 import Image from "next/image";
 import ReportButton from "@/components/mateBoard/mateBoardDetail/ReportButton";
+import { MateDetailData } from "@/types/MateDetailData";
 
-export default function MateDetailPage() {
+import { getGenderLabel } from "@/utils/getGenderLabel";
+import { getTravelRegionLabel } from "@/utils/getTravelRegion";
+
+type MateDetailPageProps = {
+  data: MateDetailData;
+};
+
+export default function MateDetailInfo({ data }: MateDetailPageProps) {
   return (
     <div className=" py-12 max-w-5xl mx-auto space-y-12">
       {/* 제목 */}
       <div className="flex items-center w-full">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">
-          6월 말 제주도 동행 구합니다.
-        </h1>
+        <h1 className="text-4xl font-bold text-gray-800 mb-2">{data.title}</h1>
         <div className="ml-auto"></div>
       </div>
 
@@ -18,19 +24,24 @@ export default function MateDetailPage() {
           📅 여행 일정
         </div>
         <div className="text-[20px] font-medium text-customGray-600">
-          2025-06-20 ~ 2025-06-30
+          {data.travelStartDate} ~ {data.travelEndDate}
         </div>
         <div className="text-[20px] font-semibold text-customBlack-200">
-          📍 제주도
+          📍 {getTravelRegionLabel(data.travelRegion)}
         </div>
       </div>
 
       {/* 모집 인원 */}
       <div className="bg-white shadow rounded-xl p-6 border border-gray-100">
         <div className="text-[20px] text-customBlack-200 font-semibold mb-2">
-          👥 모집 인원
+          👥 모집인원 및 선호성별
         </div>
-        <div className="text-[20px] text-customGray-600 ">3명</div>
+        <div className="text-[20px] text-customGray-600 ">
+          모집인원 : {data.recruitCount}명
+        </div>
+        <div className="text-[20px] text-customGray-600 ">
+          선호성별 : {getGenderLabel(data.mateGender)}
+        </div>
       </div>
 
       {/* 여행 소개 + 이미지 */}
@@ -41,19 +52,26 @@ export default function MateDetailPage() {
             📝 여행 소개
           </div>
           <div className="whitespace-pre-line text-customGray-600 leading-relaxed text-[20px]">
-            아직 정해지지는 않지만 동행을 구하고 같이 일정을 짜려고 합니다
-            {"\n"}현 인원 : 20대 남1,여1
-            {"\n"}예정은 6월 20~28일 이고 뒤로 하루씩 밀려도 상관 없습니다
-            {"\n"}관심있으신분들 연락 부탁드립니다!!
+            {data.content}
           </div>
         </div>
 
         {/* 오른쪽: 이미지 */}
-        <div className="w-full md:w-[250px] h-[250px] rounded-xl overflow-hidden border border-gray-200 shadow">
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 font-semibold text-lg">
-            IMG
+        {data.imageUrl ? (
+          <Image
+            src={data.imageUrl}
+            alt="프로필 이미지"
+            className="w-full md:w-[250px] h-[250px] rounded-xl object-cover border border-gray-200 shadow"
+            width={250}
+            height={250}
+          />
+        ) : (
+          <div className="w-full md:w-[250px] h-[250px] rounded-xl overflow-hidden border border-gray-200 shadow">
+            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 font-semibold text-lg">
+              이미지 없음
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* 여행장 */}
@@ -62,7 +80,7 @@ export default function MateDetailPage() {
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
             <Image
-              src="/default-profile.png"
+              src={data.profileImage || "/default-profile.png"}
               alt="프로필"
               className="rounded-full"
               width={48}
@@ -71,10 +89,12 @@ export default function MateDetailPage() {
           </div>
           <div className="w-full">
             <div className="flex items-center justify-between text-[16px] font-semibold text-customBlack-200">
-              <span>닉네임</span>
+              <span>{data.nickname}</span>
               <ReportButton />
             </div>
-            <div className="text-[16px] text-customGray-600">나이 · 성별</div>
+            <div className="text-[16px] text-customGray-600">
+              {getGenderLabel(data.authorGender)}
+            </div>
           </div>
         </div>
 

@@ -25,7 +25,8 @@ export default function MateBoardFilter({ cards }: { cards: MateCardData[] }) {
   }, [debouncedSearch]);
 
   const filtered = cards.filter((card) => {
-    const matchesRegion = region === "전국" ? true : card.region === region;
+    const matchesRegion =
+      region === "전국" ? true : card.travelRegion === region;
     const matchesCategory =
       category === "전체"
         ? true
@@ -34,7 +35,7 @@ export default function MateBoardFilter({ cards }: { cards: MateCardData[] }) {
           : card.recruitCount === 0;
 
     const matchesSearch =
-      card.title.includes(search) || card.description.includes(search);
+      card.title.includes(search) || card.content.includes(search);
 
     return matchesRegion && matchesCategory && matchesSearch;
   });
