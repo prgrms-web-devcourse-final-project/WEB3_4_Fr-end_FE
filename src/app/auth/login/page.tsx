@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import api from "@/lib/auth/axios";
 
 export default function Login() {
   const [bgImage, setBgImage] = useState("/loginHero/img1.jpg");
@@ -12,20 +13,25 @@ export default function Login() {
     setBgImage(`/loginHero/img${randomIndex}.jpg`);
   }, []);
 
-  const handleGoogleLogin = () => {
-    const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
-
-    const queryParams = new URLSearchParams({
-      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-      redirect_uri: `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}/auth/socialLogin`,
-      response_type: "code",
-      scope: "openid email profile",
-      access_type: "offline",
-      prompt: "consent",
-    });
-
-    window.location.href = `${rootUrl}?${queryParams.toString()}`;
+  const handleGoogleLogin = async () => {
+    try {
+      const res = await api.get("/api/v1/auth/redirect-url", {
+        params: {
+          socialType: "GOOGLE",
+        },
+        headers: {},
+      });
+      const { redirectUri } = res.data;
+      if (redirectUri) {
+        window.location.href = redirectUri;
+      } else {
+        console.error("리디렉션 URL 없음.");
+      }
+    } catch (error) {
+      console.error(`Error 발생: ${error}`);
+    }
   };
+
   return (
     <div className="relative w-screen h-screen overflow-hidden m-0 p-0">
       <div className="fixed inset-0 w-screen h-screen overflow-hidden m-0 p-0 z-0">
