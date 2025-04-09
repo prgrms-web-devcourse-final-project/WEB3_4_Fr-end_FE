@@ -2,18 +2,8 @@
 
 import React, { useState } from "react";
 import PlanCard from "@/components/plan/PlanCard";
-import { SearchResult } from "@/types/PlanSearchBarProps";
 import Image from "next/image";
-
-interface CardData {
-  id: number;
-  placeName: string;
-  searchResult: SearchResult | null;
-}
-
-interface PlanCardContainerProps {
-  onSearchResultsChange: (results: SearchResult[]) => void;
-}
+import type { CardData, PlanCardContainerProps, SearchResult } from "@/app/types"; // ✅ 타입 import
 
 const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
   onSearchResultsChange,
@@ -42,7 +32,6 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
         : card
     );
     setCards(updatedCards);
-
     const results = updatedCards
       .filter((card) => card.searchResult !== null)
       .map((card) => card.searchResult!);
@@ -57,6 +46,7 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
       .map((card) => card.searchResult!);
     onSearchResultsChange(results);
   };
+
 
   return (
     <div className="-mx-2 w-full h-[700px] overflow-y-auto overflow-x-hidden mb-20 pb-10">

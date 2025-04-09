@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { SearchResult } from "@/types/PlanSearchBarProps";
-
-interface PlanMapProps {
-  searchResults: SearchResult[];
-}
+import type { PlanMapProps } from "@/app/types"; // ✅ 타입 import
 
 const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -31,6 +27,7 @@ const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
   
   useEffect(() => {
     if (!mapRef.current) return;
+
     window.kakao.maps.load(() => {
       markersRef.current.forEach((marker) => marker.setMap(null));
       markersRef.current = [];

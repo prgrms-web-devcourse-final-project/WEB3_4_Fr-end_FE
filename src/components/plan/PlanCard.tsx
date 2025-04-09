@@ -4,20 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FiBookmark } from "react-icons/fi";
 import { SearchIcon, Trash2Icon } from "lucide-react";
-import { PlanSearchBarProps, SearchResult } from "@/types/PlanSearchBarProps";
-
-export interface KakaoPlace {
-  place_name: string;
-  category_group_name: string;
-  address_name: string;
-  x: string;
-  y: string;
-}
-
-export interface PlanCardProps extends PlanSearchBarProps {
-  searchResult: SearchResult | null;
-  onDelete: () => void;
-}
+import type { PlanCardProps, KakaoPlace, SearchResult } from "@/app/types";
 
 const PlanCard: React.FC<PlanCardProps> = ({
   placeName,

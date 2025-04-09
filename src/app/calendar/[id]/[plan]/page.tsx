@@ -1,4 +1,3 @@
-// app/page.tsx (또는 pages/index.tsx)
 "use client";
 
 import React, { useState } from "react";
