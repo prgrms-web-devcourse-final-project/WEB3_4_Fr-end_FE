@@ -4,13 +4,33 @@ import Image from "next/image";
 import { IoCall } from "react-icons/io5";
 import { CiLocationOn } from "react-icons/ci";
 import Yaggwan from "@/components/reservation/Yaggwan";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { ko } from "date-fns/locale";
-import useReservationStore from "@/store/reservationStore";
+import { useSearchParams } from "next/navigation";
+import { fetchAccommodationById } from "@/apis/reservation/reservationApi";
+
+interface Accommodation {
+  id: number;
+  name: string;
+  location: string;
+  pricePerNight: number;
+  mainImage: string;
+}
 
 export default function Confirmation() {
+  // URL에서 데이터 읽기
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+  const checkIn = searchParams.get("checkIn");
+  const checkOut = searchParams.get("checkOut");
+
+  // 숙소 정보 상태
+  const [accommodation, setAccommodation] = useState<Accommodation | null>(
+    null
+  );
+
   // 예약자 정보와 이용자 정보 통합 상태
   const [userData, setUserData] = useState({
     reserverName: "홍길동", // 예약자 이름
@@ -20,7 +40,33 @@ export default function Confirmation() {
     people: "", // 인원
   });
 
-  const { checkIn, checkOut } = useReservationStore();
+  // 숙소 정보 불러오기
+  useEffect(() => {
+    if (id) {
+      fetchAccommodationById(parseInt(id))
+        .then((data: Accommodation) => setAccommodation(data))
+        .catch((error) =>
+          console.error("Failed to fetch accommodation:", error)
+        );
+    }
+  }, [id]);
+
+  // 금액 계산 (1박당 가격 설정)
+  const pricePerNight = accommodation?.pricePerNight || 100000;
+
+  const calculateTotalPrice = () => {
+    if (checkIn && checkOut) {
+      const startDate = new Date(checkIn);
+      const endDate = new Date(checkOut);
+      const nights = Math.ceil(
+        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      return nights > 0
+        ? nights * pricePerNight * Number(userData.people || 1)
+        : 0;
+    }
+    return 0;
+  };
 
   // 입력 상태 변경 핸들러
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,25 +92,12 @@ export default function Confirmation() {
     return true;
   };
 
-  // 금액 계산
-  const pricePerNight = 100000; // 1박당 가격
-  const calculateTotalPrice = () => {
-    const startDate = new Date(checkIn);
-    const endDate = new Date(checkOut);
-    const nights = Math.ceil(
-      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-    );
-    return nights > 0
-      ? nights * pricePerNight * Number(userData.people || 1)
-      : 0;
-  };
-
   // FullCalendar 이벤트 데이터
   const eventDate = [
     {
       title: "투숙 일정",
-      start: checkIn,
-      end: checkOut,
+      start: checkIn || undefined,
+      end: checkOut || undefined,
       backgroundColor: "#80caff",
       borderColor: "#80caff",
     },
@@ -82,7 +115,7 @@ export default function Confirmation() {
     <>
       <div className="w-full h-100 rounded-2xl relative overflow-hidden mt-10">
         <Image
-          src={"/reservationImg/testImg.webp"}
+          src={accommodation?.mainImage || "/reservationImg/testImg.webp"}
           alt="숙소 이미지"
           fill
           style={{ objectFit: "cover" }}
@@ -91,7 +124,7 @@ export default function Confirmation() {
       <div className="mt-10 flex gap-30">
         <div className="font-semibold w-66 ml-10">
           <div className="text-xl text-customGray-600">호텔</div>
-          <div className="text-3xl mt-2">그랜드 하얏트 제주</div>
+          <div className="text-3xl mt-2">{accommodation?.name}</div>
         </div>
         <div className="font-medium text-xl text-customGray-600">
           <div className="flex gap-2 items-center">
@@ -100,7 +133,7 @@ export default function Confirmation() {
           </div>
           <div className="flex gap-2 items-center mt-4">
             <CiLocationOn />
-            <div>제주특별자치도 제주시 노형동</div>
+            <div>{accommodation?.location}</div>
           </div>
         </div>
       </div>
@@ -217,11 +250,11 @@ export default function Confirmation() {
       <div className="border border-customGray-300 my-10 w-full"></div>
       <div className="w-full h-81 border border-customGray-300 rounded-2xl pt-8 px-9 mb-20">
         <div className="font-medium text-xl mb-8">예약 확정하기</div>
-        <div className="w-208 h-39 mx-auto grid grid-cols-2 gap-x-57 gap-y-8">
-          <div>예약 숙소 :</div>
-          <div>예약자 명 : {userData.reserverName}</div>
+        <div className="w-208 h-39 mx-auto grid grid-cols-2 gap-x-57 gap-y-2">
+          <div>예약 숙소 : {accommodation?.name} </div>
+          <div>이용자 명 : {userData.userName}</div>
           <div>예약 인원 : {userData.people}</div>
-          <div>예약자 전화번호 : {userData.reserverPhone}</div>
+          <div>이용자 전화번호 : {userData.userPhone}</div>
           <div>
             예약 일정 : {checkIn} ~ {checkOut}
           </div>
@@ -229,7 +262,7 @@ export default function Confirmation() {
         </div>
         <button
           onClick={handleConfirmReservation}
-          className="bg-customBlue-100 text-white mt-4 py-3 px-13 rounded-lg mx-auto block"
+          className="bg-customBlue-100 text-white mt-1 py-3 px-13 rounded-lg mx-auto block"
         >
           결제하기
         </button>

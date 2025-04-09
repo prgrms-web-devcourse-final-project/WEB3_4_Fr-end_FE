@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import MenuSection from "./MenuSection";
+import { logoutApi } from "@/lib/auth/logout";
 import { UserDummyData } from "@/dummyData/UserDummyData";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useRouter } from "next/navigation";
 
 interface UserSidebarProps {
   selectedSection: string;
@@ -17,6 +20,21 @@ export default function UserSidebar({
   onSelectSection,
   onSelectItem,
 }: UserSidebarProps) {
+  const clearTokens = useAuthStore((state) => state.clearTokens);
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await logoutApi();
+
+      clearTokens();
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
+      router.push("auth/login");
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
+  };
   return (
     <div className="w-[197px] h-[447px] flex flex-col items-center">
       <Image
@@ -51,7 +69,10 @@ export default function UserSidebar({
             onSelectSection={onSelectSection}
             onSelectItem={onSelectItem}
           />
-          <div className="text-[20px] font-pretendard text-red-600 hover:font-bold">
+          <div
+            onClick={handleLogout}
+            className="text-[20px] font-pretendard text-red-600 hover:font-bold"
+          >
             로그 아웃
           </div>
         </div>
