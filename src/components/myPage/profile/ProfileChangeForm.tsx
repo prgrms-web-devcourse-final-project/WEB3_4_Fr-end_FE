@@ -34,7 +34,9 @@ export default function ProfileChangeForm() {
         console.log("✅ 유저 정보:", res.data);
         const data: UserInfo = res.data;
         setNickname(data.nickname);
-        setIntro(data.bio || "");
+        setIntro(
+          data.bio || "자연을 사랑하는 여행자와 함께할 메이트를 찾습니다! 🌿✈️"
+        );
         setEmail(data.email);
         setPhone(data.phone);
         setProfileImage(data.profileImage);
@@ -85,6 +87,7 @@ export default function ProfileChangeForm() {
 
       console.log("✅ 닉네임 응답 성공:", response.data);
       alert("닉네임이 변경되었습니다.");
+      setEditingField(null);
     } catch (err) {
       const axiosError = err as AxiosError;
       console.error("❌ 닉네임 변경 실패:", axiosError.response?.data);
@@ -96,6 +99,7 @@ export default function ProfileChangeForm() {
     try {
       await patchJson("/api/v1/user/me/bio", { bio: intro });
       alert("자기소개가 변경되었습니다.");
+      setEditingField(null);
     } catch (err) {
       const axiosError = err as AxiosError;
       console.error("소개글 변경 실패:", axiosError.response?.data);
@@ -112,8 +116,12 @@ export default function ProfileChangeForm() {
       value: email,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
         setEmail(e.target.value),
-      isValid: email === "" || emailValid,
+      isValid: !email || emailValid,
       onSubmit: async () => {
+        if (!email.trim()) {
+          alert("이메일을 입력해주세요.");
+          return;
+        }
         if (!emailValid) {
           alert("이메일 형식이 올바르지 않습니다.");
           return;
@@ -121,6 +129,7 @@ export default function ProfileChangeForm() {
         try {
           await patchJson("/api/v1/user/me/email", { email });
           alert("이메일이 변경되었습니다.");
+          setEditingField(null);
         } catch (err) {
           const axiosError = err as AxiosError;
           console.error("이메일 변경 실패:", axiosError.response?.data);
@@ -136,8 +145,12 @@ export default function ProfileChangeForm() {
       value: phone,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
         setPhone(e.target.value),
-      isValid: phone === "" || phoneValid,
+      isValid: !phone || phoneValid,
       onSubmit: async () => {
+        if (!phone.trim()) {
+          alert("휴대폰 번호를 입력해주세요.");
+          return;
+        }
         if (!phoneValid) {
           alert("휴대폰 번호 형식이 올바르지 않습니다.");
           return;
@@ -145,6 +158,7 @@ export default function ProfileChangeForm() {
         try {
           await patchJson("/api/v1/user/me/phone", { phone });
           alert("휴대폰 번호가 변경되었습니다.");
+          setEditingField(null);
         } catch (err) {
           const axiosError = err as AxiosError;
           console.error("휴대폰 번호 변경 실패:", axiosError.response?.data);
@@ -193,62 +207,96 @@ export default function ProfileChangeForm() {
                   onChange={(e) => setNickname(e.target.value)}
                   className="text-[40px] font-bold rounded w-full max-w-[447px] h-[60px]"
                 />
-                <button
-                  onClick={updateNickname}
-                  className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
-                >
-                  확인
-                </button>
+                <div className="flex justify-end w-[408px]">
+                  <button
+                    onClick={updateNickname}
+                    className="text-customViloet-200 text-[16px] font-bold hover:text-customBlue-200 cursor-pointer mb-[20px]"
+                  >
+                    확인
+                  </button>
+                </div>
               </div>
             ) : (
               <>
                 <p className="text-[40px] font-bold max-w-[447px] h-[60px]">
                   {nickname}
                 </p>
-                <button
-                  className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
-                  onClick={() => setEditingField("nickname")}
-                >
-                  수정
-                </button>
+                <div className="flex justify-end w-[408px]">
+                  <button
+                    className="text-customViloet-200 text-[16px] font-bold hover:text-customBlue-200 cursor-pointer mb-[20px]"
+                    onClick={() => setEditingField("nickname")}
+                  >
+                    수정
+                  </button>
+                </div>
               </>
             )}
 
             {editingField === "bio" ? (
               <>
+                <br />
                 <textarea
                   value={intro}
                   onChange={(e) => setIntro(e.target.value)}
-                  className="mt-2 text-[13px] font-semibold w-[326px] h-[60px]"
+                  className="mt-2 text-[13px] font-semibold w-[408px] h-[60px]"
                 />
-                <button
-                  onClick={updateBio}
-                  className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
-                >
-                  확인
-                </button>
+                <br />
+                <div className="flex justify-end w-[408px]">
+                  <button
+                    onClick={updateBio}
+                    className="text-customViloet-200 text-[16px] font-bold hover:text-customBlue-200 cursor-pointer mb-[45px]"
+                  >
+                    확인
+                  </button>
+                </div>
               </>
             ) : (
               <>
                 <p className="mt-2 text-[13px] font-semibold w-[326px] h-[60px] mb-[6.5px]">
                   {intro}
                 </p>
-                <button
-                  className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
-                  onClick={() => setEditingField("bio")}
-                >
-                  수정
-                </button>
+                <div className="flex justify-end w-[408px]">
+                  <button
+                    className="text-customViloet-200 text-[16px] font-bold hover:text-customBlue-200 cursor-pointer mb-[45px]"
+                    onClick={() => setEditingField("bio")}
+                  >
+                    수정
+                  </button>
+                </div>
               </>
             )}
 
             {fields.map((f, i) => (
-              <div key={i} className="w-[350px]">
+              <div key={i} className="w-[408px]">
                 <label className="text-base text-black font-[pretendard]">
                   {f.label}
                 </label>
                 {editingField === f.label ? (
                   <>
+                    <input
+                      type={f.type}
+                      onChange={f.onChange}
+                      placeholder={f.placeholder}
+                      className="w-full h-[50px] px-2.5 py-2 bg-white rounded outline outline-customGray-300 mt-1 focus:outline-customGray-600"
+                    />
+                    <p
+                      className={`text-customPink-300 text-[13px] mt-1 ${
+                        f.isValid ? "hidden" : ""
+                      }`}
+                    >
+                      {f.e}
+                    </p>
+                    <div className="flex justify-end mt-[15px]">
+                      <button
+                        className="text-customViloet-200 text-[16px] font-bold hover:text-customBlue-200 cursor-pointer"
+                        onClick={f.onSubmit}
+                      >
+                        확인
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex flex-col">
                     <input
                       type={f.type}
                       value={f.value}
@@ -263,31 +311,21 @@ export default function ProfileChangeForm() {
                     >
                       {f.e}
                     </p>
-                    <button
-                      onClick={f.onSubmit}
-                      className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
-                    >
-                      확인
-                    </button>
-                  </>
-                ) : (
-                  <div className="flex justify-between items-center">
-                    <p className="w-full h-[50px] px-2.5 py-2 bg-white mb-4">
-                      {f.value}
-                    </p>
-                    <button
-                      className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
-                      onClick={() => setEditingField(f.label)}
-                    >
-                      수정
-                    </button>
+                    <div className="flex justify-end mt-[15px]">
+                      <button
+                        className="text-customViloet-200 text-[16px] font-bold hover:text-customBlue-200 cursor-pointer"
+                        onClick={() => setEditingField(f.label)}
+                      >
+                        수정
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
             ))}
 
             {isSubscribed ? (
-              <div className="mt-8 w-[408px] h-[115px] border border-customGray-300 rounded">
+              <div className="mt-14 w-[408px] h-[115px] border border-customGray-300 rounded">
                 <div className="mt-[20px] ml-[20px] mb-[6px]">
                   <p className="text-[13px] font-semibold">
                     아쉽지만, 이제 작별할 시간인가요? 언제든 다시 돌아오실 수
