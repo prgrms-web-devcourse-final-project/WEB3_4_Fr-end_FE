@@ -230,11 +230,13 @@ export default function HouseDetail() {
           {/* 객실 정보 */}
           <div className="font-bold text-2xl mt-10">객실 정보</div>
           <RoomInfo />
-          <RoomInfo />
         </div>
 
         {/* 우측 예약 블록 */}
-        <FloatingReservationBlock pricePerNight={accommodation.pricePerNight} />
+        <FloatingReservationBlock
+          pricePerNight={accommodation.pricePerNight}
+          id={accommodation.id}
+        />
       </div>
     </>
   );
