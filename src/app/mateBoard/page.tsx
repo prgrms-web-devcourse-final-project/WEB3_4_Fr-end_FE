@@ -8,7 +8,7 @@ type PageProps = {
   searchParams: {
     keyword?: string;
     region?: string;
-    category?: string;
+    status?: string;
     page?: string;
   };
 };
@@ -16,12 +16,13 @@ type PageProps = {
 export default async function MateBoard({ searchParams }: PageProps) {
   // 쿼리 파라미터로부터 필터 값 설정 (없으면 기본값 사용)
   const sp = await searchParams;
+
   const filters = {
     keyword: sp.keyword ?? "",
-    region: sp.region && sp.region.trim() !== "" ? sp.region : "OPEN",
-    category: sp.category && sp.category.trim() !== "" ? sp.category : "ALL",
+    region: sp.region || "ALL",
+    status: sp.status || "ALL",
     page: sp.page ? Number(sp.page) - 1 : 0,
-    size: 10, // 한 페이지당 항목 수 (백엔드 로직과 맞추기)
+    size: 10,
     sort: "id,desc",
   };
 
@@ -32,8 +33,9 @@ export default async function MateBoard({ searchParams }: PageProps) {
   try {
     // getMateBoardPosts 함수는 PageResponse<MateCardData>를 반환한다고 가정합니다.
     const pageResponse = await getMateBoardPosts(filters);
-    cards = pageResponse.content;
+    cards = pageResponse.data;
     totalPages = pageResponse.totalPages;
+    console.log(pageResponse.data);
   } catch (error) {
     console.error("게시글 불러오기 에러:", error);
   }
@@ -48,6 +50,9 @@ export default async function MateBoard({ searchParams }: PageProps) {
           cards={cards}
           totalPages={totalPages}
           currentPage={currentPage}
+          initialRegion={filters.region} // 부모에서 사용한 region 값 전달
+          initialStatus={filters.status} // 부모에서 사용한 category 값 전달
+          initialKeyword={filters.keyword}
         />
       </div>
     </>

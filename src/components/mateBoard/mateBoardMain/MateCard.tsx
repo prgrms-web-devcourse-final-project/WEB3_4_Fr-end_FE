@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import type { MateCardData } from "@/types/mateBoard/MateCardData";
 import LikeButton from "@/components/mateBoard/mateBoardMain/LikeButton";
 import CommentCount from "@/components/mateBoard/mateBoardMain/CommentCount";
+import { getGenderLabel } from "@/utils/getGenderLabel";
+import { getTravelRegionLabel } from "@/utils/getTravelRegion";
 
 export default function MateCard({ data }: { data: MateCardData }) {
   const router = useRouter();
@@ -54,7 +56,7 @@ export default function MateCard({ data }: { data: MateCardData }) {
             className="rounded-full"
           />
           <span className="text-[16px] text-muted-foreground">
-            {data.nickname} · {data.authorGender}
+            {data.nickname} · {getGenderLabel(data.authorGender)}
           </span>
         </div>
 
@@ -88,7 +90,7 @@ export default function MateCard({ data }: { data: MateCardData }) {
           />
         </div>
         <span className="text-customGreen-200 font-bold text-[24px] mt-2">
-          {data.travelRegion}
+          {getTravelRegionLabel(data.travelRegion)}
         </span>
       </div>
     </div>

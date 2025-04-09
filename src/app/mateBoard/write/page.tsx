@@ -15,6 +15,7 @@ import ImageUpload from "@/components/mateBoard/mateBoardWriting/MateImageUpload
 import ContentTextarea from "@/components/mateBoard/mateBoardWriting/MateContentField";
 import { buildMatePayload } from "@/lib/mate/buildMatePayload";
 import { mateFormSchema, type MateFormType } from "@/lib/mate/mateFormSchema";
+import { postMateWriting } from "@/apis/mateBoard/postMateWriting";
 
 export default function MateWritingForm() {
   const [images, setImages] = useState<File[]>([]);
@@ -35,18 +36,20 @@ export default function MateWritingForm() {
     },
   });
 
-  const onSubmit = (values: MateFormType) => {
-    const formData = buildMatePayload({
+  const onSubmit = async (values: MateFormType) => {
+    const payload = buildMatePayload({
       ...values,
       mateGender,
       images,
     });
 
-    console.log({
-      ...values,
-      mateGender,
-      images,
-    });
+    try {
+      const response = await postMateWriting(payload);
+      console.log("작성 완료:", response);
+    } catch (error) {
+      console.log("전송 payload:", error);
+      console.log("전송 payload:", payload);
+    }
   };
 
   return (

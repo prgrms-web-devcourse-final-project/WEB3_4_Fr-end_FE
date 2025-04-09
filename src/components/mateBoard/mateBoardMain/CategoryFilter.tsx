@@ -1,6 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 
+const uiToBackendMapping: Record<string, string> = {
+  전체: "ALL",
+  모집중: "OPEN",
+  모집완료: "CLOSED",
+};
+
 export default function CategoryFilter({
   value,
   onChange,
@@ -16,10 +22,10 @@ export default function CategoryFilter({
         <Button
           key={filter}
           variant="default"
-          onClick={() => onChange(filter)}
+          onClick={() => onChange(uiToBackendMapping[filter])}
           className={`px-4 py-1  text-sm font-medium transition
             ${
-              value === filter
+              value === uiToBackendMapping[filter]
                 ? " text-white"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
             }`}

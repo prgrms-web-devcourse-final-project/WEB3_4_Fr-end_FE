@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { isBefore, startOfToday } from "date-fns";
+import { startOfToday } from "date-fns";
 
 export const mateFormSchema = z.object({
   title: z.string().min(5, "제목은 최소 5글자").max(30, "제목은 30글자 이하"),
   dateRange: z
     .object({
-      from: z.date({ required_error: "시작 날짜를 선택해주세요" }).optional(),
-      to: z.date({ required_error: "종료 날짜를 선택해주세요" }).optional(),
+      from: z.date({ required_error: "시작 날짜를 선택해주세요" }),
+      to: z.date({ required_error: "종료 날짜를 선택해주세요" }),
     })
     .refine((range) => range.from && range.to, {
       message: "여행 시작 날짜와 종료 날짜를 모두 선택해주세요",

@@ -1,3 +1,4 @@
+// components/mateBoard/mateBoardMain/MateBoardFilter.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,16 +14,16 @@ interface MateBoardFilterProps {
   cards: MateCardData[];
   totalPages: number;
   currentPage: number;
-  /**
-   * 필터 변경 시 호출될 콜백.
-   * newFilters 객체에 keyword, region, category, page 등의 값을 담아 전달합니다.
-   */
   onFilterChange: (newFilters: {
     keyword?: string;
     region?: string;
-    category?: string;
+    status?: string;
     page?: number;
   }) => void;
+  // 부모로부터 전달받은 초기 필터 값
+  initialRegion: string;
+  initialStatus: string;
+  initialKeyword: string;
 }
 
 export default function MateBoardFilter({
@@ -30,33 +31,43 @@ export default function MateBoardFilter({
   totalPages,
   currentPage,
   onFilterChange,
+  initialRegion,
+  initialStatus,
+  initialKeyword,
 }: MateBoardFilterProps) {
-  // 로컬에서 검색 및 필터 입력 상태 관리 (서버 요청 시 전달)
-  const [searchInput, setSearchInput] = useState("");
-  const [region, setRegion] = useState("전국");
-  const [category, setCategory] = useState("전체");
+  // 부모로부터 전달받은 초기값으로 상태 초기화
+  const [searchInput, setSearchInput] = useState(initialKeyword);
+  const [region, setRegion] = useState(initialRegion);
+  const [status, setStatus] = useState(initialStatus);
+  const [currentPageState, setCurrentPageState] = useState(currentPage);
 
-  // 사용자의 검색 입력값을 디바운싱해서 서버 요청을 너무 자주 보내지 않도록 처리
   const debouncedSearch = useDebounce(searchInput, 1000);
 
-  // 검색어나 필터값이 변경되면 상위 컴포넌트로 알림 (페이지는 1로 초기화)
+  // 필터(검색, region, status)가 변경될 때만 페이지를 1로 리셋하고 onFilterChange 호출
   useEffect(() => {
+    setCurrentPageState(1);
     onFilterChange({
       keyword: debouncedSearch,
       region,
-      category,
+      status,
       page: 1,
     });
-  }, [debouncedSearch, region, category, onFilterChange]);
+  }, [debouncedSearch, region, status, onFilterChange]);
 
-  // 검색 버튼 클릭 시에도 상위 컴포넌트에 알림 (페이지 1로)
   const handleSubmit = () => {
+    setCurrentPageState(1);
     onFilterChange({
       keyword: searchInput,
       region,
-      category,
+      status,
       page: 1,
     });
+  };
+
+  // 페이지 변경 이벤트 핸들러: 필터 변경에 의한 리셋과는 분리하여 처리
+  const handlePageChange = (newPage: number) => {
+    setCurrentPageState(newPage);
+    onFilterChange({ page: newPage });
   };
 
   return (
@@ -71,20 +82,18 @@ export default function MateBoardFilter({
         />
       </div>
       <div className="mb-5 flex">
-        <CategoryFilter value={category} onChange={setCategory} />
+        <CategoryFilter value={status} onChange={setStatus} />
         <div className="ml-auto">
           <WritingButton />
         </div>
       </div>
       <div className="mb-20">
-        {/* 서버에서 이미 필터링된 데이터를 그대로 렌더링 */}
         <MateCardList cards={cards} />
       </div>
       <PaginationControls
-        currentPage={currentPage}
+        currentPage={currentPageState}
         totalPages={totalPages}
-        // 페이지 변경 시 상위 컴포넌트에 새로운 페이지 번호 전달
-        onPageChange={(newPage) => onFilterChange({ page: newPage })}
+        onPageChange={handlePageChange}
       />
     </div>
   );
