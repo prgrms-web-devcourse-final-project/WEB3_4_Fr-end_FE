@@ -4,22 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FiBookmark } from "react-icons/fi";
 import { SearchIcon, Trash2Icon } from "lucide-react";
-import { PlanSearchBarProps, SearchResult } from "@/types/PlanSearchBarProps";
-
-// KakaoPlace 인터페이스 (카카오 API에서 받아올 데이터 형태)
-export interface KakaoPlace {
-  place_name: string;
-  category_group_name: string;
-  address_name: string;
-  x: string;
-  y: string;
-}
-
-// PlanCardProps는 검색바 관련 props와 함께 onDelete 함수를 포함합니다.
-export interface PlanCardProps extends PlanSearchBarProps {
-  searchResult: SearchResult | null;
-  onDelete: () => void;
-}
+import type { PlanCardProps, KakaoPlace, SearchResult } from "@/app/types";
 
 const PlanCard: React.FC<PlanCardProps> = ({
   placeName,
@@ -30,7 +15,6 @@ const PlanCard: React.FC<PlanCardProps> = ({
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Kakao Maps 서비스 로드 여부 확인
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
       window.kakao.maps.load(() => {
@@ -41,14 +25,12 @@ const PlanCard: React.FC<PlanCardProps> = ({
     }
   }, []);
 
-  // 엔터키 입력 시 검색 실행
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSearch();
     }
   };
 
-  // 장소 검색: placeName을 이용하여 Kakao Places API 호출
   const handleSearch = () => {
     if (!isLoaded || !window.kakao || !window.kakao.maps.services) {
       console.error("Kakao Maps 서비스 라이브러리가 로드되지 않았습니다.");
@@ -73,7 +55,6 @@ const PlanCard: React.FC<PlanCardProps> = ({
     });
   };
 
-  // 북마크 기능 (예시)
   const handleBookmark = () => {
     alert("북마크!");
   };

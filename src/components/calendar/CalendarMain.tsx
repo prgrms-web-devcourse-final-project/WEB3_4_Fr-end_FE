@@ -1,30 +1,12 @@
-// /src/components/calendar/CalendarMain.tsx
+// src/components/calendar/CalendarMain.tsx
 "use client";
 
 import React from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin, {
-  DateClickArg,
-  EventDragStopArg,
-} from "@fullcalendar/interaction";
+import interactionPlugin from "@fullcalendar/interaction";
 import Image from "next/image";
-import type { EventClickArg } from "@fullcalendar/core";
-
-interface Event {
-  id: string;
-  title: string;
-  start: string;
-  end?: string;
-  color: string;
-}
-
-interface CalendarMainProps {
-  events: Event[];
-  onDateClick: (arg: DateClickArg) => void;
-  onEventClick: (arg: EventClickArg) => void;
-  onEventDragStop: (arg: EventDragStopArg) => void;
-}
+import type { CalendarMainProps } from "@/app/types";
 
 export default function CalendarMain({
   events,

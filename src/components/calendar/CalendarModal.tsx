@@ -1,23 +1,9 @@
-// /src/components/calendar/CalendarModal.tsx
 "use client";
 
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-
-interface CalendarModalProps {
-  isOpen: boolean;
-  eventTitle: string;
-  setEventTitle: (title: string) => void;
-  eventColor: string;
-  setEventColor: (color: string) => void;
-  startDate: string;
-  setStartDate: (date: string) => void;
-  endDate: string;
-  setEndDate: (date: string) => void;
-  addNewEvent: () => void;
-  closeModal: () => void;
-}
+import type { CalendarModalProps } from "@/app/types";
 
 export default function CalendarModal({
   isOpen,
@@ -33,7 +19,7 @@ export default function CalendarModal({
   closeModal,
 }: CalendarModalProps) {
   if (!isOpen) return null;
-
+  
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-[520px]">

@@ -3,30 +3,10 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import { fetchCalendars, createCalendar, deleteCalendarById } from '@/apis/Schedule/CalendarNav';
+import type { NavItem } from '@/app/types';
 
-interface NavItem {
-  id: string;
-  label: string;
-  shareOpen: boolean;
-}
-
-interface CalendarResponse {
-  id: number;
-  calendarTitle: string;
-  startDate: string;
-  endDate: string;
-  time: string;
-  alertTime: string;
-  note: string;
-  createdAt: string;
-  modifiedAt: string;
-}
-
-
-const API_URL = 'http://api.sete.kr:8080/api/calendar';
-
-export default function CalendarNavTree() {
+export default function CalendarNav() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [items, setItems] = useState<NavItem[]>([]);
@@ -41,46 +21,33 @@ export default function CalendarNavTree() {
   useEffect(() => {
     const init = async () => {
       try {
-        const res = await axios.get(API_URL);
-        const calendarList = res.data as CalendarResponse[];
-  
+        const calendarList = await fetchCalendars();
+
         const navItems: NavItem[] = calendarList.map(item => ({
           id: item.id.toString(),
           label: item.calendarTitle,
           shareOpen: false,
         }));
-  
+
         setItems(navItems);
-  
+
         const hasId1 = navItems.some(item => item.id === '1');
         if (!hasId1) {
-          const now = new Date().toISOString();
-          const response = await axios.post(API_URL, {
-            calendarTitle: "캘린더",
-            startDate: now,
-            endDate: now,
-            time: now,
-            alertTime: now,
-            note: ""
-          });
-  
-          const created: CalendarResponse = response.data;
-  
+          const created = await createCalendar("캘린더");
           const newItem: NavItem = {
             id: created.id.toString(),
             label: created.calendarTitle,
             shareOpen: false
           };
-  
           setItems(prev => [...prev, newItem]);
         }
-  
+
         const maxId = navItems.reduce((max, item) => {
           const idNum = parseInt(item.id, 10);
           return idNum > max ? idNum : max;
         }, 0);
         setNextId(maxId + 1);
-  
+
         setMounted(true);
       } catch (err) {
         console.error("캘린더 초기화 오류", err);
@@ -88,7 +55,6 @@ export default function CalendarNavTree() {
     };
     init();
   }, []);
-  
 
   useEffect(() => {
     if (contentRef.current) {
@@ -98,17 +64,12 @@ export default function CalendarNavTree() {
 
   const addItem = async () => {
     try {
-      const now = new Date().toISOString();
-      const response = await axios.post(API_URL, {
-        calendarTitle: `캘린더 ${nextId}`,
-        startDate: now,
-        endDate: now,
-        time: now,
-        alertTime: now,
-        note: ""
-      });
-      const created = response.data;
-      setItems(prev => [...prev, { id: created.id.toString(), label: created.calendarTitle, shareOpen: false }]);
+      const created = await createCalendar(`캘린더 ${nextId}`);
+      setItems(prev => [...prev, {
+        id: created.id.toString(),
+        label: created.calendarTitle,
+        shareOpen: false
+      }]);
       setNextId(prev => prev + 1);
     } catch (err) {
       console.error("캘린더 생성 실패", err);
@@ -139,9 +100,9 @@ export default function CalendarNavTree() {
     router.push(`/calendar/${id}`);
   };
 
-  const deleteCalendar = async (id: string) => {
+  const handleDeleteCalendar = async (id: string) => {
     try {
-      await axios.delete(`${API_URL}/${id}`);
+      await deleteCalendarById(id);
       setItems(prev => prev.filter(item => item.id !== id));
     } catch (err) {
       console.error("캘린더 삭제 실패", err);
@@ -159,7 +120,6 @@ export default function CalendarNavTree() {
   };
 
   if (!mounted) return <div />;
-
   return (
     <div className="p-4 select-none">
       <div className="relative border border-gray-200 bg-white h-[700px] w-[343px] shadow-md rounded-lg overflow-hidden">
@@ -224,9 +184,9 @@ export default function CalendarNavTree() {
                 <div className="p-1 cursor-pointer" onClick={(e) => { handleClick(e); handleCopyUrl(item.id); }}>
                   <Image src="/svg/share.svg" alt="share" width={30} height={24} className="transition-transform duration-200 ease-in-out hover:scale-125" />
                 </div>
-                <div className="p-1 cursor-pointer" onClick={(e) => { handleClick(e); deleteCalendar(item.id); }}>
-                  <Image src="/svg/trash.svg" alt="trash" width={34} height={24} className="transition-transform duration-200 ease-in-out hover:scale-125" />
-                </div>
+                <div className="p-1 cursor-pointer" onClick={(e) => { handleClick(e); handleDeleteCalendar(item.id); }}>
+        <Image src="/svg/trash.svg" alt="trash" width={34} height={24} className="transition-transform duration-200 ease-in-out hover:scale-125" />
+      </div>
               </div>
             </div>
           ))}

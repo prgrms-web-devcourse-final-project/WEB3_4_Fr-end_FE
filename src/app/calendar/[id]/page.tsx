@@ -1,4 +1,3 @@
-// src/app/calendar/[id]/[plan]/[chatid]/page.tsx
 "use client";
 
 import React, { use, useState, useEffect } from "react";
