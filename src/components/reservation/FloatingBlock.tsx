@@ -2,11 +2,16 @@ import { useState } from "react";
 import useReservationStore from "@/store/reservationStore"; // Zustand 스토어
 import { useRouter } from "next/navigation";
 
-export default function FloatingReservationBlock() {
+interface FloatingReservationBlockProps {
+  pricePerNight: number; // props로 받는 1박당 가격
+}
+
+export default function FloatingReservationBlock({
+  pricePerNight,
+}: FloatingReservationBlockProps) {
   const [checkIn, setCheckIn] = useState<string>(""); // 체크인 날짜 상태
   const [checkOut, setCheckOut] = useState<string>(""); // 체크아웃 날짜 상태
   const [totalNights, setTotalNights] = useState<number>(1); // 숙박 기간 상태
-  const pricePerNight: number = 100000; // 1박당 가격
 
   const { setReservation } = useReservationStore(); // Zustand 상태 업데이트 함수
 
