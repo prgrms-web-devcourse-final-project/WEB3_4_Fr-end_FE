@@ -1,7 +1,7 @@
 "use client";
 
 import { CommentData } from "@/types/CommentData";
-import { MateData } from "@/types/MateData";
+import { MateData } from "@/types/mateBoard/MateData";
 import SingleComment from "./singleComment";
 import { useState } from "react";
 

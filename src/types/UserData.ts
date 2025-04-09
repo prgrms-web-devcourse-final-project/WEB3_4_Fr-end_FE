@@ -10,3 +10,4 @@ export interface UserData {
   birthMonth: string;
   birthDay: string;
 }
+

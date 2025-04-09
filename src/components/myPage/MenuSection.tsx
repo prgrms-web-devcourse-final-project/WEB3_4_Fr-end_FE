@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 interface MenuSectionProps {
   title: string;
   items: string[];
@@ -19,13 +17,13 @@ export default function MenuSection({
   onSelectSection,
   onSelectItem,
 }: MenuSectionProps) {
-  const [isOpen, setIsOpen] = useState(true);
+  const isOpen = selectedSection === title;
 
   return (
     <div className="w-full">
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => onSelectSection(title)}
         className={`text-[20px] font-pretendard focus:outline-none ${
           isOpen ? "font-semibold text-customBlack-400" : "text-customGray-500"
         }`}
@@ -37,14 +35,9 @@ export default function MenuSection({
           {items.map((item, idx) => (
             <li
               key={idx}
-              onClick={() => {
-                if (selectedSection !== title) {
-                  onSelectSection(title);
-                }
-                onSelectItem(item);
-              }}
+              onClick={() => onSelectItem(item)}
               className={`cursor-pointer ${
-                selectedSection === title && selectedMenu === item
+                selectedMenu === item
                   ? "text-customBlack-400 font-bold"
                   : "text-[#707070] font-normal"
               }`}

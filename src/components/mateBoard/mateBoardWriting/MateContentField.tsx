@@ -8,7 +8,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { Dispatch, SetStateAction } from "react";
 import { Control } from "react-hook-form";
 import { MateFormType } from "@/lib/mate/mateFormSchema";
 
