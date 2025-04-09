@@ -25,6 +25,13 @@ export default function SocialLogin() {
       if (!code) return;
 
       try {
+        console.log("code:", code);
+        // 추측되는 redirect_uri도 로그에 찍어보기
+        console.log(
+          "expected redirect_uri:",
+          `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}/auth/socialLogin`
+        );
+
         const res = await api.post("/api/v1/auth/social-login", {
           socialType: "GOOGLE",
           code,
