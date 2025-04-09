@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 interface NavItem {
   id: string;
@@ -10,41 +11,26 @@ interface NavItem {
   shareOpen: boolean;
 }
 
+interface CalendarResponse {
+  id: number;
+  calendarTitle: string;
+  startDate: string;
+  endDate: string;
+  time: string;
+  alertTime: string;
+  note: string;
+  createdAt: string;
+  modifiedAt: string;
+}
+
+
+const API_URL = 'http://api.sete.kr:8080/api/calendar';
+
 export default function CalendarNavTree() {
   const router = useRouter();
-
   const [mounted, setMounted] = useState(false);
-  const [items, setItems] = useState<NavItem[]>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('calendars');
-      if (stored) return JSON.parse(stored);
-    }
-    const defaultItems: NavItem[] = [
-      { id: '1', label: '캘린더 1', shareOpen: false },
-    ];
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('calendars', JSON.stringify(defaultItems));
-    }
-    return defaultItems;
-  });
-
-  // localStorage에 저장된 항목들을 반영하여 고유한 nextId 초기값 설정
-  const [nextId, setNextId] = useState<number>(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('calendars');
-      if (stored) {
-        const storedItems = JSON.parse(stored) as NavItem[];
-        // id가 문자열이므로 parseInt를 통해 숫자로 변환한 후 최댓값 계산
-        const maxId = storedItems.reduce((max, item) => {
-          const idNum = parseInt(item.id, 10);
-          return idNum > max ? idNum : max;
-        }, 0);
-        return maxId + 1;
-      }
-    }
-    return 2; // 저장된 항목이 없는 경우 초기 id 2 사용
-  });
-
+  const [items, setItems] = useState<NavItem[]>([]);
+  const [nextId, setNextId] = useState<number>(2);
   const [editingCalendarId, setEditingCalendarId] = useState<string | null>(null);
   const [editingLabel, setEditingLabel] = useState<string>('');
   const [isOpen, setIsOpen] = useState(true);
@@ -53,14 +39,56 @@ export default function CalendarNavTree() {
   const [copyMessage, setCopyMessage] = useState("");
 
   useEffect(() => {
-    setMounted(true);
+    const init = async () => {
+      try {
+        const res = await axios.get(API_URL);
+        const calendarList = res.data as CalendarResponse[];
+  
+        const navItems: NavItem[] = calendarList.map(item => ({
+          id: item.id.toString(),
+          label: item.calendarTitle,
+          shareOpen: false,
+        }));
+  
+        setItems(navItems);
+  
+        const hasId1 = navItems.some(item => item.id === '1');
+        if (!hasId1) {
+          const now = new Date().toISOString();
+          const response = await axios.post(API_URL, {
+            calendarTitle: "캘린더",
+            startDate: now,
+            endDate: now,
+            time: now,
+            alertTime: now,
+            note: ""
+          });
+  
+          const created: CalendarResponse = response.data;
+  
+          const newItem: NavItem = {
+            id: created.id.toString(),
+            label: created.calendarTitle,
+            shareOpen: false
+          };
+  
+          setItems(prev => [...prev, newItem]);
+        }
+  
+        const maxId = navItems.reduce((max, item) => {
+          const idNum = parseInt(item.id, 10);
+          return idNum > max ? idNum : max;
+        }, 0);
+        setNextId(maxId + 1);
+  
+        setMounted(true);
+      } catch (err) {
+        console.error("캘린더 초기화 오류", err);
+      }
+    };
+    init();
   }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      localStorage.setItem('calendars', JSON.stringify(items));
-    }
-  }, [items, mounted]);
+  
 
   useEffect(() => {
     if (contentRef.current) {
@@ -68,16 +96,23 @@ export default function CalendarNavTree() {
     }
   }, [isOpen, items]);
 
-  const addItem = () => {
-    setItems(prevItems => {
-      const newItem: NavItem = {
-        id: nextId.toString(), // 고유한 nextId 사용
-        label: `캘린더 ${nextId}`,
-        shareOpen: false,
-      };
-      return [...prevItems, newItem];
-    });
-    setNextId(prev => prev + 1);
+  const addItem = async () => {
+    try {
+      const now = new Date().toISOString();
+      const response = await axios.post(API_URL, {
+        calendarTitle: `캘린더 ${nextId}`,
+        startDate: now,
+        endDate: now,
+        time: now,
+        alertTime: now,
+        note: ""
+      });
+      const created = response.data;
+      setItems(prev => [...prev, { id: created.id.toString(), label: created.calendarTitle, shareOpen: false }]);
+      setNextId(prev => prev + 1);
+    } catch (err) {
+      console.error("캘린더 생성 실패", err);
+    }
   };
 
   const toggleCalendar = () => {
@@ -104,13 +139,13 @@ export default function CalendarNavTree() {
     router.push(`/calendar/${id}`);
   };
 
-  const deleteCalendar = (id: string) => {
-    setItems(prevItems => {
-      const newItems = prevItems.filter(item => item.id !== id);
-      localStorage.setItem('calendars', JSON.stringify(newItems));
-      return newItems;
-    });
-    localStorage.removeItem(`calendarEvents-${id}`);
+  const deleteCalendar = async (id: string) => {
+    try {
+      await axios.delete(`${API_URL}/${id}`);
+      setItems(prev => prev.filter(item => item.id !== id));
+    } catch (err) {
+      console.error("캘린더 삭제 실패", err);
+    }
   };
 
   const handleEditComplete = (id: string) => {
@@ -123,9 +158,7 @@ export default function CalendarNavTree() {
     setEditingLabel('');
   };
 
-  if (!mounted) {
-    return <div />;
-  }
+  if (!mounted) return <div />;
 
   return (
     <div className="p-4 select-none">
@@ -158,7 +191,7 @@ export default function CalendarNavTree() {
         >
           {items.map(item => (
             <div
-              key={item.id}  // 이제 중복된 key 문제가 발생하지 않습니다.
+              key={item.id}
               onClick={() => handleItemClick(item.id)}
               className="flex items-center gap-2 p-3 my-1 rounded-md bg-white transition-transform duration-200 ease-in-out hover:scale-105 cursor-pointer hover:bg-gray-100"
             >
@@ -188,43 +221,18 @@ export default function CalendarNavTree() {
                 )}
               </div>
               <div className="ml-auto flex gap-4 mr-4 relative">
-                <div
-                  className="p-1 cursor-pointer"
-                  onClick={(e) => {
-                    handleClick(e);
-                    handleCopyUrl(item.id);
-                  }}
-                >
-                  <Image
-                    src="/svg/share.svg"
-                    alt="share"
-                    width={30}
-                    height={24}
-                    className="transition-transform duration-200 ease-in-out hover:scale-125"
-                  />
+                <div className="p-1 cursor-pointer" onClick={(e) => { handleClick(e); handleCopyUrl(item.id); }}>
+                  <Image src="/svg/share.svg" alt="share" width={30} height={24} className="transition-transform duration-200 ease-in-out hover:scale-125" />
                 </div>
-                <div
-                  className="p-1 cursor-pointer"
-                  onClick={(e) => {
-                    handleClick(e);
-                    deleteCalendar(item.id);
-                  }}
-                >
-                  <Image
-                    src="/svg/trash.svg"
-                    alt="trash"
-                    width={34}
-                    height={24}
-                    className="transition-transform duration-200 ease-in-out hover:scale-125"
-                  />
+                <div className="p-1 cursor-pointer" onClick={(e) => { handleClick(e); deleteCalendar(item.id); }}>
+                  <Image src="/svg/trash.svg" alt="trash" width={34} height={24} className="transition-transform duration-200 ease-in-out hover:scale-125" />
                 </div>
               </div>
             </div>
           ))}
         </div>
       </div>
-      
-      {/* 토스트 메시지 */}
+
       {copyMessage && (
         <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-4 py-2 rounded-md">
           {copyMessage}
