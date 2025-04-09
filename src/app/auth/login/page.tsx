@@ -12,6 +12,20 @@ export default function Login() {
     setBgImage(`/loginHero/img${randomIndex}.jpg`);
   }, []);
 
+  const handleGoogleLogin = () => {
+    const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+
+    const queryParams = new URLSearchParams({
+      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+      redirect_uri: `${process.env.NEXT_PUBLIC_FRONTEND_BASE_URL}/auth/socialLogin`,
+      response_type: "code",
+      scope: "openid email profile",
+      access_type: "offline",
+      prompt: "consent",
+    });
+
+    window.location.href = `${rootUrl}?${queryParams.toString()}`;
+  };
   return (
     <div className="relative w-screen h-screen overflow-hidden m-0 p-0">
       <div className="fixed inset-0 w-screen h-screen overflow-hidden m-0 p-0 z-0">
@@ -74,33 +88,30 @@ export default function Login() {
           </div>
 
           <div className="flex justify-center gap-4">
-            <Link href="/auth/socialLogin">
-              <Image
-                src="/login/kakao.svg"
-                alt="kakao"
-                width={50}
-                height={50}
-                className="cursor-pointer"
-              />
-            </Link>
-            <Link href="/auth/socialLogin">
-              <Image
-                src="/login/naver.png"
-                alt="naver"
-                width={50}
-                height={50}
-                className="cursor-pointer"
-              />
-            </Link>
-            <Link href="/auth/socialLogin">
-              <Image
-                src="/login/google.svg"
-                alt="google"
-                width={50}
-                height={50}
-                className="cursor-pointer"
-              />
-            </Link>
+            <Image
+              src="/login/kakao.svg"
+              alt="kakao"
+              width={50}
+              height={50}
+              className="cursor-pointer"
+            />
+
+            <Image
+              src="/login/naver.png"
+              alt="naver"
+              width={50}
+              height={50}
+              className="cursor-pointer"
+            />
+
+            <Image
+              src="/login/google.svg"
+              alt="google"
+              width={50}
+              height={50}
+              className="cursor-pointer"
+              onClick={handleGoogleLogin}
+            />
           </div>
           <div className="mt-[100px] w-full text-center text-sm text-customGray-600 z-10 opacity-80">
             ⓒ 2025 PlanIt. All rights reserved.
