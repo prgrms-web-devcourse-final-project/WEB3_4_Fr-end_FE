@@ -4,10 +4,13 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const Header: React.FC = () => {
   const [iconPath, setIconPath] = useState("/icons");
   const pathname = usePathname();
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const isLoggedIn = !!accessToken;
 
   useEffect(() => {
     if (pathname === "/auth/login") return;
@@ -29,11 +32,8 @@ const Header: React.FC = () => {
     : "outline-[#202020]";
   const logoColor = isMainPage ? "/logo/white2.png" : "/logo/blue.png";
 
-  const isLoggedIn = true;
-
   return (
     <>
-      {/* 메인 페이지일 때만 배너 표시 */}
       {isMainPage && (
         <div className="absolute inset-0 w-full h-[600px] z-[-1] ">
           <Image
@@ -46,9 +46,7 @@ const Header: React.FC = () => {
           />
         </div>
       )}
-
       <header className="mx-52 h-[125px] relative overflow-hidden mt-5">
-        {/* 헤더 내부 중앙 정렬 */}
         <div className="flex justify-between items-center w-full max-w-[1980px] px-2.5 mx-auto">
           <Link href="/">
             <Image src={`${logoColor}`} alt="Logo" width={110} height={50} />
@@ -112,8 +110,6 @@ const Header: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* 네비게이션 링크 */}
         <div className="flex justify-start items-center w-full max-w-[1980px] h-[52px] px-2.5 gap-[30px] mx-auto">
           <div
             className={`justify-start ${textColor} text-base font-semibold font-['Pretendard']`}
