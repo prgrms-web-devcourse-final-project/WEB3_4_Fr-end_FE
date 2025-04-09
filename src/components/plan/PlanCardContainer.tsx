@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import PlanCard from "@/components/plan/PlanCard";
 import Image from "next/image";
-import type { CardData, PlanCardContainerProps, SearchResult } from "@/app/types"; // ✅ 타입 import
+import type { CardData, PlanCardContainerProps, SearchResult } from "@/types/Scheduleindex";
 
 const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
   onSearchResultsChange,

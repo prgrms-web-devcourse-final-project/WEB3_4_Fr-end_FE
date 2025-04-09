@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import type { PlanMapProps } from "@/app/types"; // ✅ 타입 import
+import type { PlanMapProps } from "@/types/Scheduleindex";// ✅ 타입 import
 
 const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);

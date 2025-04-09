@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FiBookmark } from "react-icons/fi";
 import { SearchIcon, Trash2Icon } from "lucide-react";
-import type { PlanCardProps, KakaoPlace, SearchResult } from "@/app/types";
+import type { PlanCardProps, KakaoPlace, SearchResult } from "@/types/Scheduleindex";
 
 const PlanCard: React.FC<PlanCardProps> = ({
   placeName,

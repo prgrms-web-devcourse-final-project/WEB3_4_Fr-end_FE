@@ -84,3 +84,17 @@ export interface PlanCardProps extends PlanSearchBarProps {
   searchResult: SearchResult | null;
   onDelete: () => void;
 }
+
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  start: string;
+  end?: string;
+  color: string;
+}
+
+export interface CalendarPageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}

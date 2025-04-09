@@ -7,33 +7,18 @@ import CalendarMain from "@/components/calendar/CalendarMain";
 import CalendarModal from "@/components/calendar/CalendarModal";
 import type { DateClickArg, EventDragStopArg } from "@fullcalendar/interaction";
 import type { EventClickArg } from "@fullcalendar/core";
-
-interface Event {
-  id: string;
-  title: string;
-  start: string;
-  end?: string;
-  color: string;
-}
-
-interface CalendarPageProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
+import type { CalendarEvent, CalendarPageProps } from "@/types/Scheduleindex";
 
 export default function CalendarPage({ params }: CalendarPageProps) {
-  const { id: calendarId } = use(params);  // Promise 언랩
+  const { id: calendarId } = use(params);
   const router = useRouter();
-
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventTitle, setEventTitle] = useState("");
   const [eventColor, setEventColor] = useState("#3b82f6");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  // localStorage에서 이벤트 불러오기
   useEffect(() => {
     if (calendarId) {
       const stored = localStorage.getItem(`calendarEvents-${calendarId}`);
@@ -41,18 +26,15 @@ export default function CalendarPage({ params }: CalendarPageProps) {
     }
   }, [calendarId]);
 
-  // 날짜 클릭 핸들러
   const dateClick = (arg: DateClickArg) => {
     setStartDate(arg.dateStr);
     setIsModalOpen(true);
   };
 
-  // 이벤트 클릭 핸들러
   const eventClick = (clickInfo: EventClickArg) => {
     router.push(`/calendar/${calendarId}/${clickInfo.event.id}`);
   };
 
-  // 이벤트 드래그 후 드롭 핸들러
   const handleEventDragStop = (dragInfo: EventDragStopArg) => {
     const trash = document.getElementById("trash-drop-zone");
     if (!trash) return;
@@ -78,7 +60,7 @@ export default function CalendarPage({ params }: CalendarPageProps) {
 
   const addNewEvent = () => {
     if (!eventTitle.trim() || !startDate) return;
-    const newEvent: Event = {
+    const newEvent: CalendarEvent = {
       id: Date.now().toString(),
       title: eventTitle,
       start: startDate,

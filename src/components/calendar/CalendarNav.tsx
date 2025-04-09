@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { fetchCalendars, createCalendar, deleteCalendarById } from '@/apis/Schedule/CalendarNav';
-import type { NavItem } from '@/app/types';
+import type { NavItem } from "@/types/Scheduleindex";
 
 export default function CalendarNav() {
   const router = useRouter();
