@@ -1,6 +1,6 @@
 import Image from "next/image";
 import ReportButton from "@/components/mateBoard/mateBoardDetail/ReportButton";
-import { MateDetailData } from "@/types/MateDetailData";
+import { MateDetailData } from "@/types/mateBoard/MateDetailData";
 
 import { getGenderLabel } from "@/utils/getGenderLabel";
 import { getTravelRegionLabel } from "@/utils/getTravelRegion";

@@ -12,4 +12,5 @@ export type MateCardData = {
   recruitmentStatus: string;
   mateGender: string;
   createdAt: string;
+  imageUrl?: string;
 };

@@ -3,7 +3,7 @@
 import { CalendarIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import type { MateCardData } from "@/types/MateCardData";
+import type { MateCardData } from "@/types/mateBoard/MateCardData";
 import LikeButton from "@/components/mateBoard/mateBoardMain/LikeButton";
 import CommentCount from "@/components/mateBoard/mateBoardMain/CommentCount";
 
@@ -41,28 +41,28 @@ export default function MateCard({ data }: { data: MateCardData }) {
 
         {/* 설명 */}
         <p className="text-muted-foreground text-[20px] overflow-hidden">
-          {data.description}
+          {data.content}
         </p>
 
         {/* 유저 정보 */}
         <div className="flex items-center gap-x-2 mt-auto">
           <Image
-            src={data.user.imageUrl}
+            src={data.profileImage ?? "/default-profile.png"}
             alt="프로필"
             width={24}
             height={24}
             className="rounded-full"
           />
           <span className="text-[16px] text-muted-foreground">
-            {data.user.name} · {data.user.age} · {data.user.gender}
+            {data.nickname} · {data.authorGender}
           </span>
         </div>
 
         {/* 날짜 */}
         <div className="flex items-center text-sm text-muted-foreground">
           <CalendarIcon className="w-4 h-4 mr-2" />
-          {data.period.startDate} - {data.period.endDate}(
-          {data.period.durationText})
+          {data.travelStartDate} - {data.travelEndDate}
+          {/* {data.period.durationText}) */}
         </div>
         <div className="flex items-center gap-x-3 text-sm">
           <LikeButton
@@ -80,15 +80,15 @@ export default function MateCard({ data }: { data: MateCardData }) {
       <div className="flex flex-col items-center justify-start gap-5">
         <div className="w-[220px] h-[220px] overflow-hidden rounded-xl">
           <Image
-            src={data.thumbnailUrl}
-            alt={`${data.region} 썸네일`}
+            src={data.imageUrl ?? "/jeju.jpg"}
+            alt={"썸네일"}
             width={220}
             height={220}
             className="rounded-xl object-cover aspect-square"
           />
         </div>
         <span className="text-customGreen-200 font-bold text-[24px] mt-2">
-          {data.region}
+          {data.travelRegion}
         </span>
       </div>
     </div>

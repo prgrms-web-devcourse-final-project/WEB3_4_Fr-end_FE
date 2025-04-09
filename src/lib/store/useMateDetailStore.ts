@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { MateCardData } from "../../types/MateCardData";
+import { MateCardData } from "../../types/mateBoard/MateCardData";
 
 type MateDetailStore = {
   currentDetail: MateCardData | null;

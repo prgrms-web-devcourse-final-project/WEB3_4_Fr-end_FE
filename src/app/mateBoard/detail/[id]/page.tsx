@@ -5,7 +5,7 @@ import MateDetailHero from "@/components/mateBoard/mateBoardDetail/MateDetailHer
 import MateDetailInfo from "@/components/mateBoard/mateBoardDetail/MateDetailInfo";
 import LikeButtonInfo from "@/components/mateBoard/mateBoardDetail/LikeButtonInfo";
 import { getMateBoardDetail } from "@/apis/mateBoard/getMateBoardDetail";
-import { MateDetailData } from "@/types/MateDetailData";
+import { MateDetailData } from "@/types/mateBoard/MateDetailData";
 
 type MateDetailPageProps = {
   params: { id: string };
