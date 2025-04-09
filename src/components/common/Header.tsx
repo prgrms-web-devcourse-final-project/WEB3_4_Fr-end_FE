@@ -7,24 +7,19 @@ import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const Header: React.FC = () => {
-  const [iconPath, setIconPath] = useState("/icons");
   const pathname = usePathname();
+  const [iconPath, setIconPath] = useState("/icons");
+
   const accessToken = useAuthStore((state) => state.accessToken);
   const isLoggedIn = !!accessToken;
 
   useEffect(() => {
     if (pathname === "/auth/login") return;
-
-    if (pathname === "/") {
-      setIconPath("/svg");
-    } else {
-      setIconPath("/icons");
-    }
+    setIconPath(pathname === "/" ? "/svg" : "/icons");
   }, [pathname]);
 
   if (pathname === "/auth/login") return null;
 
-  // 경로가 /일 때 설정
   const isMainPage = pathname === "/";
   const textColor = isMainPage ? "text-customGray-100" : "text-[#1a1a1a]";
   const outlineColor = isMainPage
@@ -35,21 +30,20 @@ const Header: React.FC = () => {
   return (
     <>
       {isMainPage && (
-        <div className="absolute inset-0 w-full h-[600px] z-[-1] ">
+        <div className="absolute inset-0 w-full h-[600px] z-[-1]">
           <Image
             src="/main/banner.jpg"
             alt="banner"
             fill
             className="object-cover"
             priority
-            suppressHydrationWarning
           />
         </div>
       )}
       <header className="mx-52 h-[125px] relative overflow-hidden mt-5">
         <div className="flex justify-between items-center w-full max-w-[1980px] px-2.5 mx-auto">
           <Link href="/">
-            <Image src={`${logoColor}`} alt="Logo" width={110} height={50} />
+            <Image src={logoColor} alt="Logo" width={110} height={50} />
           </Link>
           <div className="py-2.5 flex justify-start items-center gap-[27px]">
             <div
@@ -69,11 +63,10 @@ const Header: React.FC = () => {
                 height={16}
               />
             </div>
+
             <div className="flex justify-start items-center gap-[27px]">
               <div
-                className={`w-5 h-5 relative overflow-hidden ${
-                  !isLoggedIn ? "invisible" : ""
-                }`}
+                className={`w-5 h-5 relative ${!isLoggedIn ? "invisible" : ""}`}
               >
                 <Link href="/chat">
                   <Image
@@ -86,9 +79,7 @@ const Header: React.FC = () => {
                 </Link>
               </div>
               <div
-                className={`w-5 h-5 relative overflow-hidden ${
-                  !isLoggedIn ? "invisible" : ""
-                }`}
+                className={`w-5 h-5 relative ${!isLoggedIn ? "invisible" : ""}`}
               >
                 <Image
                   src={`${iconPath}/bell3.svg`}
@@ -97,7 +88,7 @@ const Header: React.FC = () => {
                   height={20}
                 />
               </div>
-              <div className="w-[21px] h-[21px] relative overflow-hidden">
+              <div className="w-[21px] h-[21px] relative">
                 <Link href={isLoggedIn ? "/myPage" : "/auth/login"}>
                   <Image
                     src={`${iconPath}/${isLoggedIn ? "user.svg" : "login.png"}`}
@@ -110,27 +101,21 @@ const Header: React.FC = () => {
             </div>
           </div>
         </div>
+
         <div className="flex justify-start items-center w-full max-w-[1980px] h-[52px] px-2.5 gap-[30px] mx-auto">
-          <div
-            className={`justify-start ${textColor} text-base font-semibold font-['Pretendard']`}
-          >
-            <Link href="/">홈으로</Link>
-          </div>
-          <div
-            className={`justify-start ${textColor} text-base font-semibold font-['Pretendard']`}
-          >
-            <Link href="/reservation">숙소 예약</Link>
-          </div>
-          <div
-            className={`justify-start ${textColor} text-base font-semibold font-['Pretendard']`}
-          >
-            <Link href="/calendar/1">Schedule</Link>
-          </div>
-          <div
-            className={`justify-start ${textColor} text-base font-semibold font-['Pretendard']`}
-          >
-            <Link href="/mateBoard">메이트 찾기</Link>
-          </div>
+          {["홈으로", "숙소 예약", "Schedule", "메이트 찾기"].map(
+            (text, idx) => {
+              const hrefs = ["/", "/reservation", "/calendar/1", "/mateBoard"];
+              return (
+                <div
+                  key={text}
+                  className={`justify-start ${textColor} text-base font-semibold font-['Pretendard']`}
+                >
+                  <Link href={hrefs[idx]}>{text}</Link>
+                </div>
+              );
+            }
+          )}
         </div>
       </header>
     </>
