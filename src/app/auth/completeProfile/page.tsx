@@ -8,6 +8,8 @@ import BirthDateField from "@/components/login/register/BirthDateField";
 import SelectField from "@/components/login/register/SelectField";
 import CheckboxField from "@/components/login/register/CheckboxField";
 import { SocialSignupFormData } from "@/types/loginForm";
+import { useEffect, useCallback } from "react";
+import toast from "react-hot-toast";
 
 export default function CompleteProfilePage() {
   const router = useRouter();
@@ -16,12 +18,42 @@ export default function CompleteProfilePage() {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<SocialSignupFormData>({ mode: "onChange" });
 
+  // 🔹 새로고침 / 브라우저 닫기 방지
+  const handleBeforeUnload = useCallback((e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = "";
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [handleBeforeUnload]);
+
+  // 🔹 링크 클릭 시 페이지 이탈 방지 및 토스트 알림
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest("a");
+
+      // 이동하려는 링크가 있고, 아직 폼 작성 중이면
+      if (anchor && isDirty) {
+        e.preventDefault();
+        toast.error("회원가입을 먼저 완료해주세요!");
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, [isDirty]);
+
+  // 🔹 폼 제출
   const onSubmit = async (data: SocialSignupFormData) => {
     try {
-      // 생년월일 포맷 YYYY-MM-DD
       const birthDate = `${data.birthYear}-${data.birthMonth.padStart(
         2,
         "0"
@@ -35,10 +67,14 @@ export default function CompleteProfilePage() {
         gender: data.gender === "남자" ? "MALE" : "FEMALE",
       };
 
+      // 페이지 이탈 방지 제거
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+
       await api.patch("/api/v1/user/me/first-info", payload);
       router.push("/");
     } catch (err) {
       console.error("추가 정보 제출 실패", err);
+      toast.error("회원가입에 실패했습니다. 다시 시도해주세요.");
     }
   };
 

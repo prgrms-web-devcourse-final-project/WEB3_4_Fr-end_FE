@@ -8,6 +8,7 @@ import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import Script from "next/script";
 import { ChatBot } from "@/components/chatbot/ChatBot";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "PlanIt",
@@ -52,6 +53,7 @@ export default function RootLayout({
           <Container>{children}</Container>
           <ChatBot />
           <Footer />
+          <Toaster position="top-center" reverseOrder={false} />
         </Providers>
       </body>
     </html>

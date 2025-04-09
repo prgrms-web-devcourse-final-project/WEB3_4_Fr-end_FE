@@ -1,28 +1,107 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
-import { UserDummyData } from "@/dummyData/UserDummyData";
+import { useEffect, useRef, useState } from "react";
+import api from "@/lib/auth/axios";
+import { AxiosError } from "axios";
+
+interface UserInfo {
+  nickname: string;
+  email: string;
+  phone: string;
+  bio: string;
+  profileImage: string | null;
+  mailingType: boolean;
+}
 
 export default function ProfileChangeForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-  const [isEditing, setIsEditing] = useState(false);
-  const [nickname, setNickname] = useState(UserDummyData.nickname);
-  const [intro, setIntro] = useState(UserDummyData.introduction);
-  const [email, setEmail] = useState(UserDummyData.email);
-  const [phone, setPhone] = useState(UserDummyData.phone);
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [nickname, setNickname] = useState("");
+  const [intro, setIntro] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const toggleSubscribed = () => {
-    setIsSubscribed((prev) => !prev);
-  };
-  const toggleEdit = () => {
-    setIsEditing((prev) => !prev);
-  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        console.log("🔐 accessToken:", localStorage.getItem("accessToken"));
+        console.log("🔄 refreshToken:", localStorage.getItem("refreshToken"));
+
+        const res = await api.get("/api/v1/user/me");
+        console.log("✅ 유저 정보:", res.data);
+        const data: UserInfo = res.data;
+        setNickname(data.nickname);
+        setIntro(data.bio || "");
+        setEmail(data.email);
+        setPhone(data.phone);
+        setProfileImage(data.profileImage);
+        setIsSubscribed(data.mailingType);
+      } catch (err: unknown) {
+        const axiosError = err as AxiosError;
+        console.error("❌ 유저 정보 불러오기 실패:", axiosError);
+        if (axiosError.response) {
+          console.error("🔍 상태코드:", axiosError.response.status);
+          console.error("🔍 응답 데이터:", axiosError.response.data);
+        }
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const phoneValid = /^01[016789]\d{7,8}$/.test(phone);
+  const nicknameValid = /^[a-zA-Z0-9가-힣]{2,10}$/.test(nickname.trim());
+
+  const patchJson = async (url: string, data: Record<string, unknown>) => {
+    console.log("📦 patchJson 호출:", url, data);
+    return await api.patch(url, data, {
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+
+  const toggleSubscribed = () => setIsSubscribed((prev) => !prev);
+  const handleUploadClick = () => fileInputRef.current?.click();
+
+  const updateNickname = async () => {
+    const safeNickname = nickname.trim();
+    if (!nicknameValid) {
+      alert("닉네임은 2~10자의 한글, 영문, 숫자만 입력해주세요.");
+      console.log("❌ 닉네임 유효성 검사 실패:", nickname);
+      return;
+    }
+
+    try {
+      console.log("📡 PATCH /api/v1/user/me/nickname 요청:", {
+        nickname: safeNickname,
+      });
+
+      const response = await patchJson("/api/v1/user/me/nickname", {
+        nickname: safeNickname,
+      });
+
+      console.log("✅ 닉네임 응답 성공:", response.data);
+      alert("닉네임이 변경되었습니다.");
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      console.error("❌ 닉네임 변경 실패:", axiosError.response?.data);
+      alert("닉네임 변경 실패");
+    }
+  };
+
+  const updateBio = async () => {
+    try {
+      await patchJson("/api/v1/user/me/bio", { bio: intro });
+      alert("자기소개가 변경되었습니다.");
+    } catch (err) {
+      const axiosError = err as AxiosError;
+      console.error("소개글 변경 실패:", axiosError.response?.data);
+      alert("소개글 변경 실패");
+    }
+  };
 
   const fields = [
     {
@@ -34,6 +113,20 @@ export default function ProfileChangeForm() {
       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
         setEmail(e.target.value),
       isValid: email === "" || emailValid,
+      onSubmit: async () => {
+        if (!emailValid) {
+          alert("이메일 형식이 올바르지 않습니다.");
+          return;
+        }
+        try {
+          await patchJson("/api/v1/user/me/email", { email });
+          alert("이메일이 변경되었습니다.");
+        } catch (err) {
+          const axiosError = err as AxiosError;
+          console.error("이메일 변경 실패:", axiosError.response?.data);
+          alert("이메일 변경 실패");
+        }
+      },
     },
     {
       label: "휴대폰 번호",
@@ -44,6 +137,20 @@ export default function ProfileChangeForm() {
       onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
         setPhone(e.target.value),
       isValid: phone === "" || phoneValid,
+      onSubmit: async () => {
+        if (!phoneValid) {
+          alert("휴대폰 번호 형식이 올바르지 않습니다.");
+          return;
+        }
+        try {
+          await patchJson("/api/v1/user/me/phone", { phone });
+          alert("휴대폰 번호가 변경되었습니다.");
+        } catch (err) {
+          const axiosError = err as AxiosError;
+          console.error("휴대폰 번호 변경 실패:", axiosError.response?.data);
+          alert("휴대폰 번호 변경 실패");
+        }
+      },
     },
   ];
 
@@ -52,7 +159,7 @@ export default function ProfileChangeForm() {
       <div className="flex gap-8">
         <div className="flex flex-col items-center mt-[95px] ml-[95px]">
           <Image
-            src={`/defaultAvatar/${UserDummyData.avatar}`}
+            src={profileImage || "/defaultAvatar/31.png"}
             alt="프로필 이미지"
             width={150}
             height={150}
@@ -71,14 +178,14 @@ export default function ProfileChangeForm() {
           >
             이미지 업로드
           </button>
-          <button className="mt-2  text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer">
+          <button className="mt-2 text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer">
             이미지 제거
           </button>
         </div>
         <div className="flex flex-col w-full relative">
           <div className="absolute left-[0] top-[75px] w-[1px] h-[219px] bg-customGray-400" />
           <div className="ml-8 mt-[101px]">
-            {isEditing ? (
+            {editingField === "nickname" ? (
               <div>
                 <input
                   type="text"
@@ -86,38 +193,62 @@ export default function ProfileChangeForm() {
                   onChange={(e) => setNickname(e.target.value)}
                   className="text-[40px] font-bold rounded w-full max-w-[447px] h-[60px]"
                 />
-                <br />
+                <button
+                  onClick={updateNickname}
+                  className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
+                >
+                  확인
+                </button>
               </div>
             ) : (
-              <p className="text-[40px] font-bold max-w-[447px] h-[60px]">
-                {nickname}
-              </p>
-            )}
-            <button
-              className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
-              onClick={toggleEdit}
-            >
-              {isEditing ? "확인" : "수정"}
-            </button>
-            <br />
-            {isEditing ? (
-              <textarea
-                value={intro}
-                onChange={(e) => setIntro(e.target.value)}
-                className="mt-2 text-[13px] font-semibold  w-[326px] h-[60px]"
-              />
-            ) : (
-              <p className="mt-2 text-[13px] font-semibold w-[326px] h-[60px] mb-[6.5px]">
-                {intro}
-              </p>
-            )}
-            {isEditing ? (
               <>
-                {fields.map((f, i) => (
-                  <div key={i} className="w-[408px] mb-4">
-                    <label className="text-base text-black font-[pretendard]">
-                      {f.label}
-                    </label>
+                <p className="text-[40px] font-bold max-w-[447px] h-[60px]">
+                  {nickname}
+                </p>
+                <button
+                  className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
+                  onClick={() => setEditingField("nickname")}
+                >
+                  수정
+                </button>
+              </>
+            )}
+
+            {editingField === "bio" ? (
+              <>
+                <textarea
+                  value={intro}
+                  onChange={(e) => setIntro(e.target.value)}
+                  className="mt-2 text-[13px] font-semibold w-[326px] h-[60px]"
+                />
+                <button
+                  onClick={updateBio}
+                  className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
+                >
+                  확인
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="mt-2 text-[13px] font-semibold w-[326px] h-[60px] mb-[6.5px]">
+                  {intro}
+                </p>
+                <button
+                  className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
+                  onClick={() => setEditingField("bio")}
+                >
+                  수정
+                </button>
+              </>
+            )}
+
+            {fields.map((f, i) => (
+              <div key={i} className="w-[350px]">
+                <label className="text-base text-black font-[pretendard]">
+                  {f.label}
+                </label>
+                {editingField === f.label ? (
+                  <>
                     <input
                       type={f.type}
                       value={f.value}
@@ -132,33 +263,30 @@ export default function ProfileChangeForm() {
                     >
                       {f.e}
                     </p>
+                    <button
+                      onClick={f.onSubmit}
+                      className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
+                    >
+                      확인
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex justify-between items-center">
+                    <p className="w-full h-[50px] px-2.5 py-2 bg-white mb-4">
+                      {f.value}
+                    </p>
+                    <button
+                      className="text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
+                      onClick={() => setEditingField(f.label)}
+                    >
+                      수정
+                    </button>
                   </div>
-                ))}
-              </>
-            ) : (
-              <div>
-                <div className="text-base text-black font-[pretendard]">
-                  이메일
-                </div>
-                <p className="w-full h-[50px] px-2.5 py-2 bg-white mb-4">
-                  {email}
-                </p>
-                <div className="text-base text-black font-[pretendard]">
-                  휴대폰 번호
-                </div>
-                <p className="w-full h-[50px] px-2.5 py-2 bg-white mb-4">
-                  {phone}
-                </p>
+                )}
               </div>
-            )}
+            ))}
 
-            <button
-              onClick={toggleEdit}
-              className=" ml-[272px] mt-[18px] bg-black text-white w-[93px] h-[30px] rounded-[8px] text-[13px] font-bold font-pretendard hover:bg-customBlue-200 cursor-pointer"
-            >
-              {isEditing ? "확인" : "수정"}
-            </button>
-            {isSubscribed === true ? (
+            {isSubscribed ? (
               <div className="mt-8 w-[408px] h-[115px] border border-customGray-300 rounded">
                 <div className="mt-[20px] ml-[20px] mb-[6px]">
                   <p className="text-[13px] font-semibold">
