@@ -36,7 +36,7 @@ export const deleteCalendar = async (
   }
 };
 
-// 캘린더 이름 수정정
+// 캘린더 이름 수정
 export const editCalendarTitle = async (
   id: string,
   userId: string,
