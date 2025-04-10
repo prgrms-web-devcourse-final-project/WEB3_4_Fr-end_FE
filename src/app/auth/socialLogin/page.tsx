@@ -31,6 +31,8 @@ export default function SocialLogin() {
           socialType,
           code,
         });
+        console.log("code:", code);
+        console.log("socialType:", socialType);
 
         const { accessToken, refreshToken, needAdditionalInfo } = res.data;
 

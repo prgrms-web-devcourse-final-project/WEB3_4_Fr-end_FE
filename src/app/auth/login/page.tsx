@@ -70,7 +70,8 @@ export default function Login() {
       const { redirectUri } = res.data;
 
       if (redirectUri) {
-        window.location.href = `${redirectUri}&socialType=GOOGLE`;
+        const joiner = redirectUri.includes("?") ? "&" : "?";
+        window.location.href = `${redirectUri}${joiner}socialType=GOOGLE`;
       } else {
         console.error("리디렉션 URL 없음.");
       }
@@ -89,7 +90,8 @@ export default function Login() {
       });
       const { redirectUri } = res.data;
       if (redirectUri) {
-        window.location.href = `${redirectUri}&socialType=KAKAO`;
+        const joiner = redirectUri.includes("?") ? "&" : "?";
+        window.location.href = `${redirectUri}${joiner}socialType=KAKAO`;
       } else {
         console.error("리디렉션 URL 없음.");
       }
@@ -108,7 +110,8 @@ export default function Login() {
       });
       const { redirectUri } = res.data;
       if (redirectUri) {
-        window.location.href = `${redirectUri}&socialType=NAVER`;
+        const joiner = redirectUri.includes("?") ? "&" : "?";
+        window.location.href = `${redirectUri}${joiner}socialType=NAVER`;
       } else {
         console.error("리디렉션 URL 없음.");
       }
