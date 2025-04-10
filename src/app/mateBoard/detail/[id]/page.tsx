@@ -11,7 +11,8 @@ type MateDetailPageProps = {
   params: { id: string };
 };
 export default async function MateDetailPage({ params }: MateDetailPageProps) {
-  const id = Number(params.id);
+  const awaitedParam = await params;
+  const id = Number(awaitedParam.id);
   const data: MateDetailData = await getMateBoardDetail(id);
 
   if (!data) {
@@ -32,12 +33,12 @@ export default async function MateDetailPage({ params }: MateDetailPageProps) {
       </div>
       <div className="mb-10 flex justify-center items-center  ">
         <div className="w-full max-w-5xl">
-          <CommentButton />
+          <CommentButton mateId={id} />
         </div>
       </div>
       <div className="mb-10 flex justify-center items-center">
         <div className="w-full max-w-5xl">
-          <CommentCardList />
+          <CommentCardList matePostId={id} />
         </div>
       </div>
     </>
