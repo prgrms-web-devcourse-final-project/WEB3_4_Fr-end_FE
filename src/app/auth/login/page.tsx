@@ -68,8 +68,9 @@ export default function Login() {
         headers: {},
       });
       const { redirectUri } = res.data;
+
       if (redirectUri) {
-        window.location.href = redirectUri;
+        window.location.href = `${redirectUri}&socialType=GOOGLE`;
       } else {
         console.error("리디렉션 URL 없음.");
       }
@@ -88,7 +89,7 @@ export default function Login() {
       });
       const { redirectUri } = res.data;
       if (redirectUri) {
-        window.location.href = redirectUri;
+        window.location.href = `${redirectUri}&socialType=KAKAO`;
       } else {
         console.error("리디렉션 URL 없음.");
       }
@@ -107,7 +108,7 @@ export default function Login() {
       });
       const { redirectUri } = res.data;
       if (redirectUri) {
-        window.location.href = redirectUri;
+        window.location.href = `${redirectUri}&socialType=NAVER`;
       } else {
         console.error("리디렉션 URL 없음.");
       }
