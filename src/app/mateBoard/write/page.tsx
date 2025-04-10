@@ -16,8 +16,9 @@ import ContentTextarea from "@/components/mateBoard/mateBoardWriting/MateContent
 import { buildMatePayload } from "@/lib/mate/buildMatePayload";
 import { mateFormSchema, type MateFormType } from "@/lib/mate/mateFormSchema";
 import { postMateWriting } from "@/apis/mateBoard/postMateWriting";
-
+import { useRouter } from "next/navigation";
 export default function MateWritingForm() {
+  const router = useRouter();
   const [images, setImages] = useState<File[]>([]);
   const [mateGender, setMateGender] = useState<string>("NO_PREFERENCE");
 
@@ -46,6 +47,7 @@ export default function MateWritingForm() {
     try {
       const response = await postMateWriting(payload);
       console.log("작성 완료:", response);
+      router.push("/mateBoard");
     } catch (error) {
       console.log("전송 payload:", error);
       console.log("전송 payload:", payload);
