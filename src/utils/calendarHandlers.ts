@@ -21,7 +21,7 @@ export const addNewCalendar = async (
 };
 
 
-/** 캘린더 삭제 */
+// 캘린더 삭제
 export const deleteCalendar = async (
   id: string,
   userId: string,
@@ -66,7 +66,7 @@ export const editCalendarTitle = async (
   }
 };
 
-// URL 복사사
+// URL 복사
 export const copyCalendarUrl = async (id: string) => {
   try {
     const url = `${window.location.origin}/calendar/${id}`;

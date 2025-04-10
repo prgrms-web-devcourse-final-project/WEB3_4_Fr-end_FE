@@ -28,11 +28,13 @@ export interface UpdateCalendarBody {
   note: string;
 }
 
+// 캘린더 목록 가져오기
 export const fetchCalendars = async (): Promise<CalendarResponse[]> => {
   const res = await api.get('/calendar');
   return res.data.data;
 };
 
+// 캘린더 생성
 export const createCalendar = async (
   title: string,
   userId: string
@@ -49,10 +51,13 @@ export const createCalendar = async (
   return res.data;
 };
 
+
+// 캘린더 삭제
 export const deleteCalendarById = async (id: string, userId: string) => {
   await api.delete(`/calendar/${id}?userId=${userId}`);
 };
 
+// 캘린더 이름 변경
 export const updateCalendar = async (
   calendarId: string,
   userId: string,
