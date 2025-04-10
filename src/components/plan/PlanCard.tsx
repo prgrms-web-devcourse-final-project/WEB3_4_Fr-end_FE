@@ -1,73 +1,119 @@
 "use client";
 
-import React, { useState } from "react";
-import PlanSearchBar from "@/components/plan/PlanSearchBar";
-import { SearchResult } from "@/types/PlanSearchBarProps";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FiBookmark } from "react-icons/fi";
-
-interface PlanCardProps {
-  placeName: string;
-  onPlaceNameChange: (newPlaceName: string) => void;
-  onSearchResult: (result: SearchResult | null) => void;
-  searchResult: SearchResult | null;
-}
+import { SearchIcon, Trash2Icon } from "lucide-react";
+import type { PlanCardProps, KakaoPlace, SearchResult } from "@/types/Scheduleindex";
 
 const PlanCard: React.FC<PlanCardProps> = ({
   placeName,
   onPlaceNameChange,
   onSearchResult,
   searchResult,
+  onDelete,
 }) => {
-  //div CSS active: 상태 유지
-  const [clicked, setClicked] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const handleDelete = () => {
-    alert("카드삭제");
+  useEffect(() => {
+    if (window.kakao && window.kakao.maps) {
+      window.kakao.maps.load(() => {
+        setIsLoaded(true);
+      });
+    } else {
+      console.error("Kakao Maps SDK가 로드되지 않았습니다.");
+    }
+  }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
-  const handleClick = () => {
-    alert("북마크");
+  const handleSearch = () => {
+    if (!isLoaded || !window.kakao || !window.kakao.maps.services) {
+      console.error("Kakao Maps 서비스 라이브러리가 로드되지 않았습니다.");
+      onSearchResult(null);
+      return;
+    }
+    const ps = new window.kakao.maps.services.Places();
+    ps.keywordSearch(placeName, (data: KakaoPlace[], status: string) => {
+      if (status === window.kakao.maps.services.Status.OK && data.length > 0) {
+        const place = data[0];
+        const result: SearchResult = {
+          place_name: place.place_name,
+          category_name: place.category_group_name,
+          address_name: place.address_name,
+          x: parseFloat(place.x),
+          y: parseFloat(place.y),
+        };
+        onSearchResult(result);
+      } else {
+        onSearchResult(null);
+      }
+    });
   };
+
+  const handleBookmark = () => {
+    alert("북마크!");
+  };
+
   return (
-    <div
-      onClick={() => setClicked((prev) => !prev)}
-      className={`w-full max-w-md shadow-md rounded-md grid grid-flow-col grid-rows-2 gap-4 p-2 ${
-        clicked ? "border-2 border-amber-300" : "border border-gray-300"
-      }`}
-    >
-      {/* 시간 */}
-      <div className="row-span-2 flex items-center justify-center">
-        <input
-          type="text"
-          placeholder="시간"
-          className="w-24 max-w-full px-2 py-1 border border-white rounded-md text-center"
-        />
-      </div>
+    <div>
+      <div
+        className="w-[92%] overflow-hidden shadow-md rounded-md grid grid-flow-col grid-rows-2 gap-4 p-4 border border-gray-300"
+      >
+        {/* 시간  */}
+        <div className="row-span-2 flex items-center justify-center ">
+          <input
+            type="time"
+            placeholder="00:00"
+            className="w-full py-1 border border-white rounded-md text-center"
+          />
+        </div>
 
-      {/* 검색창 영역 */}
-      <div className="col-span-2">
-        <PlanSearchBar
-          placeName={placeName}
-          onPlaceNameChange={onPlaceNameChange}
-          onSearchResult={onSearchResult}
-          onDelete={handleDelete}
-        />
-      </div>
+        {/* 검색창 */}
+        <div className="col-span-2">
+          <div className="flex items-center w-full pr-10">
+            <input
+              type="text"
+              placeholder="검색어를 입력하세요"
+              value={placeName}
+              onChange={(e) => onPlaceNameChange(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="flex-1 border-none outline-none bg-transparent font-bold"
+            />
+            {/* 아이콘  */}
+            <div className="flex space-x-2">
+              <Button variant="ghost" size="icon" onClick={handleSearch} asChild>
+                <span>
+                  <SearchIcon className="w-4 h-4 max-w-full" />
+                </span>
+              </Button>
+              <Button variant="ghost" size="icon" onClick={onDelete} asChild>
+                <span>
+                  <Trash2Icon className="w-4 h-4 max-w-full" />
+                </span>
+              </Button>
+            </div>
+          </div>
+        </div>
 
-      {/* 하단 영역: 카테고리와 버튼을 양쪽 끝에 배치 */}
-      <div className="col-span-2 row-span-1">
-        <div className="flex justify-between items-center">
-          <span>
-            {searchResult?.category_name?.trim()
-              ? searchResult.category_name
-              : "카테고리 정보없음"}
-          </span>
-          <Button variant="ghost" size="icon" onClick={handleClick} asChild>
+        {/*  카테고리 북마크 */}
+        <div className="col-span-2 row-span-1 pr-10">
+          <div className="flex justify-between items-center">
             <span>
-              <FiBookmark />
+              {searchResult?.category_name?.trim()
+                ? searchResult.category_name
+                : "카테고리"}
             </span>
-          </Button>
+            <Button variant="ghost" size="icon" onClick={handleBookmark} asChild>
+              <span>
+                <FiBookmark className="w-4 h-4 max-w-full" />
+              </span>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

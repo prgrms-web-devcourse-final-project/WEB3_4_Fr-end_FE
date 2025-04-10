@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { ko } from "date-fns/locale";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { fetchAccommodationById } from "@/apis/reservation/reservationApi";
 
 interface Accommodation {
@@ -26,12 +26,13 @@ export default function Confirmation() {
   const checkIn = searchParams.get("checkIn");
   const checkOut = searchParams.get("checkOut");
 
+  const router = useRouter();
+
   // 숙소 정보 상태
   const [accommodation, setAccommodation] = useState<Accommodation | null>(
     null
   );
 
-  // 예약자 정보와 이용자 정보 통합 상태
   const [userData, setUserData] = useState({
     reserverName: "홍길동", // 예약자 이름
     reserverPhone: "010-1234-5678", // 예약자 전화번호
@@ -106,8 +107,15 @@ export default function Confirmation() {
   // 예약 확인 처리
   const handleConfirmReservation = () => {
     if (validateUserData()) {
-      alert("예약이 완료되었습니다!");
-      // 서버 연동 로직 추가 가능
+      const query = new URLSearchParams({
+        id: accommodation?.id?.toString() || "", // 숙소 ID
+        userName: userData.userName, // 이용자 이름
+        userPhone: userData.userPhone, // 이용자 전화번호
+        people: userData.people, // 예약 인원
+        checkIn: checkIn || "", // 예약 시작일
+        checkOut: checkOut || "", // 예약 종료일
+      }).toString();
+      router.push(`/reservation/payment?${query}`);
     }
   };
 

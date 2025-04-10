@@ -16,20 +16,20 @@ export default function Failure() {
           </div>
           <div className="flex flex-col gap-6 mt-8 ml-47">
             <div className="font-semibold">
-              <div className="text-customBlue-200">결제자</div>
-              <div className="text-xl">홍길동</div>
+              <div className="text-customBlue-200">결제사</div>
+              <div className="text-xl">PLANIT</div>
             </div>
             <div className="font-semibold">
-              <div className="text-customBlue-200">상품명</div>
-              <div className="text-xl">그랜드 하얏트 제주</div>
+              <div className="text-customBlue-200">관련 문의</div>
+              <div className="text-xl">02-123-4567</div>
             </div>
             <div className="font-semibold">
               <div className="text-customBlue-200">결제 수단</div>
-              <div className="text-xl">개인 신용</div>
+              <div className="text-xl">간편 결제</div>
             </div>
             <div className="font-semibold">
               <div className="text-customBlue-200">실패 사유</div>
-              <div className="text-xl">실패 사유</div>
+              <div className="text-xl">결제 실패</div>
             </div>
           </div>
           <div className="mt-6 flex justify-center">
