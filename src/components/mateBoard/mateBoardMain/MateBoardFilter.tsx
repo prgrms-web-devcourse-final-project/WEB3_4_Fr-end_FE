@@ -1,30 +1,13 @@
-// components/mateBoard/mateBoardMain/MateBoardFilter.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import MateSearch from "@/components/mateBoard/mateBoardMain/MateSearch";
 import CategoryFilter from "@/components/mateBoard/mateBoardMain/CategoryFilter";
 import MateCardList from "@/components/mateBoard/mateBoardMain/MateCardList";
 import { useDebounce } from "@/hooks/useDebounce";
-import type { MateCardData } from "@/types/mateBoard/MateCardData";
 import PaginationControls from "@/components/mateBoard/mateBoardMain/PaginationControls";
 import WritingButton from "@/components/mateBoard/mateBoardMain/WritingButton";
-
-interface MateBoardFilterProps {
-  cards: MateCardData[];
-  totalPages: number;
-  currentPage: number;
-  onFilterChange: (newFilters: {
-    keyword?: string;
-    region?: string;
-    status?: string;
-    page?: number;
-  }) => void;
-  // 부모로부터 전달받은 초기 필터 값
-  initialRegion: string;
-  initialStatus: string;
-  initialKeyword: string;
-}
+import type { MateBoardFilterProps } from "@/types/mateBoard/MateBoardFilterProps";
 
 export default function MateBoardFilter({
   cards,
@@ -35,7 +18,7 @@ export default function MateBoardFilter({
   initialStatus,
   initialKeyword,
 }: MateBoardFilterProps) {
-  // 부모로부터 전달받은 초기값으로 상태 초기화
+  // 필터 상태 관리 (초기값은 부모에서 전달받은 값)
   const [searchInput, setSearchInput] = useState(initialKeyword);
   const [region, setRegion] = useState(initialRegion);
   const [status, setStatus] = useState(initialStatus);
@@ -43,36 +26,94 @@ export default function MateBoardFilter({
 
   const debouncedSearch = useDebounce(searchInput, 1000);
 
-  // 필터(검색, region, status)가 변경될 때만 페이지를 1로 리셋하고 onFilterChange 호출
+  // 이전 필터 값을 저장하는 ref (초기 렌더링 시 초기값으로 설정)
+  const previousFiltersRef = useRef({
+    keyword: initialKeyword,
+    region: initialRegion,
+    status: initialStatus,
+  });
+
+  // 필터 값이 변경되었을 때만 페이지를 1로 리셋하고 onFilterChange 호출
   useEffect(() => {
-    setCurrentPageState(1);
-    onFilterChange({
-      keyword: debouncedSearch,
-      region,
-      status,
-      page: 1,
-    });
-  }, [debouncedSearch, region, status, onFilterChange]);
+    const previous = previousFiltersRef.current;
+    // 필터가 이전과 다르면 페이지를 1로 리셋
+    if (
+      debouncedSearch !== previous.keyword ||
+      region !== previous.region ||
+      status !== previous.status
+    ) {
+      setCurrentPageState(1);
+      onFilterChange({
+        keyword: debouncedSearch,
+        region,
+        status,
+        page: 1,
+      });
+      // 현재 필터를 이전 필터로 업데이트
+      previousFiltersRef.current = {
+        keyword: debouncedSearch,
+        region,
+        status,
+      };
+    } else {
+      // 필터 변화가 없으면 현재 페이지를 그대로 유지
+      onFilterChange({
+        keyword: debouncedSearch,
+        region,
+        status,
+        page: currentPageState,
+      });
+    }
+  }, [debouncedSearch, region, status, onFilterChange, currentPageState]);
 
-  const handleSubmit = () => {
-    setCurrentPageState(1);
-    onFilterChange({
-      keyword: searchInput,
-      region,
-      status,
-      page: 1,
-    });
-  };
+  // 검색 제출 이벤트
+  const handleSubmit = useCallback(() => {
+    // 동일한 로직을 사용하여 필터 변경 시 페이지를 1로 리셋
+    const previous = previousFiltersRef.current;
+    if (
+      searchInput !== previous.keyword ||
+      region !== previous.region ||
+      status !== previous.status
+    ) {
+      setCurrentPageState(1);
+      onFilterChange({
+        keyword: searchInput,
+        region,
+        status,
+        page: 1,
+      });
+      previousFiltersRef.current = {
+        keyword: searchInput,
+        region,
+        status,
+      };
+    } else {
+      onFilterChange({
+        keyword: searchInput,
+        region,
+        status,
+        page: currentPageState,
+      });
+    }
+  }, [searchInput, region, status, onFilterChange, currentPageState]);
 
-  // 페이지 변경 이벤트 핸들러: 필터 변경에 의한 리셋과는 분리하여 처리
-  const handlePageChange = (newPage: number) => {
-    setCurrentPageState(newPage);
-    onFilterChange({ page: newPage });
-  };
+  // 페이지 변경 이벤트 핸들러: 필터 값은 그대로 유지하면서 페이지 번호만 변경
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      setCurrentPageState(newPage);
+      onFilterChange({
+        keyword: debouncedSearch,
+        region,
+        status,
+        page: newPage,
+      });
+    },
+    [debouncedSearch, region, status, onFilterChange]
+  );
 
   return (
-    <div>
-      <div className="space-y-6 mb-20 flex flex-col items-center">
+    <div className="space-y-8">
+      <div className="mb-20 flex flex-col items-center">
         <MateSearch
           search={searchInput}
           category={region}

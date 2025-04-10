@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 import MateTitleField from "@/components/mateBoard/mateBoardWriting/MateTitleField";
 import MateRegionField from "@/components/mateBoard/mateBoardWriting/MateRegionField";
@@ -12,15 +13,18 @@ import MateDateRangeField from "@/components/mateBoard/mateBoardWriting/MateDate
 import MatePeopleField from "@/components/mateBoard/mateBoardWriting/MatePeopleField";
 import MateGenderSelect from "@/components/mateBoard/mateBoardWriting/MateGenderSelector";
 import ImageUpload from "@/components/mateBoard/mateBoardWriting/MateImageUploader";
+
+import { postMateWriting } from "@/apis/mateBoard/postMateWriting";
+
 import ContentTextarea from "@/components/mateBoard/mateBoardWriting/MateContentField";
 import { buildMatePayload } from "@/lib/mate/buildMatePayload";
 import { mateFormSchema, type MateFormType } from "@/lib/mate/mateFormSchema";
-import { postMateWriting } from "@/apis/mateBoard/postMateWriting";
-import { useRouter } from "next/navigation";
+
 export default function MateWritingForm() {
   const router = useRouter();
   const [images, setImages] = useState<File[]>([]);
   const [mateGender, setMateGender] = useState<string>("NO_PREFERENCE");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const form = useForm<MateFormType>({
     resolver: zodResolver(mateFormSchema),
@@ -38,6 +42,7 @@ export default function MateWritingForm() {
   });
 
   const onSubmit = async (values: MateFormType) => {
+    if (isSubmitting) return;
     const payload = buildMatePayload({
       ...values,
       mateGender,
@@ -51,6 +56,8 @@ export default function MateWritingForm() {
     } catch (error) {
       console.log("전송 payload:", error);
       console.log("전송 payload:", payload);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -82,9 +89,10 @@ export default function MateWritingForm() {
           <div className="text-center">
             <Button
               type="submit"
+              disabled={isSubmitting}
               className="px-6 py-2 text-white bg-black hover:bg-gray-800"
             >
-              작성하기
+              {isSubmitting ? "작성 중..." : "작성하기"}
             </Button>
           </div>
         </form>
