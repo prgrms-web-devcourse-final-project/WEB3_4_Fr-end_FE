@@ -1,10 +1,16 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { RiCheckboxCircleLine } from "react-icons/ri";
 
 export default function Success() {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const buyer_name = searchParams.get("buyer_name");
+  const name = searchParams.get("name");
+  const pg_provider = searchParams.get("pg_provider");
+  const paid_amount = searchParams.get("paid_amount");
 
   return (
     <>
@@ -17,19 +23,19 @@ export default function Success() {
           <div className="flex flex-col gap-6 mt-8 ml-47">
             <div className="font-semibold">
               <div className="text-customBlue-200">결제자</div>
-              <div className="text-xl">홍길동</div>
+              <div className="text-xl">{buyer_name}</div>
             </div>
             <div className="font-semibold">
               <div className="text-customBlue-200">상품명</div>
-              <div className="text-xl">그랜드 하얏트 제주</div>
+              <div className="text-xl">{name}</div>
             </div>
             <div className="font-semibold">
               <div className="text-customBlue-200">결제 수단</div>
-              <div className="text-xl">개인 신용</div>
+              <div className="text-xl">{pg_provider}</div>
             </div>
             <div className="font-semibold">
               <div className="text-customBlue-200">결제 금액</div>
-              <div className="text-xl">100,000 원</div>
+              <div className="text-xl">{paid_amount} 원</div>
             </div>
           </div>
           <div className="mt-6 flex justify-center">

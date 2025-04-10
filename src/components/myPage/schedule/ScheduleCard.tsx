@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarMate, CalendarData } from "@/types/ScheuduleData";
+import { CalendarData } from "@/types/ScheuduleData";
 import { useState } from "react";
 
 interface CalendarProps {

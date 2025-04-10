@@ -8,9 +8,11 @@ import { useAuthStore } from "@/store/useAuthStore";
 export default function SocialLogin() {
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
+  const socialType = searchParams.get("socialType") ?? "GOOGLE";
   const router = useRouter();
   const setTokens = useAuthStore((state) => state.setTokens);
   const [dotCount, setDotCount] = useState<number>(1);
+  const setUser = useAuthStore((state) => state.setUser);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -26,33 +28,29 @@ export default function SocialLogin() {
 
       try {
         const res = await api.post("/api/v1/auth/social-login", {
-          socialType: "GOOGLE",
+          socialType,
           code,
         });
 
         const { accessToken, refreshToken, needAdditionalInfo } = res.data;
 
-        console.log("🟢 로그인 응답 성공");
-        console.log("accessToken:", accessToken);
-        console.log("refreshToken:", refreshToken);
-        console.log("needAdditionalInfo:", needAdditionalInfo);
-
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         setTokens(accessToken, refreshToken);
 
-        if (needAdditionalInfo) {
-          router.push("/auth/completeProfile");
-        } else {
-          router.push("/");
-        }
+        const userRes = await api.get("/api/v1/user/me");
+        const userData = userRes.data;
+        setUser(userData);
+        localStorage.setItem("UserData", JSON.stringify(userData));
+
+        router.push(needAdditionalInfo ? "/auth/completeProfile" : "/");
       } catch (err) {
         console.error("소셜 로그인 실패:", err);
       }
     };
 
     handleSocialLogin();
-  }, [code, router, setTokens]);
+  }, [code, router, setTokens, socialType, setUser]);
 
   const dots = ".".repeat(dotCount);
 

@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import api from "@/lib/auth/axios";
-import { AxiosError } from "axios";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 interface UserInfo {
   nickname: string;
@@ -27,11 +28,7 @@ export default function ProfileChangeForm() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        console.log("🔐 accessToken:", localStorage.getItem("accessToken"));
-        console.log("🔄 refreshToken:", localStorage.getItem("refreshToken"));
-
         const res = await api.get("/api/v1/user/me");
-        console.log("✅ 유저 정보:", res.data);
         const data: UserInfo = res.data;
         setNickname(data.nickname);
         setIntro(
@@ -39,14 +36,19 @@ export default function ProfileChangeForm() {
         );
         setEmail(data.email);
         setPhone(data.phone);
-        setProfileImage(data.profileImage);
+        if (!data.profileImage || data.profileImage === "null") {
+          setProfileImage(null);
+        } else {
+          setProfileImage(data.profileImage);
+        }
+
         setIsSubscribed(data.mailingType);
-      } catch (err: unknown) {
-        const axiosError = err as AxiosError;
-        console.error("❌ 유저 정보 불러오기 실패:", axiosError);
-        if (axiosError.response) {
-          console.error("🔍 상태코드:", axiosError.response.status);
-          console.error("🔍 응답 데이터:", axiosError.response.data);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          console.error(
+            error.response?.data.message || "❌ 유저 정보 불러오기 실패:"
+          );
+          toast.error("유저 정보 불러오기에 실패했습니다!");
         }
       }
     };
@@ -59,20 +61,86 @@ export default function ProfileChangeForm() {
   const nicknameValid = /^[a-zA-Z0-9가-힣]{2,10}$/.test(nickname.trim());
 
   const patchJson = async (url: string, data: Record<string, unknown>) => {
-    console.log("📦 patchJson 호출:", url, data);
     return await api.patch(url, data, {
       headers: { "Content-Type": "application/json" },
     });
   };
 
-  const toggleSubscribed = () => setIsSubscribed((prev) => !prev);
   const handleUploadClick = () => fileInputRef.current?.click();
 
+  const uploadImageToServer = async (file: File): Promise<string> => {
+    const presignRes = await api.post("/api/v1/image", null, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const {
+      presigned: { postUrl, formData },
+      getUrl,
+    } = presignRes.data;
+
+    const uploadForm = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      uploadForm.append(key, value as string);
+    });
+
+    uploadForm.append("file", file, file.name);
+
+    const uploadRes = await fetch(postUrl, {
+      method: "POST",
+      body: uploadForm,
+    });
+    if (!uploadRes.ok) {
+      throw new Error("S3 업로드 실패");
+    }
+    return getUrl;
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+    setProfileImage(imageUrl);
+    console.log("파일 MIME 타입:", file.type);
+
+    try {
+      const uploadedUrl = await uploadImageToServer(file);
+      await api.patch("/api/v1/user/me/profile-image", {
+        profileImageUrl: uploadedUrl,
+      });
+      toast.success("프로필 이미지가 변경되었습니다!");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          error.response?.data.message || "프로필 이미지 변경 실패"
+        );
+        toast.error("프로필 이미지 변경에 실패했습니다!");
+      }
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    try {
+      await api.patch("/api/v1/user/me/profile-image", {
+        profileImageUrl: null,
+      });
+      setProfileImage(null);
+      toast.success("이미지가 제거되었습니다.");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error(
+          error.response?.data.message || "프로필 이미지 제거 실패"
+        );
+        toast.error("이미지 제거에 실패했습니다.");
+      }
+    }
+  };
   const updateNickname = async () => {
     const safeNickname = nickname.trim();
     if (!nicknameValid) {
-      alert("닉네임은 2~10자의 한글, 영문, 숫자만 입력해주세요.");
-      console.log("❌ 닉네임 유효성 검사 실패:", nickname);
+      toast.error("닉네임은 2~10자의 한글, 영문, 숫자만 입력해주세요.");
       return;
     }
 
@@ -86,24 +154,26 @@ export default function ProfileChangeForm() {
       });
 
       console.log("✅ 닉네임 응답 성공:", response.data);
-      alert("닉네임이 변경되었습니다.");
+      toast.success("닉네임이 변경되었습니다.");
       setEditingField(null);
-    } catch (err) {
-      const axiosError = err as AxiosError;
-      console.error("❌ 닉네임 변경 실패:", axiosError.response?.data);
-      alert("닉네임 변경 실패");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.message || "❌ 닉네임 변경 실패");
+        toast.error("닉네임 변경에 실패했습니다!");
+      }
     }
   };
 
   const updateBio = async () => {
     try {
       await patchJson("/api/v1/user/me/bio", { bio: intro });
-      alert("자기소개가 변경되었습니다.");
+      toast.success("자기소개가 변경되었습니다.");
       setEditingField(null);
-    } catch (err) {
-      const axiosError = err as AxiosError;
-      console.error("소개글 변경 실패:", axiosError.response?.data);
-      alert("소개글 변경 실패");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.message || "❌ 자기소개 변경 실패");
+        toast.error("자기소개 변경에 실패했습니다!");
+      }
     }
   };
 
@@ -119,21 +189,24 @@ export default function ProfileChangeForm() {
       isValid: !email || emailValid,
       onSubmit: async () => {
         if (!email.trim()) {
-          alert("이메일을 입력해주세요.");
+          toast.error("이메일을 입력해주세요.");
           return;
         }
         if (!emailValid) {
-          alert("이메일 형식이 올바르지 않습니다.");
+          toast.error("이메일 형식이 올바르지 않습니다.");
           return;
         }
         try {
           await patchJson("/api/v1/user/me/email", { email });
-          alert("이메일이 변경되었습니다.");
+          toast.success("이메일이 변경되었습니다.");
           setEditingField(null);
-        } catch (err) {
-          const axiosError = err as AxiosError;
-          console.error("이메일 변경 실패:", axiosError.response?.data);
-          alert("이메일 변경 실패");
+        } catch (error: unknown) {
+          if (axios.isAxiosError(error)) {
+            console.error(
+              error.response?.data.message || "❌ 이메일 변경 실패"
+            );
+            toast.error("이메일 변경에 실패했습니다!");
+          }
         }
       },
     },
@@ -148,42 +221,71 @@ export default function ProfileChangeForm() {
       isValid: !phone || phoneValid,
       onSubmit: async () => {
         if (!phone.trim()) {
-          alert("휴대폰 번호를 입력해주세요.");
+          toast.error("휴대폰 번호를 입력해주세요.");
           return;
         }
         if (!phoneValid) {
-          alert("휴대폰 번호 형식이 올바르지 않습니다.");
+          toast.error("휴대폰 번호 형식이 올바르지 않습니다.");
           return;
         }
         try {
           await patchJson("/api/v1/user/me/phone", { phone });
-          alert("휴대폰 번호가 변경되었습니다.");
+          toast.success("휴대폰 번호가 변경되었습니다.");
           setEditingField(null);
-        } catch (err) {
-          const axiosError = err as AxiosError;
-          console.error("휴대폰 번호 변경 실패:", axiosError.response?.data);
-          alert("휴대폰 번호 변경 실패");
+        } catch (error: unknown) {
+          if (axios.isAxiosError(error)) {
+            console.error(
+              error.response?.data.message || "❌ 휴대폰 번호 변경 실패"
+            );
+            toast.error("휴대폰 번호 변경에 실패했습니다!");
+          }
         }
       },
     },
   ];
 
+  const toggleSubscribed = async () => {
+    try {
+      const nextState = !isSubscribed;
+
+      await api.patch("/api/v1/user/me/mailing-type", {
+        mailingType: nextState,
+      });
+
+      setIsSubscribed(nextState);
+
+      toast.success(
+        nextState
+          ? "메일링 구독을 신청하였습니다!"
+          : "메일링 구독을 취소하였습니다!"
+      );
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data.message || "❌ 메일링 변경 실패");
+        toast.error("메일 수신 설정 변경에 실패했습니다!");
+      }
+    }
+  };
+
   return (
     <div className="w-[726px] h-[698px] relative bg-white rounded-lg mb-[168px]">
       <div className="flex gap-8">
         <div className="flex flex-col items-center mt-[95px] ml-[95px]">
-          <Image
-            src={profileImage || "/defaultAvatar/31.png"}
-            alt="프로필 이미지"
-            width={150}
-            height={150}
-            className="rounded-full"
-          />
+          <div className="w-[150px] h-[150px] relative rounded-full overflow-hidden">
+            <Image
+              src={profileImage || "/defaultAvatar/31.png"}
+              alt="프로필 이미지"
+              width={150}
+              height={150}
+              className="object-cover"
+            />
+          </div>
           <input
             type="file"
             accept="image/*"
             className="hidden"
             ref={fileInputRef}
+            onChange={handleImageChange}
           />
           <button
             type="button"
@@ -192,7 +294,10 @@ export default function ProfileChangeForm() {
           >
             이미지 업로드
           </button>
-          <button className="mt-2 text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer">
+          <button
+            onClick={handleRemoveImage}
+            className="mt-2 text-customViloet-200 text-[13px] hover:text-customBlue-200 cursor-pointer"
+          >
             이미지 제거
           </button>
         </div>

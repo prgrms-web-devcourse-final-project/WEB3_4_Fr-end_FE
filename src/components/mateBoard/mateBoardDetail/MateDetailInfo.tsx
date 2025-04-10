@@ -102,7 +102,7 @@ export default function MateDetailInfo({ data }: MateDetailPageProps) {
 
         {/* 유저소개 */}
         <p className="text-[16px] text-customGray-600">
-          서로를 존중하고 배려하는 여행을 하고 싶습니다.
+          {data.bio || "소개글이 없습니다."}
         </p>
       </div>
     </div>

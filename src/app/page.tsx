@@ -1,3 +1,5 @@
+"use client";
+
 import MainAbout from "@/components/main/MainAbout";
 import MainBanner from "@/components/main/MainBanner";
 import MainLocation from "@/components/main/MainLocation";
@@ -7,11 +9,11 @@ import MainSchedule from "@/components/main/MainSchedule";
 export default function Home() {
   return (
     <>
-   <MainBanner/>
-   <MainLodging/>
-   <MainLocation/>
-   <MainSchedule/>
-   <MainAbout/>
+      <MainBanner />
+      <MainLodging />
+      <MainLocation />
+      <MainSchedule />
+      <MainAbout />
     </>
   );
 }
