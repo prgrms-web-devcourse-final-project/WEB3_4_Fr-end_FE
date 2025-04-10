@@ -25,6 +25,7 @@ export default function Payment() {
   const checkOut = searchParams.get("checkOut");
   const userName = searchParams.get("userName");
   const userPhone = searchParams.get("userPhone");
+  const userId = searchParams.get("userId");
   const people = searchParams.get("people");
 
   const [paymentMethod, setPaymentMethod] = useState("일반 결제");
@@ -88,7 +89,7 @@ export default function Payment() {
         buyer_postcode: "유저 조회용 값",
         buyer_email: `${accommodation.id}`,
         custom_data: JSON.stringify({
-          user_id: "유저 식별용 ID", // 유저 ID
+          user_id: `${userId}`, // 유저 ID
           accommodation_id: accommodation?.id || "", // 숙소 ID
           accommodation_name: accommodation.name, // 숙소 이름
           accommodation_address: accommodation.location, // 숙소 주소
@@ -99,7 +100,7 @@ export default function Payment() {
           total_price: totalAmount, // 총 결제 금액
           merchant_uid: `mid_${new Date().getTime()}`, // 주문 고유 ID
           imp_uid: "imp13648461", // 결제 고유 ID (결제가 성공해야 확인 가능)
-          booking_statue: "예약완료", // 예약 상태
+          booking_status: "예약 완료", // 예약 상태
           payment_method: pg_method, // 결제 방식
           reserved_at: new Date().toISOString(), // 예약 생성 시각
         }),
