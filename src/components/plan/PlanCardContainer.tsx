@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import PlanCard from "@/components/plan/PlanCard";
 import Image from "next/image";
-import type { CardData, PlanCardContainerProps, SearchResult } from "@/app/types"; // ✅ 타입 import
+import type { CardData, PlanCardContainerProps, SearchResult } from "@/types/Scheduleindex";
 
 const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
   onSearchResultsChange,
@@ -50,7 +50,6 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
 
   return (
     <div className="-mx-2 w-full h-[700px] overflow-y-auto overflow-x-hidden mb-20 pb-10">
-      {/* 컨테이너 상단 헤더 */}
       <div className="w-[92%] flex items-baseline justify-between mb-4">
         <p className="font-bold text-2xl text-customBlack-200 text-left">
           day1
@@ -67,11 +66,11 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
       <div className="flex flex-col gap-4 pt-2">
         {cards.map((card, idx) => (
           <div key={card.id} className="flex items-center">
-            {/* 동그라미 영역 */}
+            {/* 동그라미 */}
             <div className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-400 text-white text-sm font-semibold shrink-0">
               {idx + 1}
             </div>
-            {/* 카드 영역 */}
+            {/* 카드 */}
             <div className="ml-4 w-full">
               <PlanCard
                 placeName={card.placeName}

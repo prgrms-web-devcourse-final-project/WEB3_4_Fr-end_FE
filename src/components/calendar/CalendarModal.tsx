@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import type { CalendarModalProps } from "@/app/types";
+import type { CalendarModalProps } from "@/types/Scheduleindex";
 
 export default function CalendarModal({
   isOpen,

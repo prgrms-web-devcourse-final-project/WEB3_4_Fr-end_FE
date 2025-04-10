@@ -6,7 +6,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import Image from "next/image";
-import type { CalendarMainProps } from "@/app/types";
+import type { CalendarMainProps } from "@/types/Scheduleindex";
 
 export default function CalendarMain({
   events,

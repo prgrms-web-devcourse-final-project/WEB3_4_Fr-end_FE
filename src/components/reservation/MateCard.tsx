@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { CiLocationOn } from "react-icons/ci";
 import { FaCalendarAlt } from "react-icons/fa";
-import type { MateCardData } from "@/types/MateCardData";
+import type { MateCardData } from "@/types/mateBoard/MateCardData";
 import { useRouter } from "next/navigation";
 
 export default function MateCard({ data }: { data: MateCardData }) {

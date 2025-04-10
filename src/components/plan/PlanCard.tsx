@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FiBookmark } from "react-icons/fi";
 import { SearchIcon, Trash2Icon } from "lucide-react";
-import type { PlanCardProps, KakaoPlace, SearchResult } from "@/app/types";
+import type { PlanCardProps, KakaoPlace, SearchResult } from "@/types/Scheduleindex";
 
 const PlanCard: React.FC<PlanCardProps> = ({
   placeName,
@@ -64,7 +64,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
       <div
         className="w-[92%] overflow-hidden shadow-md rounded-md grid grid-flow-col grid-rows-2 gap-4 p-4 border border-gray-300"
       >
-        {/* 시간 입력 영역 */}
+        {/* 시간  */}
         <div className="row-span-2 flex items-center justify-center ">
           <input
             type="time"
@@ -73,7 +73,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
           />
         </div>
 
-        {/* 검색창 영역 */}
+        {/* 검색창 */}
         <div className="col-span-2">
           <div className="flex items-center w-full pr-10">
             <input
@@ -84,7 +84,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
               onKeyDown={handleKeyDown}
               className="flex-1 border-none outline-none bg-transparent font-bold"
             />
-            {/* 아이콘 그룹 컨테이너 */}
+            {/* 아이콘  */}
             <div className="flex space-x-2">
               <Button variant="ghost" size="icon" onClick={handleSearch} asChild>
                 <span>
@@ -100,7 +100,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
           </div>
         </div>
 
-        {/* 하단 영역: 카테고리 정보와 북마크 버튼 */}
+        {/*  카테고리 북마크 */}
         <div className="col-span-2 row-span-1 pr-10">
           <div className="flex justify-between items-center">
             <span>
