@@ -16,8 +16,9 @@ export default function CommentCardList({
   useEffect(() => {
     async function fetchComments() {
       try {
-        const data = await getComments(matePostId);
-        setComments(data);
+        const response = await getComments(matePostId);
+        console.log("API에서 반환된 댓글 데이터:", response);
+        setComments(response.data);
       } catch (error) {
         console.error("댓글 불러오기 실패:", error);
         setError("댓글을 불러오는 중입니다");

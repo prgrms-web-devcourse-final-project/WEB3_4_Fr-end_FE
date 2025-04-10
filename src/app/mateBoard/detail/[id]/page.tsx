@@ -38,7 +38,7 @@ export default async function MateDetailPage({ params }: MateDetailPageProps) {
       </div>
       <div className="mb-10 flex justify-center items-center">
         <div className="w-full max-w-5xl">
-          <CommentCardList />
+          <CommentCardList matePostId={id} />
         </div>
       </div>
     </>
