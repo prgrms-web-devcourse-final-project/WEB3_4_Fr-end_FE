@@ -8,7 +8,7 @@ export default function CommentCard({ comment }: { comment: MateComment }) {
       {/* // 좋아요,삭제 버튼 */}
       <div className="absolute top-4 right-4 flex gap-2 my-7">
         <span className="text-gray-800 text-sm font-semibold -mr-1">
-          {comment.likeCount}
+          {comment.likeCount || 0}
         </span>
         <button className="text-gray-400  transition">
           <HeartIcon className="w-5 h-5 fill-red-500 stroke-0" />
@@ -30,10 +30,10 @@ export default function CommentCard({ comment }: { comment: MateComment }) {
         </div>
         <div className="space-y-2">
           <div className="text-[16px] font-semibold text-customBlack-200">
-            닉네임
+            {comment.nickname}
           </div>
           <div className="text-[16px] text-customGray-600">
-            동행신청 드렸습니다!.
+            {comment.content}
           </div>
         </div>
       </div>
