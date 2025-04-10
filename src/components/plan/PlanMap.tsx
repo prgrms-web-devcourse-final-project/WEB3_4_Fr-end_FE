@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import type { PlanMapProps } from "@/types/Scheduleindex";// ✅ 타입 import
+import type { PlanMapProps } from "@/types/Scheduleindex";
 
 const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -21,7 +21,7 @@ const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
         }
       });
     } else {
-      console.error("Kakao Maps API가 로드되지 않았거나, mapContainerRef가 null입니다.");
+      console.error("SDK가 로드되지 않았습니다");
     }
   }, []);
   

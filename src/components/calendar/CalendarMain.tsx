@@ -1,4 +1,3 @@
-// src/components/calendar/CalendarMain.tsx
 "use client";
 
 import React from "react";
@@ -8,12 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import Image from "next/image";
 import type { CalendarMainProps } from "@/types/Scheduleindex";
 
-export default function CalendarMain({
-  events,
-  onDateClick,
-  onEventClick,
-  onEventDragStop,
-}: CalendarMainProps) {
+export default function CalendarMain({ events, onDateClick, onEventClick, onEventDragStop }: CalendarMainProps) {
   return (
     <div className="h-full w-full overflow-hidden relative">
       <FullCalendar

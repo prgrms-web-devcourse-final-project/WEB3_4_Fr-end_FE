@@ -63,6 +63,10 @@ export interface PlanSearchBarProps {
   onPlaceNameChange: (placeName: string) => void;
   onSearchResult: (result: SearchResult | null) => void;
 }
+export interface PlanCardProps extends PlanSearchBarProps {
+  searchResult: SearchResult | null;
+  onDelete: () => void;
+}
 
 export interface SearchResult {
   place_name: string;
@@ -79,12 +83,6 @@ export interface KakaoPlace {
   x: string;
   y: string;
 }
-
-export interface PlanCardProps extends PlanSearchBarProps {
-  searchResult: SearchResult | null;
-  onDelete: () => void;
-}
-
 export interface CalendarEvent {
   id: string;
   title: string;
