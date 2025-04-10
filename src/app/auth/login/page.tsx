@@ -4,14 +4,60 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import api from "@/lib/auth/axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function Login() {
-  const [bgImage, setBgImage] = useState("/loginHero/img1.jpg");
+  const [bgImage, setBgImage] = useState<string>("/loginHero/img1.jpg");
+  const [loginId, setLoginId] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [rememberId, setRememberId] = useState<boolean>(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 10) + 1;
     setBgImage(`/loginHero/img${randomIndex}.jpg`);
+    const savedId = localStorage.getItem("rememberedLoginId");
+    if (savedId) {
+      setLoginId(savedId);
+      setRememberId(true);
+    }
   }, []);
+  const handleLogin = async () => {
+    try {
+      const res = await api.post("/api/v1/auth/local-login", {
+        loginId,
+        password,
+      });
+
+      if (rememberId) {
+        localStorage.setItem("rememberedLoginId", loginId);
+      } else {
+        localStorage.removeItem("rememberedLoginId");
+      }
+
+      const { accessToken, refreshToken, needAdditionalInfo } = res.data;
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      toast.success("로그인 성공!");
+
+      if (needAdditionalInfo) {
+        router.push("/");
+      } else {
+        router.push("/auth/completeProfile");
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data.message || "로그인 실패!");
+      } else {
+        toast.error("알 수 없는 오류가 발생했습니다.");
+      }
+    }
+  };
 
   const handleGoogleLogin = async () => {
     try {
@@ -57,17 +103,23 @@ export default function Login() {
           <input
             type="email"
             placeholder="이메일 주소"
+            value={loginId}
+            onChange={(e) => setLoginId(e.target.value)}
             className="border w-[380px] h-[50px] p-2 rounded-t-[8px]  outline-customGray-300 focus:outline-customGray-600"
           />
           <input
             type="password"
             placeholder="비밀번호 확인"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="border border-t-0 w-[380px] h-[50px] mb-4 p-2 rounded-b-[8px]  outline-customGray-300 focus:outline-customGray-600"
           />
           <div className="flex w-full items-center pl-[67px] mb-4 cursor-pointer">
             <input
               type="checkbox"
               id="remember"
+              checked={rememberId}
+              onChange={(e) => setRememberId(e.target.checked)}
               className="mr-[5px] align-middle"
             />
             <label
@@ -78,7 +130,10 @@ export default function Login() {
             </label>
           </div>
           <div className="flex gap-4 mb-4">
-            <button className="bg-customGray-100 w-[150px] h-[48px] text-black px-[49px] py-[12px] rounded-[8px] font-pretendard font-normal text-[20px] hover:bg-customBlue-200 hover:text-white cursor-pointer">
+            <button
+              onClick={handleLogin}
+              className="bg-customGray-100 w-[150px] h-[48px] text-black px-[49px] py-[12px] rounded-[8px] font-pretendard font-normal text-[20px] hover:bg-customBlue-200 hover:text-white cursor-pointer"
+            >
               로그인
             </button>
             <Link href="/auth/register">

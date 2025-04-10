@@ -40,6 +40,9 @@ export default function UserSidebar({
       try {
         const res = await api.get("/api/v1/user/me");
         setUser(res.data);
+        console.log(res.data);
+        const userData: UserInfo = res.data;
+        localStorage.setItem("UserData", JSON.stringify(userData));
       } catch (err) {
         console.error("유저 정보 불러오기 실패", err);
       }

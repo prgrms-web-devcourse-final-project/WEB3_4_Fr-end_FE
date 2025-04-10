@@ -8,10 +8,11 @@ import BirthDateField from "@/components/login/register/BirthDateField";
 import SelectField from "@/components/login/register/SelectField";
 import CheckboxField from "@/components/login/register/CheckboxField";
 import { SocialSignupFormData } from "@/types/loginForm";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function CompleteProfilePage() {
+  const [mailingAgree, setMailingAgree] = useState<boolean>(false);
   const router = useRouter();
 
   const {
@@ -21,7 +22,6 @@ export default function CompleteProfilePage() {
     formState: { errors, isDirty },
   } = useForm<SocialSignupFormData>({ mode: "onChange" });
 
-  // 🔹 새로고침 / 브라우저 닫기 방지
   const handleBeforeUnload = useCallback((e: BeforeUnloadEvent) => {
     e.preventDefault();
     e.returnValue = "";
@@ -65,6 +65,7 @@ export default function CompleteProfilePage() {
         phone: data.phone,
         birthDate,
         gender: data.gender === "남자" ? "MALE" : "FEMALE",
+        mailingType: mailingAgree,
       };
 
       // 페이지 이탈 방지 제거
@@ -127,7 +128,12 @@ export default function CompleteProfilePage() {
 
         <SelectField control={control} errors={errors} name="gender" />
 
-        <CheckboxField id="email-agree" label="이메일 수신에 동의합니다" />
+        <CheckboxField
+          id="email-agree"
+          label="이메일 메일링 서비스에 동의합니다."
+          checked={mailingAgree}
+          onChange={(e) => setMailingAgree(e.target.checked)}
+        />
 
         <button
           type="submit"
