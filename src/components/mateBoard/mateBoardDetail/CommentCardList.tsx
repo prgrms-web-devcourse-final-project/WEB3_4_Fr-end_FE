@@ -1,10 +1,46 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import CommentCard from "@/components/mateBoard/mateBoardDetail/CommentCard";
-export default function CommentCardList() {
+import { getComments } from "@/apis/mateBoard/getComments";
+import { MateComment } from "@/types/mateBoard/MateComment";
+
+export default function CommentCardList({
+  matePostId,
+}: {
+  matePostId: number;
+}) {
+  const [comments, setComments] = useState<MateComment[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    async function fetchComments() {
+      try {
+        const data = await getComments(matePostId);
+        setComments(data);
+      } catch (error) {
+        console.error("댓글 불러오기 실패:", error);
+        setError("댓글을 불러오는 중입니다");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchComments();
+  }, [matePostId]);
+
+  if (loading) return <div>댓글 로딩 중...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
     <div className="space-y-4">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <CommentCard key={i} />
-      ))}
+      {comments.length > 0 ? (
+        comments.map((comment) => (
+          <CommentCard key={comment.mateCommentId} comment={comment} />
+        ))
+      ) : (
+        <div>댓글이 없습니다.</div>
+      )}
     </div>
   );
 }

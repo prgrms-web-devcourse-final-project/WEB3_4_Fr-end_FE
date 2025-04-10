@@ -50,7 +50,7 @@ export default function FilterController({
       totalPages={totalPages}
       currentPage={currentPage}
       onFilterChange={handleFilterChange}
-      // 부모로부터 받은 초기값을 하위 컴포넌트로 전달합니다.
+      // 부모로부터 받은 초기값을 하위 컴포넌트로 전달
       initialRegion={initialRegion}
       initialStatus={initialStatus}
       initialKeyword={initialKeyword}
