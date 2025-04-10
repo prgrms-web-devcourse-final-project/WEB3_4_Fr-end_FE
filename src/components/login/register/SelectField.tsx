@@ -9,7 +9,7 @@ import {
 interface SelectFieldProps<T extends FieldValues> {
   control: Control<T>;
   errors: FieldErrors<T>;
-  name: Path<T>; // ← 이게 핵심!
+  name: Path<T>;
 }
 
 export default function SelectField<T extends FieldValues>({
@@ -32,6 +32,7 @@ export default function SelectField<T extends FieldValues>({
             <option value="">성별</option>
             <option value="남자">남자</option>
             <option value="여자">여자</option>
+            <option value="기타">기타</option>
           </select>
         )}
       />

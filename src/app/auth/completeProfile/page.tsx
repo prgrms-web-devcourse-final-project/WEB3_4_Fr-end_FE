@@ -34,13 +34,11 @@ export default function CompleteProfilePage() {
     };
   }, [handleBeforeUnload]);
 
-  // 🔹 링크 클릭 시 페이지 이탈 방지 및 토스트 알림
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const anchor = target.closest("a");
 
-      // 이동하려는 링크가 있고, 아직 폼 작성 중이면
       if (anchor && isDirty) {
         e.preventDefault();
         toast.error("회원가입을 먼저 완료해주세요!");
@@ -51,7 +49,6 @@ export default function CompleteProfilePage() {
     return () => document.removeEventListener("click", handleClick);
   }, [isDirty]);
 
-  // 🔹 폼 제출
   const onSubmit = async (data: SocialSignupFormData) => {
     try {
       const birthDate = `${data.birthYear}-${data.birthMonth.padStart(
@@ -64,11 +61,15 @@ export default function CompleteProfilePage() {
         nickname: data.nickname,
         phone: data.phone,
         birthDate,
-        gender: data.gender === "남자" ? "MALE" : "FEMALE",
+        gender:
+          data.gender === "남자"
+            ? "MALE"
+            : data.gender === "여자"
+            ? "FEMALE"
+            : "UNSPECIFIED",
         mailingType: mailingAgree,
       };
 
-      // 페이지 이탈 방지 제거
       window.removeEventListener("beforeunload", handleBeforeUnload);
 
       await api.patch("/api/v1/user/me/first-info", payload);
