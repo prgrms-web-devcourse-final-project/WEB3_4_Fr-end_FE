@@ -1,6 +1,7 @@
 "use client";
 
-import React, { use, useState, useEffect } from "react";
+import { use } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import CalendarNav from "@/components/calendar/CalendarNav";
 import CalendarMain from "@/components/calendar/CalendarMain";
@@ -18,13 +19,6 @@ export default function CalendarPage({ params }: CalendarPageProps) {
   const [eventColor, setEventColor] = useState("#3b82f6");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-
-  useEffect(() => {
-    if (calendarId) {
-      const stored = localStorage.getItem(`calendarEvents-${calendarId}`);
-      setEvents(stored ? JSON.parse(stored) : []);
-    }
-  }, [calendarId]);
 
   const dateClick = (arg: DateClickArg) => {
     setStartDate(arg.dateStr);
@@ -48,10 +42,6 @@ export default function CalendarPage({ params }: CalendarPageProps) {
     ) {
       const filtered = events.filter((e) => e.id !== dragInfo.event.id);
       setEvents(filtered);
-      localStorage.setItem(
-        `calendarEvents-${calendarId}`,
-        JSON.stringify(filtered)
-      );
       dragInfo.event.remove();
     }
   };
@@ -69,10 +59,6 @@ export default function CalendarPage({ params }: CalendarPageProps) {
     };
     const updated = [...events, newEvent];
     setEvents(updated);
-    localStorage.setItem(
-      `calendarEvents-${calendarId}`,
-      JSON.stringify(updated)
-    );
     closeModal();
   };
 

@@ -8,29 +8,19 @@ export default function ChatPage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // 1. 페이지 진입 시 채팅방 생성 (또는 입장)
+  // 더미 ID
   useEffect(() => {
-    const createOrEnterRoom = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/chatBot/chat/rooms`, {
-          method: 'POST',
-        });
-
-        const data = await res.json();
-        console.log('✅ 채팅방 생성 응답:', data);
-        const newRoomId = data?.data?.id ?? data?.id;
-        if (!newRoomId) throw new Error('채팅방 ID를 찾을 수 없습니다.');
-
-        setChatRoomId(newRoomId);
-      } catch (err) {
-        console.error('❌ 채팅방 생성 실패:', err);
-      }
+    const fakeCreateRoom = () => {
+      // api 교체해야됨
+      const fakeId = Math.floor(Math.random() * 1000) + 1;
+      console.log(fakeId);
+      setChatRoomId(fakeId);
     };
 
-    createOrEnterRoom();
+    fakeCreateRoom();
   }, []);
 
-  // 2. 메시지 전송
+  // 더미 응답답
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || !chatRoomId) return;
@@ -40,25 +30,12 @@ export default function ChatPage() {
     setInput('');
     setIsLoading(true);
 
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/chatBot/chat/rooms/${chatRoomId}/messages`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userMessage }),
-      });
-
-      const data = await res.json();
-      console.log('🤖 응답:', data);
-      const botMessage = data?.data?.botMessage ?? data?.botMessage ?? '응답 없음';
-      setMessages((prev) => [...prev, `🤖: ${botMessage}`]);
-    } catch (err) {
-      console.error('❌ 메시지 전송 실패:', err);
-      setMessages((prev) => [...prev, `⚠️ 메시지 전송 중 오류 발생`]);
-    } finally {
+    // api 교체해야됨
+    setTimeout(() => {
+      const fakeBotMessage = `🤖: "${userMessage}"에 대한 답변입니다.`;
+      setMessages((prev) => [...prev, fakeBotMessage]);
       setIsLoading(false);
-    }
+    }, 1000);
   };
 
   return (
