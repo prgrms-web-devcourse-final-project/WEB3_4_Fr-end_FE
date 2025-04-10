@@ -78,6 +78,44 @@ export default function Login() {
     }
   };
 
+  const handleKakaoLogin = async () => {
+    try {
+      const res = await api.get("/api/v1/auth/redirect-url", {
+        params: {
+          socialType: "KAKAO",
+        },
+        headers: {},
+      });
+      const { redirectUri } = res.data;
+      if (redirectUri) {
+        window.location.href = redirectUri;
+      } else {
+        console.error("리디렉션 URL 없음.");
+      }
+    } catch (error) {
+      console.error(`Error 발생: ${error}`);
+    }
+  };
+
+  const handleNaverLogin = async () => {
+    try {
+      const res = await api.get("/api/v1/auth/redirect-url", {
+        params: {
+          socialType: "NAVER",
+        },
+        headers: {},
+      });
+      const { redirectUri } = res.data;
+      if (redirectUri) {
+        window.location.href = redirectUri;
+      } else {
+        console.error("리디렉션 URL 없음.");
+      }
+    } catch (error) {
+      console.error(`Error 발생: ${error}`);
+    }
+  };
+
   return (
     <div className="relative w-screen h-screen overflow-hidden m-0 p-0">
       <div className="fixed inset-0 w-screen h-screen overflow-hidden m-0 p-0 z-0">
@@ -155,6 +193,7 @@ export default function Login() {
               width={50}
               height={50}
               className="cursor-pointer"
+              onClick={handleKakaoLogin}
             />
 
             <Image
@@ -163,6 +202,7 @@ export default function Login() {
               width={50}
               height={50}
               className="cursor-pointer"
+              onClick={handleNaverLogin}
             />
 
             <Image
