@@ -46,6 +46,7 @@ export default function RootLayout({
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=services&autoload=false`}
           strategy="beforeInteractive"
         />
+        <Script src="https://cdn.iamport.kr/v1/iamport.js" />
       </head>
       <body className={pretendard.className}>
         <Providers>
