@@ -7,6 +7,7 @@ const api = axios.create({
   },
 });
 
+
 export interface CalendarResponse {
   id: number;
   calendarTitle: string;
@@ -19,25 +20,44 @@ export interface CalendarResponse {
   modifiedAt: string;
 }
 
+export interface UpdateCalendarBody {
+  calendarTitle: string;
+  startDate: string;
+  endDate: string;
+  alertTime: string;
+  note: string;
+}
+
 export const fetchCalendars = async (): Promise<CalendarResponse[]> => {
   const res = await api.get('/calendar');
   return res.data.data;
 };
 
-export const createCalendar = async (title: string): Promise<CalendarResponse> => {
+export const createCalendar = async (
+  title: string,
+  userId: string
+): Promise<CalendarResponse> => {
   const now = new Date().toISOString();
   const body = {
     calendarTitle: title,
     startDate: now,
     endDate: now,
-    time: now,
     alertTime: now,
     note: ''
   };
-  const res = await api.post('/calendar', body);
+  const res = await api.post(`/calendar?userId=${userId}`, body);
   return res.data;
 };
 
-export const deleteCalendarById = async (id: string) => {
-  await api.delete(`/calendar/${id}`);
+export const deleteCalendarById = async (id: string, userId: string) => {
+  await api.delete(`/calendar/${id}?userId=${userId}`);
+};
+
+export const updateCalendar = async (
+  calendarId: string,
+  userId: string,
+  body: UpdateCalendarBody
+) => {
+  const res = await api.put(`/calendar/${calendarId}?userId=${userId}`, body);
+  return res.data;
 };

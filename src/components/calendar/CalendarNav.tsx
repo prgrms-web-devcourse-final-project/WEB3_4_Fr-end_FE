@@ -3,8 +3,9 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { fetchCalendars, createCalendar, deleteCalendarById } from '@/apis/Schedule/CalendarNav';
+import { fetchCalendars, createCalendar, deleteCalendarById, updateCalendar } from '@/apis/Schedule/CalendarNav';
 import type { NavItem } from "@/types/Scheduleindex";
+import { useAuthStore } from '@/store/useAuthStore';
 
 export default function CalendarNav() {
   const router = useRouter();
@@ -17,23 +18,23 @@ export default function CalendarNav() {
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<string>('auto');
   const [copyMessage, setCopyMessage] = useState("");
+  const userId = useAuthStore((state) => state.user?.id);
 
   useEffect(() => {
     const init = async () => {
       try {
         const calendarList = await fetchCalendars();
-
         const navItems: NavItem[] = calendarList.map(item => ({
           id: item.id.toString(),
           label: item.calendarTitle,
           shareOpen: false,
         }));
-
+  
         setItems(navItems);
-
+  
         const hasId1 = navItems.some(item => item.id === '1');
-        if (!hasId1) {
-          const created = await createCalendar("캘린더");
+        if (!hasId1 && userId) {
+          const created = await createCalendar("캘린더", userId); // ✅ 여기서도 userId 전달
           const newItem: NavItem = {
             id: created.id.toString(),
             label: created.calendarTitle,
@@ -41,20 +42,20 @@ export default function CalendarNav() {
           };
           setItems(prev => [...prev, newItem]);
         }
-
+  
         const maxId = navItems.reduce((max, item) => {
           const idNum = parseInt(item.id, 10);
           return idNum > max ? idNum : max;
         }, 0);
         setNextId(maxId + 1);
-
+  
         setMounted(true);
       } catch (err) {
         console.error("캘린더 초기화 오류", err);
       }
     };
     init();
-  }, []);
+  }, [userId]); 
 
   useEffect(() => {
     if (contentRef.current) {
@@ -62,19 +63,24 @@ export default function CalendarNav() {
     }
   }, [isOpen, items]);
 
-  const addItem = async () => {
-    try {
-      const created = await createCalendar(`캘린더 ${nextId}`);
-      setItems(prev => [...prev, {
-        id: created.id.toString(),
-        label: created.calendarTitle,
-        shareOpen: false
-      }]);
-      setNextId(prev => prev + 1);
-    } catch (err) {
-      console.error("캘린더 생성 실패", err);
+const addItem = async () => {
+  try {
+    if (!userId) {
+      alert("로그인이 필요합니다.");
+      return;
     }
-  };
+
+    const created = await createCalendar(`캘린더 ${nextId}`, userId); // ✅ userId 전달
+    setItems(prev => [...prev, {
+      id: created.id.toString(),
+      label: created.calendarTitle,
+      shareOpen: false
+    }]);
+    setNextId(prev => prev + 1);
+  } catch (err) {
+    console.error("캘린더 생성 실패", err);
+  }
+};
 
   const toggleCalendar = () => {
     setIsOpen(prev => !prev);
@@ -100,24 +106,53 @@ export default function CalendarNav() {
     router.push(`/calendar/${id}`);
   };
 
-  const handleDeleteCalendar = async (id: string) => {
-    try {
-      await deleteCalendarById(id);
-      setItems(prev => prev.filter(item => item.id !== id));
-    } catch (err) {
-      console.error("캘린더 삭제 실패", err);
+ const handleDeleteCalendar = async (id: string) => {
+  try {
+    if (!userId) {
+      alert("로그인 정보가 없습니다.");
+      return;
     }
-  };
 
-  const handleEditComplete = (id: string) => {
-    setItems(prevItems =>
-      prevItems.map(item =>
+    await deleteCalendarById(id, userId); // ✅ userId 함께 전달
+    setItems(prev => prev.filter(item => item.id !== id));
+  } catch (err) {
+    console.error("캘린더 삭제 실패", err);
+  }
+};
+
+const handleEditComplete = async (id: string) => {
+  console.log("🧩 캘린더 이름 수정 시도");
+  console.log("📌 calendarId:", id);
+  console.log("📌 userId:", userId);
+  console.log("📌 새로운 이름:", editingLabel);
+
+  try {
+    if (!userId) {
+      alert("로그인 정보가 없습니다.");
+      return;
+    }
+
+    const now = new Date().toISOString(); // 임시 시간
+    await updateCalendar(id, userId, {
+      calendarTitle: editingLabel,
+      startDate: now,
+      endDate: now,
+      alertTime: now,
+      note: ""
+    });
+
+    // UI 업데이트
+    setItems((prevItems) =>
+      prevItems.map((item) =>
         item.id === id ? { ...item, label: editingLabel } : item
       )
     );
     setEditingCalendarId(null);
-    setEditingLabel('');
-  };
+    setEditingLabel("");
+  } catch (err) {
+    console.error("캘린더 수정 실패", err);
+  }
+};
 
   if (!mounted) return <div />;
   return (
