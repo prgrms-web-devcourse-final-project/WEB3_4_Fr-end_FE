@@ -15,10 +15,9 @@ type UserInfo = {
 
 export default function MyPage() {
   const [selectedSection, setSelectedSection] = useState<string>("개인 정보");
-  const [selectedMenu, setSelectedMenu] = useState<string>(""); // 초기 메뉴는 유저정보를 보고 결정
+  const [selectedMenu, setSelectedMenu] = useState<string>("");
   const [user, setUser] = useState<UserInfo | null>(null);
 
-  // ✅ 유저 정보 요청 및 초기 메뉴 설정
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -26,7 +25,6 @@ export default function MyPage() {
         const userData: UserInfo = res.data;
         setUser(userData);
 
-        // 초기 메뉴 설정: 소셜 로그인 여부에 따라
         const defaultMenu =
           userData.socialType === "GOOGLE" ? "내 프로필 변경" : "비밀번호 변경";
         setSelectedMenu(defaultMenu);
@@ -38,7 +36,6 @@ export default function MyPage() {
     fetchUser();
   }, []);
 
-  // ✅ 사이드바 섹션 클릭 시 메뉴까지 자동 설정
   const handleSelectSection = (section: string) => {
     setSelectedSection(section);
 
@@ -53,7 +50,6 @@ export default function MyPage() {
     }
   };
 
-  // ✅ 선택된 메뉴에 따라 콘텐츠 렌더링
   const renderContent = () => {
     if (selectedSection === "개인 정보") {
       switch (selectedMenu) {

@@ -32,11 +32,6 @@ export default function SocialLogin() {
 
         const { accessToken, refreshToken, needAdditionalInfo } = res.data;
 
-        console.log("🟢 로그인 응답 성공");
-        console.log("accessToken:", accessToken);
-        console.log("refreshToken:", refreshToken);
-        console.log("needAdditionalInfo:", needAdditionalInfo);
-
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         setTokens(accessToken, refreshToken);

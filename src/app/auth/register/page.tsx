@@ -1,12 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import InputField from "@/components/login/register/InputField";
 import BirthDateField from "@/components/login/register/BirthDateField";
 import CheckboxField from "@/components/login/register/CheckboxField";
 import SelectField from "@/components/login/register/SelectField";
 import { EmailSignupFormData } from "@/types/loginForm";
+import api from "@/lib/auth/axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 function validatePasswordComplexity(value: string) {
   const pattern =
@@ -27,23 +31,41 @@ export default function Register() {
   } = useForm<EmailSignupFormData>({
     mode: "onChange",
   });
-
+  const [mailingAgree, setMailingAgree] = useState<boolean>(false);
   const passwordValue = watch("password");
+  const router = useRouter();
 
-  const onSubmit = (data: EmailSignupFormData) => {
+  const onSubmit = async (data: EmailSignupFormData) => {
     const birthDate = `${data.birthYear}-${data.birthMonth.padStart(
       2,
       "0"
     )}-${data.birthDay.padStart(2, "0")}`;
     const gender = data.gender === "남자" ? "MALE" : "FEMALE";
 
-    console.log("회원가입 데이터:", {
-      ...data,
+    const payload = {
+      loginId: data.username,
+      password: data.password,
+      nickname: data.nickname,
+      email: data.email,
       birthDate,
+      phone: data.phone,
       gender,
-    });
+      mailingType: mailingAgree,
+    };
 
-    // TODO: 서버로 API 전송
+    try {
+      await api.post("/api/v1/auth/local-register", payload);
+      toast.success("회원가입이 완료되었습니다!");
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 1000);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data.message || "회원가입이 실패했습니다!");
+      } else {
+        toast.error("알 수 없는 에러가 발생하였습니다!");
+      }
+    }
   };
 
   return (
@@ -144,6 +166,8 @@ export default function Register() {
         <CheckboxField
           id="email-agree"
           label="이메일 메일링 서비스에 동의합니다."
+          checked={mailingAgree}
+          onChange={(e) => setMailingAgree(e.target.checked)}
         />
 
         <button
