@@ -12,19 +12,20 @@ import MateRegionField from "@/components/mateBoard/mateBoardWriting/MateRegionF
 import MateDateRangeField from "@/components/mateBoard/mateBoardWriting/MateDateRangeField";
 import MatePeopleField from "@/components/mateBoard/mateBoardWriting/MatePeopleField";
 import MateGenderSelect from "@/components/mateBoard/mateBoardWriting/MateGenderSelector";
-import ImageUpload from "@/components/mateBoard/mateBoardWriting/MateImageUploader";
 
 import { postMateWriting } from "@/apis/mateBoard/postMateWriting";
 
 import ContentTextarea from "@/components/mateBoard/mateBoardWriting/MateContentField";
 import { buildMatePayload } from "@/lib/mate/buildMatePayload";
 import { mateFormSchema, type MateFormType } from "@/lib/mate/mateFormSchema";
+import { uploadImageToServer } from "@/apis/mateBoard/postImage";
+import Image from "next/image";
 
 export default function MateWritingForm() {
   const router = useRouter();
-  const [images, setImages] = useState<File[]>([]);
   const [mateGender, setMateGender] = useState<string>("NO_PREFERENCE");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const form = useForm<MateFormType>({
     resolver: zodResolver(mateFormSchema),
@@ -36,18 +37,45 @@ export default function MateWritingForm() {
       },
       people: 1,
       content: "",
-      location: "지역 검색",
-      mateGender: "무관",
+      location: "ALL",
+      mateGender: "NO_PREFERENCE",
     },
   });
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
   const onSubmit = async (values: MateFormType) => {
     if (isSubmitting) return;
-    const payload = buildMatePayload({
+    setIsSubmitting(true);
+
+    let payload = buildMatePayload({
       ...values,
       mateGender,
-      images,
+      images: [],
     });
+
+    // 만약 새 이미지가 선택되었다면, 업로드 후 결과를 payload에 병합
+    if (selectedFile) {
+      try {
+        const uploadResult = await uploadImageToServer(selectedFile);
+        payload = {
+          ...payload,
+          imageId: uploadResult.imageId,
+          imageUrl: uploadResult.getUrl,
+        };
+        console.log("이미지 업로드 성공");
+      } catch (error) {
+        console.error("이미지 업로드 실패:", error);
+        alert("이미지 업로드에 실패했습니다.");
+        setIsSubmitting(false);
+        return;
+      }
+    }
 
     try {
       const response = await postMateWriting(payload);
@@ -82,7 +110,23 @@ export default function MateWritingForm() {
 
           <MateGenderSelect value={mateGender} onChange={setMateGender} />
 
-          <ImageUpload images={images} setImages={setImages} />
+          {/* 이미지 업로드 및 미리보기 영역 */}
+          <div className="space-y-2">
+            {/* 새 이미지 미리보기: 파일이 선택된 경우 */}
+            {selectedFile && (
+              <div>
+                <p>이미지 미리보기:</p>
+                <Image
+                  src={URL.createObjectURL(selectedFile)}
+                  alt="새 이미지 미리보기"
+                  width={250}
+                  height={250}
+                  className="rounded-xl object-cover"
+                />
+              </div>
+            )}
+            <input type="file" id="fileInput" onChange={handleFileChange} />
+          </div>
 
           <ContentTextarea control={form.control} />
 
