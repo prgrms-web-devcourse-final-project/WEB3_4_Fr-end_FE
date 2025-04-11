@@ -13,4 +13,5 @@ export type MateDetailData = {
   mateGender: string;
   createdAt: string;
   imageUrl: string;
+  bio: string | null;
 };

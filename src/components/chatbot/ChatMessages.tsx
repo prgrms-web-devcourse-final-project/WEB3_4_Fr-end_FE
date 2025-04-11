@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ChatBotMessage } from "@/types/ChatBot";
+import { ChatBotMessage } from "@/types/chatbot";
 import { ChatMessageBubble } from "@/components/chatbot/ChatMessagesBubble";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -26,7 +26,7 @@ export function ChatMessages({ messages, isTyping }: ChatMessagesProps) {
     <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-4">
       {messages.map((message) => {
         const messageDate = format(
-          new Date(Date.now()), // 채팅창 상단 날짜표시시
+          new Date(Date.now()), // 채팅창 상단 날짜표시
           "yyyy년 MM월 dd일 EEEE",
           { locale: ko }
         );

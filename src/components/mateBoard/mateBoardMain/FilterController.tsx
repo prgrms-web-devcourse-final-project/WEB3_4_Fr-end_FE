@@ -36,7 +36,10 @@ export default function FilterController({
     if (newFilters.keyword) query.set("keyword", newFilters.keyword);
     if (newFilters.region) query.set("region", newFilters.region);
     if (newFilters.status) query.set("status", newFilters.status);
-    query.set("page", newFilters.page ? newFilters.page.toString() : "1");
+    query.set(
+      "page",
+      (newFilters.page !== undefined ? newFilters.page : currentPage).toString()
+    );
 
     const newQueryStr = query.toString();
     if (currentQuery === newQueryStr) return;
