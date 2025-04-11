@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import api from "@/lib/auth/axios";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useAuthStore } from "@/store/useAuthStore";
 
 interface UserInfo {
   nickname: string;
@@ -24,6 +25,7 @@ export default function ProfileChangeForm() {
   const [phone, setPhone] = useState("");
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const { setUser } = useAuthStore();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -68,15 +70,22 @@ export default function ProfileChangeForm() {
 
   const handleUploadClick = () => fileInputRef.current?.click();
 
-  const uploadImageToServer = async (file: File): Promise<string> => {
-    const presignRes = await api.post("/api/v1/image", null, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  const uploadImageToServer = async (
+    file: File
+  ): Promise<{ imageId: number; getUrl: string }> => {
+    const presignRes = await api.post(
+      "/api/v1/image",
+      {},
+      {
+        headers: {
+          "Content-Type": file.type,
+        },
+      }
+    );
 
     const {
       presigned: { postUrl, formData },
+      imageId,
       getUrl,
     } = presignRes.data;
 
@@ -85,7 +94,7 @@ export default function ProfileChangeForm() {
       uploadForm.append(key, value as string);
     });
 
-    uploadForm.append("file", file, file.name);
+    uploadForm.append("file", file);
 
     const uploadRes = await fetch(postUrl, {
       method: "POST",
@@ -94,7 +103,7 @@ export default function ProfileChangeForm() {
     if (!uploadRes.ok) {
       throw new Error("S3 업로드 실패");
     }
-    return getUrl;
+    return { imageId, getUrl };
   };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,11 +115,14 @@ export default function ProfileChangeForm() {
     console.log("파일 MIME 타입:", file.type);
 
     try {
-      const uploadedUrl = await uploadImageToServer(file);
+      const { imageId, getUrl } = await uploadImageToServer(file);
       await api.patch("/api/v1/user/me/profile-image", {
-        profileImageUrl: uploadedUrl,
+        imageId,
+        imageUrl: getUrl,
       });
       toast.success("프로필 이미지가 변경되었습니다!");
+      const res = await api.get("/api/v1/user/me");
+      setUser(res.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         console.error(
@@ -123,11 +135,11 @@ export default function ProfileChangeForm() {
 
   const handleRemoveImage = async () => {
     try {
-      await api.patch("/api/v1/user/me/profile-image", {
-        profileImageUrl: null,
-      });
+      await api.delete("/api/v1/user/me/profile-image");
       setProfileImage(null);
       toast.success("이미지가 제거되었습니다.");
+      const res = await api.get("/api/v1/user/me");
+      setUser(res.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         console.error(
@@ -145,16 +157,12 @@ export default function ProfileChangeForm() {
     }
 
     try {
-      console.log("📡 PATCH /api/v1/user/me/nickname 요청:", {
+      await patchJson("/api/v1/user/me/nickname", {
         nickname: safeNickname,
       });
-
-      const response = await patchJson("/api/v1/user/me/nickname", {
-        nickname: safeNickname,
-      });
-
-      console.log("✅ 닉네임 응답 성공:", response.data);
       toast.success("닉네임이 변경되었습니다.");
+      const res = await api.get("/api/v1/user/me");
+      setUser(res.data);
       setEditingField(null);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -168,6 +176,8 @@ export default function ProfileChangeForm() {
     try {
       await patchJson("/api/v1/user/me/bio", { bio: intro });
       toast.success("자기소개가 변경되었습니다.");
+      const res = await api.get("/api/v1/user/me");
+      setUser(res.data);
       setEditingField(null);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -199,6 +209,8 @@ export default function ProfileChangeForm() {
         try {
           await patchJson("/api/v1/user/me/email", { email });
           toast.success("이메일이 변경되었습니다.");
+          const res = await api.get("/api/v1/user/me");
+          setUser(res.data);
           setEditingField(null);
         } catch (error: unknown) {
           if (axios.isAxiosError(error)) {
@@ -231,6 +243,8 @@ export default function ProfileChangeForm() {
         try {
           await patchJson("/api/v1/user/me/phone", { phone });
           toast.success("휴대폰 번호가 변경되었습니다.");
+          const res = await api.get("/api/v1/user/me");
+          setUser(res.data);
           setEditingField(null);
         } catch (error: unknown) {
           if (axios.isAxiosError(error)) {
@@ -259,6 +273,8 @@ export default function ProfileChangeForm() {
           ? "메일링 구독을 신청하였습니다!"
           : "메일링 구독을 취소하였습니다!"
       );
+      const res = await api.get("/api/v1/user/me");
+      setUser(res.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         console.error(error.response?.data.message || "❌ 메일링 변경 실패");
@@ -357,7 +373,7 @@ export default function ProfileChangeForm() {
               </>
             ) : (
               <>
-                <p className="mt-2 text-[13px] font-semibold w-[326px] h-[60px] mb-[6.5px]">
+                <p className="mt-2 text-[13px] font-semibold w-[408px] h-[60px]">
                   {intro}
                 </p>
                 <div className="flex justify-end w-[408px]">
