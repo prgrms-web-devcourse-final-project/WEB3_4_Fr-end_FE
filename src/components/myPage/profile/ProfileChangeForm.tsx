@@ -135,11 +135,11 @@ export default function ProfileChangeForm() {
 
   const handleRemoveImage = async () => {
     try {
-      await api.patch("/api/v1/user/me/profile-image", {
-        profileImageUrl: null,
-      });
+      await api.delete("/api/v1/user/me/profile-image");
       setProfileImage(null);
       toast.success("이미지가 제거되었습니다.");
+      const res = await api.get("/api/v1/user/me");
+      setUser(res.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         console.error(
@@ -157,15 +157,9 @@ export default function ProfileChangeForm() {
     }
 
     try {
-      console.log("📡 PATCH /api/v1/user/me/nickname 요청:", {
+      await patchJson("/api/v1/user/me/nickname", {
         nickname: safeNickname,
       });
-
-      const response = await patchJson("/api/v1/user/me/nickname", {
-        nickname: safeNickname,
-      });
-
-      console.log("✅ 닉네임 응답 성공:", response.data);
       toast.success("닉네임이 변경되었습니다.");
       const res = await api.get("/api/v1/user/me");
       setUser(res.data);
