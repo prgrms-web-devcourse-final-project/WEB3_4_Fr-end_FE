@@ -1,6 +1,7 @@
 "use client";
 
 import { fetchAccommodationById } from "@/apis/reservation/reservationApi";
+import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaRegClock } from "react-icons/fa6";
@@ -76,6 +77,18 @@ export default function Payment() {
       return;
     }
 
+    const simplifiedCustomData = {
+      userId: Number(userId), // 유저 ID
+      accommodationId: accommodation?.id || "", // 숙소 ID
+      accommodationName: accommodation.name, // 숙소 이름
+      accommodationAddress: accommodation.location, // 숙소 주소
+      accommodationImage: accommodation.mainImage, // 숙소 이미지
+      checkIn: checkIn || "", // 체크인 날짜
+      checkOut: checkOut || "", // 체크아웃 날짜
+      guestCount: people || "", // 예약 인원 수
+      totalPrice: totalAmount, // 총 결제 금액
+    };
+
     IMP?.request_pay(
       {
         pg: pg_method, // 선택된 PG 값
@@ -86,10 +99,10 @@ export default function Payment() {
         buyer_name: userName, // 구매자 이름
         buyer_tel: userPhone, // 구매자 전화번호
         buyer_addr: accommodation?.location || "", // 숙소 위치
-        buyer_postcode: "유저 조회용 값",
+        buyer_postcode: userId,
         buyer_email: `${accommodation.id}`,
         custom_data: JSON.stringify({
-          user_id: `${userId}`, // 유저 ID
+          user_id: Number(userId), // 유저 ID
           accommodation_id: accommodation?.id || "", // 숙소 ID
           accommodation_name: accommodation.name, // 숙소 이름
           accommodation_address: accommodation.location, // 숙소 주소
@@ -105,7 +118,7 @@ export default function Payment() {
           reserved_at: new Date().toISOString(), // 예약 생성 시각
         }),
       },
-      function (rsp) {
+      async function (rsp) {
         const { buyer_name, name, pg_provider, paid_amount } = rsp;
 
         const queryParams = new URLSearchParams({
@@ -118,6 +131,28 @@ export default function Payment() {
         if (rsp.success) {
           alert("결제가 완료되었습니다!");
           console.log("결제 성공:", rsp);
+
+          try {
+            const response = await axios.post(
+              "http://api.sete.kr:8080/api/bookings/complete",
+              {
+                imp_uid: rsp.imp_uid,
+                merchant_uid: rsp.merchant_uid,
+                payMethod: rsp.pay_method,
+                pgProvider: rsp.pg_provider,
+                pgTid: rsp.pg_tid,
+                paidAmount: rsp.paid_amount,
+                currency: "KRW",
+                status: rsp.status,
+                paid_at: rsp.paid_at,
+                receiptUrl: rsp.receipt_url,
+                custom_data: simplifiedCustomData,
+              }
+            );
+            console.log("API 응답:", response.data);
+          } catch (error) {
+            console.error("API 호출 중 오류", error);
+          }
           router.push(`/reservation/payment/success?${queryParams}`);
         } else {
           router.push("/reservatin/payment/failure");
