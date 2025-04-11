@@ -13,3 +13,9 @@ export interface EmailSignupFormData extends SocialSignupFormData {
   password: string;
   confirmPassword: string;
 }
+
+export interface SignupFormData {
+  birthYear: string;
+  birthMonth: string;
+  birthDay: string;
+}
