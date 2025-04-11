@@ -12,7 +12,8 @@ export const addNewCalendar = async (
     setItems(prev => [...prev, {
       id: created.id.toString(),
       label: created.calendarTitle,
-      shareOpen: false
+      shareOpen: false,
+      userId: userId,
     }]);
   } catch (err) {
     console.error(err);
@@ -20,8 +21,7 @@ export const addNewCalendar = async (
   }
 };
 
-
-/** 캘린더 삭제 */
+// 캘린더 삭제
 export const deleteCalendar = async (
   id: string,
   userId: string,
@@ -36,7 +36,7 @@ export const deleteCalendar = async (
   }
 };
 
-// 캘린더 이름 수정정
+// 캘린더 이름 수정
 export const editCalendarTitle = async (
   id: string,
   userId: string,
@@ -66,7 +66,7 @@ export const editCalendarTitle = async (
   }
 };
 
-// URL 복사사
+// URL 복사
 export const copyCalendarUrl = async (id: string) => {
   try {
     const url = `${window.location.origin}/calendar/${id}`;

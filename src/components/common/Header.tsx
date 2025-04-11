@@ -2,15 +2,18 @@
 
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
+import { fetchCalendars } from "@/apis/Schedule/CalendarNav";
 
 const Header: React.FC = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const [iconPath, setIconPath] = useState("/icons");
 
   const accessToken = useAuthStore((state) => state.accessToken);
+  const userId = useAuthStore((state) => state.user?.id);
   const isLoggedIn = !!accessToken;
 
   useEffect(() => {
@@ -26,6 +29,23 @@ const Header: React.FC = () => {
     ? "outline-customGray-100"
     : "outline-[#202020]";
   const logoColor = isMainPage ? "/logo/white2.png" : "/logo/blue.png";
+
+  const handleScheduleClick = async () => {
+    if (!userId) return;
+    try {
+      const calendars = await fetchCalendars();
+      const myCalendars = calendars.filter(
+        (c) => `${c.userId}` === `${userId}`
+      );
+      if (myCalendars.length > 0) {
+        router.push(`/calendar/${myCalendars[0].id}`);
+      } else {
+        router.push("/calendar/empty");
+      }
+    } catch (err) {
+      console.error("캘린더 이동 실패:", err);
+    }
+  };
 
   return (
     <>
@@ -91,7 +111,9 @@ const Header: React.FC = () => {
               <div className="w-[21px] h-[21px] relative">
                 <Link href={isLoggedIn ? "/myPage" : "/auth/login"}>
                   <Image
-                    src={`${iconPath}/${isLoggedIn ? "user.svg" : "login.png"}`}
+                    src={`${iconPath}/${
+                      isLoggedIn ? "user.svg" : "login.png"
+                    }`}
                     alt="user"
                     width={20}
                     height={20}
@@ -101,11 +123,24 @@ const Header: React.FC = () => {
             </div>
           </div>
         </div>
-
+        
         <div className="flex justify-start items-center w-full max-w-[1980px] h-[52px] px-2.5 gap-[30px] mx-auto">
           {["홈으로", "숙소 예약", "Schedule", "메이트 찾기"].map(
             (text, idx) => {
-              const hrefs = ["/", "/reservation", "/calendar/1", "/mateBoard"];
+              const hrefs = ["/", "/reservation", "", "/mateBoard"];
+
+              if (text === "Schedule") {
+                return (
+                  <div
+                    key={text}
+                    onClick={handleScheduleClick}
+                    className={`justify-start ${textColor} text-base font-semibold font-['Pretendard'] cursor-pointer`}
+                  >
+                    {text}
+                  </div>
+                );
+              }
+
               return (
                 <div
                   key={text}
