@@ -167,6 +167,8 @@ export default function ProfileChangeForm() {
 
       console.log("✅ 닉네임 응답 성공:", response.data);
       toast.success("닉네임이 변경되었습니다.");
+      const res = await api.get("/api/v1/user/me");
+      setUser(res.data);
       setEditingField(null);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -180,6 +182,8 @@ export default function ProfileChangeForm() {
     try {
       await patchJson("/api/v1/user/me/bio", { bio: intro });
       toast.success("자기소개가 변경되었습니다.");
+      const res = await api.get("/api/v1/user/me");
+      setUser(res.data);
       setEditingField(null);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -211,6 +215,8 @@ export default function ProfileChangeForm() {
         try {
           await patchJson("/api/v1/user/me/email", { email });
           toast.success("이메일이 변경되었습니다.");
+          const res = await api.get("/api/v1/user/me");
+          setUser(res.data);
           setEditingField(null);
         } catch (error: unknown) {
           if (axios.isAxiosError(error)) {
@@ -243,6 +249,8 @@ export default function ProfileChangeForm() {
         try {
           await patchJson("/api/v1/user/me/phone", { phone });
           toast.success("휴대폰 번호가 변경되었습니다.");
+          const res = await api.get("/api/v1/user/me");
+          setUser(res.data);
           setEditingField(null);
         } catch (error: unknown) {
           if (axios.isAxiosError(error)) {
@@ -271,6 +279,8 @@ export default function ProfileChangeForm() {
           ? "메일링 구독을 신청하였습니다!"
           : "메일링 구독을 취소하였습니다!"
       );
+      const res = await api.get("/api/v1/user/me");
+      setUser(res.data);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         console.error(error.response?.data.message || "❌ 메일링 변경 실패");
@@ -369,7 +379,7 @@ export default function ProfileChangeForm() {
               </>
             ) : (
               <>
-                <p className="mt-2 text-[13px] font-semibold w-[326px] h-[60px] mb-[6.5px]">
+                <p className="mt-2 text-[13px] font-semibold w-[408px] h-[60px]">
                   {intro}
                 </p>
                 <div className="flex justify-end w-[408px]">

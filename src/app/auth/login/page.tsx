@@ -7,12 +7,15 @@ import api from "@/lib/auth/axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function Login() {
   const [bgImage, setBgImage] = useState<string>("/loginHero/img1.jpg");
   const [loginId, setLoginId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rememberId, setRememberId] = useState<boolean>(false);
+  const setUser = useAuthStore((state) => state.setUser);
+   const setTokens = useAuthStore((state) => state.setTokens);
 
   const router = useRouter();
 
@@ -27,10 +30,15 @@ export default function Login() {
   }, []);
   const handleLogin = async () => {
     try {
-      const res = await api.post("/api/v1/auth/local-login", {
-        loginId,
-        password,
-      });
+      const res = await api.post(
+        "/api/v1/auth/local-login",
+        { loginId, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (rememberId) {
         localStorage.setItem("rememberedLoginId", loginId);
@@ -38,14 +46,20 @@ export default function Login() {
         localStorage.removeItem("rememberedLoginId");
       }
 
-      const { accessToken, refreshToken, needAdditionalInfo } = res.data;
+      const { accessToken, refreshToken } = res.data;
+      
+      setTokens(accessToken, refreshToken);
 
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
 
-      toast.success("로그인 성공!");
+      const userRes = await api.get("/api/v1/user/me");
+      const userData = userRes.data;
+      setUser(userData);
+      localStorage.setItem("UserData", JSON.stringify(userData));
 
-      if (needAdditionalInfo) {
+      toast.success("로그인 성공!");
+      if (userData.status === "REGISTERED") {
         router.push("/");
       } else {
         router.push("/auth/completeProfile");
