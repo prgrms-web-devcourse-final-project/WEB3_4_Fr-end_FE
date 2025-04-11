@@ -18,7 +18,7 @@ export const mateFormSchema = z.object({
   people: z
     .number({ required_error: "모집 인원을 입력해주세요" })
     .min(1, "1명 이상이어야 합니다"),
-  content: z.string().min(20, "내용은 최소 20자 이상이어야 합니다."),
+  content: z.string().min(10, "내용은 최소 10자 이상으로 작성해주세요."),
   location: z.string().nonempty("여행지를 선택해주세요"),
   mateGender: z.string().nonempty("메이트 성별을 선택해주세요"),
 });

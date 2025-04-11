@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import ReportButton from "@/components/mateBoard/mateBoardDetail/ReportButton";
 import { MateDetailData } from "@/types/mateBoard/MateDetailData";
@@ -6,21 +8,27 @@ import { getGenderLabel } from "@/utils/getGenderLabel";
 import { getTravelRegionLabel } from "@/utils/getTravelRegion";
 import MateEditButton from "@/components/mateBoard/mateBoardDetail/MateEditButton";
 import MateDeleteButton from "@/components/mateBoard/mateBoardDetail/MateDeleteButton";
+import { useAuthStore } from "@/store/useAuthStore";
 
 type MateDetailPageProps = {
   data: MateDetailData;
 };
 
 export default function MateDetailInfo({ data }: MateDetailPageProps) {
+  const userId = useAuthStore((state) => state.user?.id);
+  const authorId = data.authorId;
+
   return (
     <div className=" py-12 max-w-5xl mx-auto space-y-12">
       {/* 제목 */}
       <div className="flex items-center justify-between w-full">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">{data.title}</h1>
-        <div className="flex flex-row gap-5">
-          <MateEditButton />
-          <MateDeleteButton />
-        </div>
+        {userId === authorId && (
+          <div className="flex flex-row gap-5">
+            <MateEditButton PostId={data.matePostId} />
+            <MateDeleteButton PostId={data.matePostId} />
+          </div>
+        )}
       </div>
 
       {/* 여행 일정 */}
