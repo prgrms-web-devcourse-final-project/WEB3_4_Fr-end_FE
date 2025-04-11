@@ -15,7 +15,7 @@ export default function Login() {
   const [password, setPassword] = useState<string>("");
   const [rememberId, setRememberId] = useState<boolean>(false);
   const setUser = useAuthStore((state) => state.setUser);
-   const setTokens = useAuthStore((state) => state.setTokens);
+  const setTokens = useAuthStore((state) => state.setTokens);
 
   const router = useRouter();
 
@@ -47,7 +47,7 @@ export default function Login() {
       }
 
       const { accessToken, refreshToken } = res.data;
-      
+
       setTokens(accessToken, refreshToken);
 
       localStorage.setItem("accessToken", accessToken);
