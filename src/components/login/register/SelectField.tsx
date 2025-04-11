@@ -27,7 +27,7 @@ export default function SelectField<T extends FieldValues>({
         render={({ field }) => (
           <select
             {...field}
-            className="w-full h-[50px] px-2.5 bg-white rounded outline outline-customGray-500 text-[13px] text-customGray-400 focus:outline-customBlack-400"
+            className="w-full h-[50px] px-2.5 bg-white rounded outline outline-customGray-500 text-[13px] text-customGray-400 focus:outline-customBlack-400 focus:text-customBlack-400"
           >
             <option value="">성별</option>
             <option value="남자">남자</option>

@@ -28,14 +28,17 @@ export default function Confirmation() {
 
   const router = useRouter();
 
+  const storedUserData = localStorage.getItem("UserData");
+  const parsedUserData = JSON.parse(storedUserData || "");
+
   // 숙소 정보 상태
   const [accommodation, setAccommodation] = useState<Accommodation | null>(
     null
   );
 
   const [userData, setUserData] = useState({
-    reserverName: "홍길동", // 예약자 이름
-    reserverPhone: "010-1234-5678", // 예약자 전화번호
+    reserverName: parsedUserData.nickname, // 예약자 이름
+    reserverPhone: parsedUserData.email, // 예약자 이메일
     userName: "", // 이용자 이름
     userPhone: "", // 이용자 전화번호
     people: "", // 인원
@@ -111,6 +114,7 @@ export default function Confirmation() {
         id: accommodation?.id?.toString() || "", // 숙소 ID
         userName: userData.userName, // 이용자 이름
         userPhone: userData.userPhone, // 이용자 전화번호
+        userId: parsedUserData.id, // 유저 id
         people: userData.people, // 예약 인원
         checkIn: checkIn || "", // 예약 시작일
         checkOut: checkOut || "", // 예약 종료일
@@ -156,7 +160,7 @@ export default function Confirmation() {
                 className="w-32 text-lg font-medium"
                 htmlFor="reserverName"
               >
-                예약자 이름
+                예약자 닉네임
               </label>
               <input
                 id="reserverName"
@@ -174,7 +178,7 @@ export default function Confirmation() {
                 className="w-32 text-lg font-medium"
                 htmlFor="reserverPhone"
               >
-                예약자 전화번호
+                예약자 이메일
               </label>
               <input
                 id="reserverPhone"

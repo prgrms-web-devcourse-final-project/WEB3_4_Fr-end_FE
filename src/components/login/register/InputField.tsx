@@ -36,7 +36,7 @@ export default function InputField<T extends FieldValues>({
         type={type}
         placeholder={placeholder}
         {...register(name, rules)}
-        className="w-full h-[50px] px-2.5 py-3.5 bg-white rounded outline outline-customGray-500 text-[13px] text-customGray-400 focus:outline-customBlack-400"
+        className="w-full h-[50px] px-2.5 py-3.5 bg-white rounded outline outline-customGray-500 text-[13px] text-customGray-400 focus:outline-customBlack-400 focus:text-customBlack-400"
       />
       {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
     </div>
