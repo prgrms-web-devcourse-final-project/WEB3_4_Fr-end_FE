@@ -12,14 +12,14 @@ export const addNewCalendar = async (
     setItems(prev => [...prev, {
       id: created.id.toString(),
       label: created.calendarTitle,
-      shareOpen: false
+      shareOpen: false,
+      userId: userId,
     }]);
   } catch (err) {
     console.error(err);
     toast.error("캘린더 생성에 실패했습니다.");
   }
 };
-
 
 // 캘린더 삭제
 export const deleteCalendar = async (

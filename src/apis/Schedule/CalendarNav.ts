@@ -18,6 +18,7 @@ export interface CalendarResponse {
   note: string;
   createdAt: string;
   modifiedAt: string;
+  userId: number;
 }
 
 export interface UpdateCalendarBody {

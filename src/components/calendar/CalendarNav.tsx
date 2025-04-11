@@ -24,22 +24,23 @@ export default function CalendarNav() {
     const init = async () => {
       try {
         const calendarList = await fetchCalendars();
-        const navItems: NavItem[] = calendarList.map(item => ({
-          id: item.id.toString(),
-          label: item.calendarTitle,
-          shareOpen: false,
-        }));
+  
+        const navItems = calendarList
+          .filter(item => `${item.userId}` === `${userId}`)
+          .map(item => ({
+            id: item.id.toString(),
+            label: item.calendarTitle,
+            shareOpen: false,
+            userId: item.userId.toString(),
+          }));
+  
+        console.log("📦 내가 만든 캘린더 목록:", navItems);
         setItems(navItems);
-
-        // 캘린더가 하나도 없으면 기본 캘린더 생성
-        if (navItems.length === 0 && userId) {
-          await addNewCalendar(userId, setItems);
-        }
       } catch (err) {
         console.error(err);
       }
     };
-
+  
     init();
   }, [userId]);
 
@@ -52,6 +53,7 @@ export default function CalendarNav() {
 
   //  캘린더 생성
   const handleAdd = () => {
+    console.log("🖱 New Calendar 버튼 클릭됨");
     if (!userId) return;
     addNewCalendar(userId, setItems);
   };
@@ -63,6 +65,7 @@ export default function CalendarNav() {
 
   //  캘린더 항목 클릭 시 해당 캘린더 페이지로 이동
   const handleItemClick = (id: string) => {
+    console.log("✅ 클릭한 캘린더 ID:", id);
     router.push(`/calendar/${id}`);
   };
 

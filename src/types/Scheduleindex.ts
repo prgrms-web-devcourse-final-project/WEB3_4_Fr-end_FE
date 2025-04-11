@@ -34,6 +34,7 @@ export interface NavItem {
   id: string;
   label: string;
   shareOpen: boolean;
+  userId: string;
 }
 
 export interface SearchResult {
