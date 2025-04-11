@@ -3,12 +3,14 @@
 import { useState } from "react";
 import api from "@/lib/auth/axios";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function PasswordChangeForm() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const validatePassword = (password: string) => {
     const regex = new RegExp(
@@ -41,6 +43,7 @@ export default function PasswordChangeForm() {
       setNewPassword("");
       setConfirmPassword("");
       setError("");
+      router.push("/");
     } catch (error: unknown) {
       console.error(error);
       setError("비밀번호 변경에 실패했습니다. 현재 비밀번호를 확인해주세요.");
