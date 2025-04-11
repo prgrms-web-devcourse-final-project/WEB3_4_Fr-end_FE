@@ -10,6 +10,7 @@ import CheckboxField from "@/components/login/register/CheckboxField";
 import { SocialSignupFormData } from "@/types/loginForm";
 import { useEffect, useCallback, useState } from "react";
 import toast from "react-hot-toast";
+import { logoutApi } from "@/lib/auth/logout";
 
 export default function CompleteProfilePage() {
   const [mailingAgree, setMailingAgree] = useState<boolean>(false);
@@ -25,6 +26,7 @@ export default function CompleteProfilePage() {
   const handleBeforeUnload = useCallback((e: BeforeUnloadEvent) => {
     e.preventDefault();
     e.returnValue = "";
+    logoutApi();
   }, []);
 
   useEffect(() => {
@@ -42,6 +44,8 @@ export default function CompleteProfilePage() {
       if (anchor && isDirty) {
         e.preventDefault();
         toast.error("회원가입을 먼저 완료해주세요!");
+
+        logoutApi();
       }
     };
 

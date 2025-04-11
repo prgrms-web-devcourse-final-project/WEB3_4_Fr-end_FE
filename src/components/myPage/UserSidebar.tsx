@@ -5,8 +5,6 @@ import MenuSection from "./MenuSection";
 import { logoutApi } from "@/lib/auth/logout";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import api from "@/lib/auth/axios";
 
 interface UserSidebarProps {
   selectedSection: string;
@@ -15,48 +13,21 @@ interface UserSidebarProps {
   onSelectItem: (item: string) => void;
 }
 
-type UserInfo = {
-  nickname: string;
-  email: string;
-  phone: string;
-  bio: string;
-  profileImage: string | null;
-  socialType: string;
-};
-
 export default function UserSidebar({
   selectedSection,
   selectedMenu,
   onSelectSection,
   onSelectItem,
 }: UserSidebarProps) {
+  const user = useAuthStore((state) => state.user);
   const clearTokens = useAuthStore((state) => state.clearTokens);
   const router = useRouter();
-
-  const [user, setUser] = useState<UserInfo | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await api.get("/api/v1/user/me");
-        setUser(res.data);
-        const userData: UserInfo = res.data;
-        localStorage.setItem("UserData", JSON.stringify(userData));
-      } catch (err) {
-        console.error("유저 정보 불러오기 실패", err);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   const handleLogout = async () => {
     try {
       await logoutApi();
       clearTokens();
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      router.push("auth/login");
+      router.push("/auth/login");
     } catch (error) {
       console.error("로그아웃 실패:", error);
     }
@@ -70,13 +41,15 @@ export default function UserSidebar({
 
   return (
     <div className="w-[197px] h-[447px] flex flex-col items-center">
-      <Image
-        src={user.profileImage || "/defaultAvatar/31.png"}
-        alt="user"
-        width={196}
-        height={196}
-        className="rounded-full"
-      />
+      <div className="w-[196px] h-[196px] relative rounded-full overflow-hidden">
+        <Image
+          src={user.profileImage || "/defaultAvatar/31.png"}
+          alt="user"
+          width={196}
+          height={196}
+          className="object-cover"
+        />
+      </div>
       <p className="mt-4 text-black text-xl">반갑습니다!</p>
       <div className="flex">
         <span className="text-customViloet-200 text-xl">{user.nickname}</span>

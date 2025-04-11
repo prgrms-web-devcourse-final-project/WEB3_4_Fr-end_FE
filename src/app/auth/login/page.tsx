@@ -90,6 +90,7 @@ export default function Login() {
       });
       const { redirectUri } = res.data;
       if (redirectUri) {
+        localStorage.setItem("socialType", "KAKAO");
         const joiner = redirectUri.includes("?") ? "&" : "?";
         window.location.href = `${redirectUri}${joiner}socialType=KAKAO`;
       } else {
@@ -110,6 +111,7 @@ export default function Login() {
       });
       const { redirectUri } = res.data;
       if (redirectUri) {
+        localStorage.setItem("socialType", "NAVER");
         const joiner = redirectUri.includes("?") ? "&" : "?";
         window.location.href = `${redirectUri}${joiner}socialType=NAVER`;
       } else {

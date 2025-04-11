@@ -172,7 +172,7 @@ export default function Register() {
 
         <button
           type="submit"
-          className="w-full h-[52px] bg-[#80caff] text-white text-[20px] font-bold rounded-lg mt-4 mb-36"
+          className="w-full h-[52px] bg-[#80caff] text-white text-[20px] font-bold rounded-lg mt-4 mb-36 hover:bg-customBlue-200"
         >
           회원가입
         </button>

@@ -28,7 +28,7 @@ export default function BirthDateField({
                 message: "4자리 연도를 입력해주세요.",
               },
             })}
-            className="w-full h-[50px] px-2.5 py-3.5 bg-white rounded outline  outline-customGray-500 text-[13px] text-customGray-400 focus:outline-customBlack-400"
+            className="w-full h-[50px] px-2.5 py-3.5 bg-white rounded outline  outline-customGray-500 text-[13px] text-customGray-400 focus:outline-customBlack-400 focus:text-customBlack-400"
           />
           {errors.birthYear && (
             <span className="text-red-500 text-sm mt-1">
@@ -47,7 +47,7 @@ export default function BirthDateField({
                 message: "1~12 사이의 숫자를 입력해주세요.",
               },
             })}
-            className="w-full h-[50px] px-2.5 py-3.5 bg-white rounded outline  outline-customGray-500 text-[13px] text-customGray-400 focus:outline-customBlack-400"
+            className="w-full h-[50px] px-2.5 py-3.5 bg-white rounded outline  outline-customGray-500 text-[13px] text-customGray-400 focus:outline-customBlack-400 focus:text-customBlack-400"
           />
           {errors.birthMonth && (
             <span className="text-red-500 text-sm mt-1">
@@ -66,7 +66,7 @@ export default function BirthDateField({
                 message: "1~31 사이의 숫자를 입력해주세요.",
               },
             })}
-            className="w-full h-[50px] px-2.5 py-3.5 bg-white rounded outline  outline-customGray-500 text-[13px] text-customGray-400 focus:outline-customBlack-400"
+            className="w-full h-[50px] px-2.5 py-3.5 bg-white rounded outline  outline-customGray-500 text-[13px] text-customGray-400 focus:outline-customBlack-400 focus:text-customBlack-400"
           />
           {errors.birthDay && (
             <span className="text-red-500 text-sm mt-1">
