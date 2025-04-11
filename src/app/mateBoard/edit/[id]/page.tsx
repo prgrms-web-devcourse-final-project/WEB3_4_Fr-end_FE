@@ -14,7 +14,6 @@ export default async function EditPage({ params }: EditPageProps) {
     return <div>데이터가 없습니다.</div>;
   }
 
-  // MateDetailData가 문자열 날짜 필드를 가지고 있다면 Date 객체로 변환
   const editData = {
     id: data.matePostId,
     title: data.title,
@@ -24,6 +23,7 @@ export default async function EditPage({ params }: EditPageProps) {
     content: data.content,
     travelRegion: data.travelRegion,
     mateGender: data.mateGender,
+    imageUrl: data.imageUrl,
   };
 
   return <MateEditForm data={editData} />;
