@@ -17,7 +17,6 @@ import ContentTextarea from "@/components/mateBoard/mateBoardWriting/MateContent
 import { buildMatePayload } from "@/lib/mate/buildMatePayload";
 import { mateFormSchema, type MateFormType } from "@/lib/mate/mateFormSchema";
 import { putMateBoardPost } from "@/apis/mateBoard/putMateBoardPost";
-// 이미지 업로드 함수 (axios를 이용한 구현)
 import { uploadImageToServer } from "@/apis/mateBoard/postImage";
 import Image from "next/image";
 

@@ -91,13 +91,12 @@ export default function MateDetailInfo({ data }: MateDetailPageProps) {
       <div className="bg-gray-50 rounded-xl p-6">
         {/* 상단: 프로필 영역 */}
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
+          <div className="relative w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
             <Image
               src={data.profileImage || "/default-profile.png"}
               alt="프로필"
-              className="rounded-full"
-              width={48}
-              height={48}
+              className="rounded-full object-cover"
+              fill
             />
           </div>
           <div className="w-full">

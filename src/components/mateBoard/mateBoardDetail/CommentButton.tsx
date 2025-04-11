@@ -12,14 +12,22 @@ export default function CommentButton({
   onCommentPosted: () => void;
 }) {
   const [comment, setComment] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!comment.trim()) {
-      alert("댓글을 입력해 주세요.");
+    const trimmedComment = comment.trimEnd();
+    if (!trimmedComment) {
+      setErrorMessage("댓글을 입력해 주세요.");
       return;
     }
+    if (trimmedComment.length < 5) {
+      setErrorMessage("댓글은 최소 5자 이상이어야 합니다.");
+      return;
+    }
+
+    setErrorMessage("");
 
     try {
       await postComment(mateId, { content: comment });
@@ -44,10 +52,16 @@ export default function CommentButton({
               onChange={(e) => setComment(e.target.value)}
               className="flex-1 bg-transparent outline-none text-sm text-customGray-700 placeholder:text-gray-400"
             />
+
             <button type="submit" className="text-gray-500 hover:text-gray-800">
               <PaperPlaneIcon />
             </button>
           </div>
+          {errorMessage && (
+            <p className="text-red-500 font-bold text-sm mt-1">
+              {errorMessage}
+            </p>
+          )}
         </form>
       </div>
     </div>
