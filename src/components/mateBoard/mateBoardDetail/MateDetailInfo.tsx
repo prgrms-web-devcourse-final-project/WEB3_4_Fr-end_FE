@@ -4,6 +4,8 @@ import { MateDetailData } from "@/types/mateBoard/MateDetailData";
 
 import { getGenderLabel } from "@/utils/getGenderLabel";
 import { getTravelRegionLabel } from "@/utils/getTravelRegion";
+import MateEditButton from "@/components/mateBoard/mateBoardDetail/MateEditButton";
+import MateDeleteButton from "@/components/mateBoard/mateBoardDetail/MateDeleteButton";
 
 type MateDetailPageProps = {
   data: MateDetailData;
@@ -13,9 +15,12 @@ export default function MateDetailInfo({ data }: MateDetailPageProps) {
   return (
     <div className=" py-12 max-w-5xl mx-auto space-y-12">
       {/* 제목 */}
-      <div className="flex items-center w-full">
+      <div className="flex items-center justify-between w-full">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">{data.title}</h1>
-        <div className="ml-auto"></div>
+        <div className="flex flex-row gap-5">
+          <MateEditButton />
+          <MateDeleteButton />
+        </div>
       </div>
 
       {/* 여행 일정 */}

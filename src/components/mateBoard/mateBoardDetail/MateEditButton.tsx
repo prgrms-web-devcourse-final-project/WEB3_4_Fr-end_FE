@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+
 export default function MateEditButton() {
-  return <div>MateEditButton</div>;
+  return <Button>MateEditButton</Button>;
 }

@@ -1,5 +1,6 @@
 export type MateCardData = {
-  id: number;
+  matePostId: number;
+  authorId: number;
   nickname: string;
   profileImage: string | null;
   authorGender: string;
@@ -9,6 +10,7 @@ export type MateCardData = {
   travelStartDate: string;
   travelEndDate: string;
   recruitCount: number;
+  appliedCount: number;
   recruitmentStatus: string;
   mateGender: string;
   createdAt: string;

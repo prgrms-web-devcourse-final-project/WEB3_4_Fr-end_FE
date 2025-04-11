@@ -1,11 +1,10 @@
 import ApplyButton from "@/components/mateBoard/mateBoardDetail/ApplyButton";
-import CommentButton from "@/components/mateBoard/mateBoardDetail/CommentButton";
-import CommentCardList from "@/components/mateBoard/mateBoardDetail/CommentCardList";
 import MateDetailHero from "@/components/mateBoard/mateBoardDetail/MateDetailHero";
 import MateDetailInfo from "@/components/mateBoard/mateBoardDetail/MateDetailInfo";
 import LikeButtonInfo from "@/components/mateBoard/mateBoardDetail/LikeButtonInfo";
 import { getMateBoardDetail } from "@/apis/mateBoard/getMateBoardDetail";
 import { MateDetailData } from "@/types/mateBoard/MateDetailData";
+import CommentsSection from "@/components/mateBoard/mateBoardDetail/CommentSection";
 
 type MateDetailPageProps = {
   params: { id: string };
@@ -16,7 +15,6 @@ export default async function MateDetailPage({ params }: MateDetailPageProps) {
   const data: MateDetailData = await getMateBoardDetail(id);
 
   if (!data) {
-    // notFound(); 404페이지
     console.error("데이터가 없습니다.");
   }
   return (
@@ -31,14 +29,9 @@ export default async function MateDetailPage({ params }: MateDetailPageProps) {
         <ApplyButton />
         <LikeButtonInfo />
       </div>
-      <div className="mb-10 flex justify-center items-center  ">
-        <div className="w-full max-w-5xl">
-          <CommentButton mateId={id} />
-        </div>
-      </div>
       <div className="mb-10 flex justify-center items-center">
         <div className="w-full max-w-5xl">
-          <CommentCardList matePostId={id} />
+          <CommentsSection matePostId={id} />
         </div>
       </div>
     </>

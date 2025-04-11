@@ -7,8 +7,10 @@ import { MateComment } from "@/types/mateBoard/MateComment";
 
 export default function CommentCardList({
   matePostId,
+  newCommentTrigger,
 }: {
   matePostId: number;
+  newCommentTrigger: boolean;
 }) {
   const [comments, setComments] = useState<MateComment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -18,7 +20,12 @@ export default function CommentCardList({
       try {
         const response = await getComments(matePostId);
         console.log("API에서 반환된 댓글 데이터:", response);
-        setComments(response.data);
+        if (response === undefined || response === null) {
+          setComments([]);
+          setError("댓글을 작성해보세요.");
+        } else {
+          setComments(response.data);
+        }
       } catch (error) {
         console.error("댓글 불러오기 실패:", error);
         setError("댓글을 불러오는 중입니다");
@@ -28,7 +35,7 @@ export default function CommentCardList({
     }
 
     fetchComments();
-  }, [matePostId]);
+  }, [matePostId, newCommentTrigger]);
 
   if (loading) return <div>댓글 로딩 중...</div>;
   if (error) return <div>{error}</div>;
