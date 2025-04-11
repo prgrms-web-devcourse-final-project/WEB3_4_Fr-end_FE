@@ -4,11 +4,17 @@ import { useState } from "react";
 import AllAcc from "./myAccompany/allAcc";
 import MyAcc from "./myAccompany/myAcc";
 import YourAcc from "./myAccompany/yourAcc";
+import AcceptAcc from "./myAccompany/acceptAcc";
 import { MateDummyData } from "@/dummyData/MateDummyData";
 import { commentDummyData } from "@/dummyData/CommentDummyData";
 
 export default function Accompany() {
-  const list = ["전체", "내가 받은 동행신청", "내가 신청한 동행신청"];
+  const list = [
+    "전체",
+    "내가 받은 동행신청",
+    "내가 신청한 동행신청",
+    "동행 수락 목록",
+  ];
   const [selectedMenu, setSelectedMenu] = useState<string>("전체");
   const renderContent = () => {
     switch (selectedMenu) {
@@ -18,6 +24,8 @@ export default function Accompany() {
         return <YourAcc users={MateDummyData} comments={commentDummyData} />;
       case "내가 신청한 동행신청":
         return <MyAcc users={MateDummyData} comments={commentDummyData} />;
+      case "동행 수락 목록":
+        return <AcceptAcc users={MateDummyData} comments={commentDummyData} />;
       default:
         return null;
     }
