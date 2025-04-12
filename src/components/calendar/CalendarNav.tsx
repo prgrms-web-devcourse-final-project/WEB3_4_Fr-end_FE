@@ -22,11 +22,17 @@ export default function CalendarNav() {
   // 캘린더 목록 불러오기 + 기본 캘린더 생성
   useEffect(() => {
     const init = async () => {
+      if (!userId) {
+        console.warn("🚨 userId가 없습니다. 로그인 여부를 확인해주세요.");
+        return;
+      }
+  
       try {
         const calendarList = await fetchCalendars();
+        console.log("📦 캘린더 응답 확인:", calendarList);
   
         const navItems = calendarList
-          .filter(item => `${item.userId}` === `${userId}`)
+          .filter(item => item.userId.toString() === userId.toString())
           .map(item => ({
             id: item.id.toString(),
             label: item.calendarTitle,
@@ -34,10 +40,9 @@ export default function CalendarNav() {
             userId: item.userId.toString(),
           }));
   
-        console.log("📦 내가 만든 캘린더 목록:", navItems);
         setItems(navItems);
       } catch (err) {
-        console.error(err);
+        console.error("❌ 캘린더 목록 불러오기 실패:", err);
       }
     };
   
@@ -53,9 +58,8 @@ export default function CalendarNav() {
 
   //  캘린더 생성
   const handleAdd = () => {
-    console.log("🖱 New Calendar 버튼 클릭됨");
     if (!userId) return;
-    addNewCalendar(userId, setItems);
+    addNewCalendar(setItems);
   };
 
   //  캘린더 URL 복사
@@ -72,13 +76,17 @@ export default function CalendarNav() {
   //  캘린더 삭제
   const handleDeleteCalendar = (id: string) => {
     if (!userId) return;
-    deleteCalendar(id, userId, setItems);
+    console.log("🧾 삭제 대상 ID:", id);
+const itemToDelete = items.find(item => item.id === id);
+console.log("🔍 삭제하려는 항목의 userId:", itemToDelete?.userId);
+console.log("🙋 내 userId:", userId);
+    deleteCalendar(id, setItems);
   };
 
   //  캘린더 이름 수정 완료
   const handleEditComplete = (id: string) => {
     if (!userId) return;
-    editCalendarTitle(id, userId, editingLabel, setItems, () => {
+    editCalendarTitle(id, editingLabel, setItems, () => {
       setEditingCalendarId(null);
       setEditingLabel('');
     });

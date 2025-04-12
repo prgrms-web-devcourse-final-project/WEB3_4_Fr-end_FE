@@ -2,18 +2,16 @@ import toast from "react-hot-toast";
 import { createCalendar, deleteCalendarById, updateCalendar } from "@/apis/Schedule/CalendarNav";
 import type { NavItem } from "@/types/Scheduleindex";
 
-// 캘린더 생성
 export const addNewCalendar = async (
-  userId: string,
   setItems: React.Dispatch<React.SetStateAction<NavItem[]>>
 ) => {
   try {
-    const created = await createCalendar("캘린더", userId);
+    const created = await createCalendar("캘린더");
     setItems(prev => [...prev, {
       id: created.id.toString(),
       label: created.calendarTitle,
       shareOpen: false,
-      userId: userId,
+      userId: created.userId.toString(), 
     }]);
   } catch (err) {
     console.error(err);
@@ -21,14 +19,13 @@ export const addNewCalendar = async (
   }
 };
 
-// 캘린더 삭제
+// 📌 캘린더 삭제
 export const deleteCalendar = async (
   id: string,
-  userId: string,
   setItems: React.Dispatch<React.SetStateAction<NavItem[]>>
 ) => {
   try {
-    await deleteCalendarById(id, userId);
+    await deleteCalendarById(id);
     setItems(prev => prev.filter(item => item.id !== id));
   } catch (err) {
     console.error(err);
@@ -36,22 +33,21 @@ export const deleteCalendar = async (
   }
 };
 
-// 캘린더 이름 수정
+// 📌 캘린더 이름 수정
 export const editCalendarTitle = async (
   id: string,
-  userId: string,
   newLabel: string,
   setItems: React.Dispatch<React.SetStateAction<NavItem[]>>,
   onComplete: () => void
 ) => {
   try {
     const now = new Date().toISOString();
-    await updateCalendar(id, userId, {
+    await updateCalendar(id, {
       calendarTitle: newLabel,
       startDate: now,
       endDate: now,
       alertTime: now,
-      note: ""
+      note: "",
     });
 
     setItems(prev =>
