@@ -15,7 +15,7 @@ export default function MateCardList({ cards }: MateCardListProps) {
   return (
     <div className="grid grid-cols-2 gap-6 place-items-center">
       {validCards.map((card) => (
-        <MateCard key={card.id} data={card} />
+        <MateCard key={card.matePostId} data={card} />
       ))}
     </div>
   );

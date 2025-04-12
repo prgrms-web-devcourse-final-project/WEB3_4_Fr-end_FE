@@ -1,8 +1,8 @@
 import apiClient from "@/config/axiosConfig";
 import { MatePayload } from "@/types/mateBoard/MatePayload";
-// import { MatePostResponse } from "@/types/mateBoard/MatePostResponse";
-
-export const postMateWriting = async (payload: MatePayload): Promise<any> => {
+export const postMateWriting = async (
+  payload: MatePayload
+): Promise<{ postId: number }> => {
   try {
     const response = await apiClient.post("/api/v1/mate-board/posts", payload, {
       headers: {

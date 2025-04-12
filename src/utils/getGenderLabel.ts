@@ -4,7 +4,9 @@ export function getGenderLabel(genderKey: string): string {
       return "남성";
     case "FEMALE":
       return "여성";
+    case "NO_PREFFERENCE":
+      return "무관";
     default:
-      return "기타";
+      return "무관";
   }
 }
