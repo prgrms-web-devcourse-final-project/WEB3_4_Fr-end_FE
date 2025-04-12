@@ -8,11 +8,19 @@ import { useAuthStore } from "@/store/useAuthStore";
 export default function SocialLogin() {
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
-  const socialType = searchParams.get("socialType") ?? "GOOGLE";
   const router = useRouter();
   const setTokens = useAuthStore((state) => state.setTokens);
   const [dotCount, setDotCount] = useState<number>(1);
   const setUser = useAuthStore((state) => state.setUser);
+  const [socialType, setSocialType] = useState<string>("GOOGLE");
+
+  useEffect(() => {
+    const typeFromParams = searchParams.get("socialType");
+    const typeFromStorage =
+      typeof window !== "undefined" ? localStorage.getItem("socialType") : null;
+
+    setSocialType(typeFromParams ?? typeFromStorage ?? "GOOGLE");
+  }, [searchParams]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,6 +39,8 @@ export default function SocialLogin() {
           socialType,
           code,
         });
+        console.log("code:", code);
+        console.log("socialType:", socialType);
 
         const { accessToken, refreshToken, needAdditionalInfo } = res.data;
 
@@ -44,6 +54,7 @@ export default function SocialLogin() {
         localStorage.setItem("UserData", JSON.stringify(userData));
 
         router.push(needAdditionalInfo ? "/auth/completeProfile" : "/");
+        localStorage.removeItem("socialType");
       } catch (err) {
         console.error("소셜 로그인 실패:", err);
       }
