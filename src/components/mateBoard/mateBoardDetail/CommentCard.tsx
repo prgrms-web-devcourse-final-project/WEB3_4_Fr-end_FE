@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { HeartIcon, Trash2Icon } from "lucide-react";
 import { MateComment } from "@/types/mateBoard/MateComment";
