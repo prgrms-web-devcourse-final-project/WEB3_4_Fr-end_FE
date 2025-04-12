@@ -7,12 +7,23 @@ import { MateComment } from "@/types/mateBoard/MateComment";
 
 export default function CommentCardList({
   matePostId,
+  newCommentTrigger,
 }: {
   matePostId: number;
+  newCommentTrigger: boolean;
 }) {
   const [comments, setComments] = useState<MateComment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handleCommentDelete = (deletedCommentId: number) => {
+    setComments((prevComments) =>
+      prevComments.filter(
+        (comment) => comment.mateCommentId !== deletedCommentId
+      )
+    );
+  };
+
   useEffect(() => {
     async function fetchComments() {
       try {
@@ -28,7 +39,7 @@ export default function CommentCardList({
     }
 
     fetchComments();
-  }, [matePostId]);
+  }, [matePostId, newCommentTrigger]);
 
   if (loading) return <div>댓글 로딩 중...</div>;
   if (error) return <div>{error}</div>;
@@ -37,7 +48,7 @@ export default function CommentCardList({
     <div className="space-y-4">
       {comments.length > 0 ? (
         comments.map((comment) => (
-          <CommentCard key={comment.mateCommentId} comment={comment} />
+          <CommentCard key={comment.mateCommentId} comment={comment} onDelete={handleCommentDelete} />
         ))
       ) : (
         <div>댓글이 없습니다.</div>

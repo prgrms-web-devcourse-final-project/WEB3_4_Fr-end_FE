@@ -5,6 +5,7 @@ import type { MateFormType } from "./mateFormSchema";
 type BuildMatePayloadProps = MateFormType & {
   mateGender: string; // useState에서 관리하는 값
   images: File[]; // 이미지 배열
+  imageUrl?: string;
 };
 
 export function buildMatePayload({
@@ -14,6 +15,7 @@ export function buildMatePayload({
   location,
   dateRange,
   mateGender,
+  imageUrl,
   images,
 }: BuildMatePayloadProps) {
   // 날짜 변환
@@ -45,5 +47,6 @@ export function buildMatePayload({
     imageId: images.length > 0 ? 9007199254740991 : undefined,
     // 필요에 따라 종료 날짜 유효성 체크
     travelEndDateValid: !!(dateRange.from && dateRange.to),
+    imageUrl,
   };
 }
