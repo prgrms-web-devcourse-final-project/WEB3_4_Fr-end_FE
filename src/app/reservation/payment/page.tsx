@@ -83,8 +83,9 @@ export default function Payment() {
       accommodationName: accommodation.name, // 숙소 이름
       accommodationAddress: accommodation.location, // 숙소 주소
       accommodationImage: accommodation.mainImage, // 숙소 이미지
-      checkIn: checkIn || "", // 체크인 날짜
-      checkOut: checkOut || "", // 체크아웃 날짜
+      checkInDate: checkIn || "", // 체크인 날짜
+      checkOutDate: checkOut || "", // 체크아웃 날짜
+      checkInTime: accommodation.checkInTime || "", // 체크인 시간
       guestCount: people || "", // 예약 인원 수
       totalPrice: totalAmount, // 총 결제 금액
     };
@@ -107,8 +108,9 @@ export default function Payment() {
           accommodation_name: accommodation.name, // 숙소 이름
           accommodation_address: accommodation.location, // 숙소 주소
           accommodation_image: accommodation.mainImage, // 숙소 이미지
-          check_in: checkIn || "", // 체크인 날짜
-          check_out: checkOut || "", // 체크아웃 날짜
+          check_in_date: checkIn || "", // 체크인 날짜
+          check_out_date: checkOut || "", // 체크아웃 날짜
+          check_in_time: accommodation.checkInTime, // 체크인 시간
           guest_count: people || "", // 예약 인원 수
           total_price: totalAmount, // 총 결제 금액
           merchant_uid: `mid_${new Date().getTime()}`, // 주문 고유 ID
