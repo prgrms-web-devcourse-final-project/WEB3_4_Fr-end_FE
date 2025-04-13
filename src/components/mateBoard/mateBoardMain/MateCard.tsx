@@ -13,7 +13,7 @@ export default function MateCard({ data }: { data: MateCardData }) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/mateBoard/detail/${data.id}`);
+    router.push(`/mateBoard/detail/${data.matePostId}`);
   };
 
   return (
@@ -48,13 +48,14 @@ export default function MateCard({ data }: { data: MateCardData }) {
 
         {/* 유저 정보 */}
         <div className="flex items-center gap-x-2 mt-auto">
-          <Image
-            src={data.profileImage ?? "/default-profile.png"}
-            alt="프로필"
-            width={24}
-            height={24}
-            className="rounded-full"
-          />
+          <div className="relative w-6 h-6 rounded-full bg-gray-300 overflow-hidden">
+            <Image
+              src={data.profileImage ?? "/default-profile.png"}
+              alt="프로필"
+              fill
+              className="rounded-full object-cover"
+            />
+          </div>
           <span className="text-[16px] text-muted-foreground">
             {data.nickname} · {getGenderLabel(data.authorGender)}
           </span>
@@ -78,16 +79,22 @@ export default function MateCard({ data }: { data: MateCardData }) {
         </div>
       </div>
 
-      {/* 오른쪽 썸네일 + 지역 */}
+      {/* 오른쪽 썸네일 이미지 */}
       <div className="flex flex-col items-center justify-start gap-5">
         <div className="w-[220px] h-[220px] overflow-hidden rounded-xl">
-          <Image
-            src={data.imageUrl ?? "/jeju.jpg"}
-            alt={"썸네일"}
-            width={220}
-            height={220}
-            className="rounded-xl object-cover aspect-square"
-          />
+          {data.imageUrl ? (
+            <Image
+              src={data.imageUrl}
+              alt="썸네일"
+              width={220}
+              height={220}
+              className="rounded-xl object-cover aspect-square"
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-300 flex items-center justify-center rounded-xl">
+              <span className="text-gray-600">이미지 없음</span>
+            </div>
+          )}
         </div>
         <span className="text-customGreen-200 font-bold text-[24px] mt-2">
           {getTravelRegionLabel(data.travelRegion)}

@@ -1,21 +1,34 @@
+"use client";
+
 import Image from "next/image";
 import ReportButton from "@/components/mateBoard/mateBoardDetail/ReportButton";
 import { MateDetailData } from "@/types/mateBoard/MateDetailData";
 
 import { getGenderLabel } from "@/utils/getGenderLabel";
 import { getTravelRegionLabel } from "@/utils/getTravelRegion";
+import MateEditButton from "@/components/mateBoard/mateBoardDetail/MateEditButton";
+import MateDeleteButton from "@/components/mateBoard/mateBoardDetail/MateDeleteButton";
+import { useAuthStore } from "@/store/useAuthStore";
 
 type MateDetailPageProps = {
   data: MateDetailData;
 };
 
 export default function MateDetailInfo({ data }: MateDetailPageProps) {
+  const userId = useAuthStore((state) => state.user?.id);
+  const authorId = data.authorId;
+
   return (
     <div className=" py-12 max-w-5xl mx-auto space-y-12">
       {/* 제목 */}
-      <div className="flex items-center w-full">
+      <div className="flex items-center justify-between w-full">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">{data.title}</h1>
-        <div className="ml-auto"></div>
+        {userId === authorId && (
+          <div className="flex flex-row gap-5">
+            <MateEditButton PostId={data.matePostId} />
+            <MateDeleteButton PostId={data.matePostId} />
+          </div>
+        )}
       </div>
 
       {/* 여행 일정 */}
@@ -78,13 +91,12 @@ export default function MateDetailInfo({ data }: MateDetailPageProps) {
       <div className="bg-gray-50 rounded-xl p-6">
         {/* 상단: 프로필 영역 */}
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
+          <div className="relative w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
             <Image
               src={data.profileImage || "/default-profile.png"}
               alt="프로필"
-              className="rounded-full"
-              width={48}
-              height={48}
+              className="rounded-full object-cover"
+              fill
             />
           </div>
           <div className="w-full">
