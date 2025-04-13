@@ -8,17 +8,26 @@ import ProfileChangeForm from "@/components/myPage/profile/ProfileChangeForm";
 import ReservationHistory from "@/components/myPage/reservation/ReservationHistory";
 import ActiveLog from "@/components/myPage/active/ActiveLog";
 import ScheduleManager from "@/components/myPage/schedule/ScheduleManager";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/useAuthStore";
 
 type UserInfo = {
   socialType: string;
 };
 
 export default function MyPage() {
+  const router = useRouter();
   const [selectedSection, setSelectedSection] = useState<string>("개인 정보");
   const [selectedMenu, setSelectedMenu] = useState<string>("");
   const [user, setUser] = useState<UserInfo | null>(null);
 
   useEffect(() => {
+    const isValid = useAuthStore.getState().checkExpiration();
+    if (!isValid) {
+      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+      router.push("/auth/login");
+      return;
+    }
     const fetchUser = async () => {
       try {
         const res = await api.get("/api/v1/user/me");
@@ -34,7 +43,7 @@ export default function MyPage() {
     };
 
     fetchUser();
-  }, []);
+  }, [router]);
 
   const handleSelectSection = (section: string) => {
     setSelectedSection(section);
