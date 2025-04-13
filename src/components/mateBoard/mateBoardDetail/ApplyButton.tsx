@@ -2,16 +2,20 @@
 
 import { postApplication } from "@/apis/mateBoard/postApplication";
 import { Button } from "@/components/ui/button";
+import { PostApplicationResponse } from "@/types/mateBoard/PostApplicationResponse";
+import toast from "react-hot-toast";
 
 export default function ApplyButton({ postId }: { postId: number }) {
   const handleApply = async () => {
     try {
-      const result = await postApplication(postId);
-      console.log(result.data);
-      alert("동행 신청을 하였습니다.");
+      const result = (await postApplication(postId)) as PostApplicationResponse;
+      console.log(result);
+      if (result.status === 201) {
+        toast.success("동행신청을 완료하였습니다.");
+      }
     } catch (error) {
-      console.error("동행 신청 오류:", error);
-      alert("동행 신청에 실패했습니다.");
+      console.log(error);
+      toast.error("이미 신청한 게시글입니다.");
     }
   };
   return (
