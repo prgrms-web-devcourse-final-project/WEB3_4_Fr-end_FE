@@ -4,9 +4,9 @@ interface FilterSidebarProps {
   searchInput: string;
   setSearchInput: (value: string) => void;
   handleSearchSubmit: () => void;
-  selectedCategory: string | null; // 단일 선택을 위해 변경
+  selectedCategory: string | null;
   handleCategoryChange: (category: string) => void;
-  selectedRegion: string | null; // 단일 선택을 위해 변경
+  selectedRegion: string | null;
   handleRegionClick: (region: string) => void;
 }
 
