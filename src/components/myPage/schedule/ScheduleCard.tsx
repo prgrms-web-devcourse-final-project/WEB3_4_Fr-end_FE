@@ -2,9 +2,12 @@
 
 import { CalendarData } from "@/types/ScheuduleData";
 import { useState } from "react";
+import { deleteCalendar } from "@/lib/myPage/calendarDelete";
+import toast from "react-hot-toast"; // 알림이 있으면 더 좋아요
 
 interface CalendarProps {
   calendars: CalendarData[];
+  onDelete?: (id: number) => void;
 }
 
 const badgeColors = [
@@ -19,13 +22,14 @@ const badgeColors = [
   "bg-pink-400",
 ];
 
-export default function ScheduleCard({ calendars }: CalendarProps) {
+export default function ScheduleCard({ calendars, onDelete }: CalendarProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const commentPerPage = 3;
 
   const currentCalendar = calendars.slice(0, currentPage * commentPerPage);
   const totalCalendar = Math.ceil(calendars.length / commentPerPage);
 
+  console.log(calendars);
   return (
     <div className="flex flex-col items-center">
       {currentCalendar.map((calendar) => {
@@ -38,7 +42,19 @@ export default function ScheduleCard({ calendars }: CalendarProps) {
               <div className="font-pretendard font-bold text-[20px] text-customBlack-100">
                 {calendar.name}
               </div>
-              <div className="text-red-800 font-pretendard font-semibold text-[10px] hover:text-red-300 cursor-pointer">
+              <div
+                onClick={async () => {
+                  try {
+                    await deleteCalendar(calendar.id);
+                    toast.success("캘린더가 삭제되었습니다.");
+                    onDelete?.(calendar.id);
+                  } catch (err) {
+                    console.error("삭제 실패:", err);
+                    toast.error("삭제에 실패했습니다.");
+                  }
+                }}
+                className="text-red-800 font-pretendard font-semibold text-[10px] hover:text-red-300 cursor-pointer"
+              >
                 캘린더 삭제
               </div>
             </div>

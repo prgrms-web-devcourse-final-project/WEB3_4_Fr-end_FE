@@ -21,6 +21,7 @@ interface PostProps {
 export default function Post({ posts }: PostProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = 9;
+  console.log(posts);
 
   const currentPosts = posts.slice(0, currentPage * postsPerPage);
   const totalPages = Math.ceil(posts.length / postsPerPage);
@@ -35,14 +36,15 @@ export default function Post({ posts }: PostProps) {
           const formatted = `${start.format(`YY.MM.DD`)} - ${end.format(
             `YY.MM.DD`
           )} (${duration}일)`;
+          console.log("post 이미지:", post.img);
 
           return (
             <div
-              key={post.id}
+              key={`/${post.id}`}
               className="w-[210px] min-h-[260px] bg-white outline outline-customGray-400 rounded-[16px] flex-col"
             >
               <Image
-                src={`/myReservation/${post.img}`}
+                src={post.img}
                 alt={post.title}
                 width={210}
                 height={181}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Accompany from "./accompany";
 import Comment from "./comment";
 import Post from "./post";
-import { dummyTravelPosts } from "@/dummyData/TravelPosts";
+// import { dummyTravelPosts } from "@/dummyData/TravelPosts";
 import { commentDummyData } from "@/dummyData/CommentDummyData";
 import api from "@/lib/auth/axios";
 import { MatePostResponse } from "@/types/MatePostResponse";
@@ -34,7 +34,7 @@ export default function ActiveLog() {
           const res = await api.get("/api/v1/user/me/activity/mate-post");
           setPosts(res.data);
         } else if (selectedMenu === "작성한 댓글") {
-          const res = await api.get("/api/v1/user/me/activity/comment");
+          const res = await api.get("/api/v1/user/me/activity/mate-comments");
           setComments(res.data);
         } else if (selectedMenu === "동행 목록") {
           const res = await api.get("/api/v1/user/me/activity/accompany");
@@ -51,8 +51,7 @@ export default function ActiveLog() {
   const renderContent = () => {
     switch (selectedMenu) {
       case "작성한 게시물":
-        const transformedPosts =
-          posts.length > 0 ? transformPosts(posts) : dummyTravelPosts;
+        const transformedPosts = transformPosts(posts);
         return <Post posts={transformedPosts} />;
       case "작성한 댓글":
         return (
