@@ -6,6 +6,8 @@ import { MateComment } from "@/types/mateBoard/MateComment";
 import { useAuthStore } from "@/store/useAuthStore";
 import { timeStamp } from "@/utils/timeStamp";
 import { deleteComment } from "@/apis/mateBoard/deleteComment";
+import ConfirmModal from "@/components/mateBoard/common/ConfirmModal";
+import { useState } from "react";
 
 export default function CommentCard({
   comment,
@@ -17,15 +19,18 @@ export default function CommentCard({
   const userId = useAuthStore((state) => state.user?.id);
   const authorId = comment.authorId;
   const { matePostId, mateCommentId } = comment;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleModalOpen = (): void => {
+    setIsModalOpen(true);
+  };
 
   const handleDelete = async () => {
-    const confirmed = window.confirm("댓글을 삭제하시겠습니까?");
-    if (!confirmed) return;
-
     try {
       const response = await deleteComment(matePostId, mateCommentId);
       console.log("댓글 삭제 요청:", response);
       onDelete(mateCommentId);
+      setIsModalOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -52,9 +57,10 @@ export default function CommentCard({
         </div>
       </div>
       <div className="flex flex-col items-end justify-center">
-        <div className=" text-xs text-gray-500 mb-5">
-          {timeStamp(comment.createdAt)}
+        <div className=" text-s text-gray-500 mb-2">
+          <span>{timeStamp(comment.createdAt)}</span>
         </div>
+
         <div className="flex gap-2">
           <span className="text-gray-800 text-sm font-semibold -mr-1">
             {comment.likeCount || 0}
@@ -64,7 +70,7 @@ export default function CommentCard({
           </button>
           {userId === authorId && (
             <button
-              onClick={handleDelete}
+              onClick={handleModalOpen}
               className="text-gray-400 hover:text-gray-600 transition cursor-pointer"
             >
               <Trash2Icon className="w-5 h-5" />
@@ -72,6 +78,13 @@ export default function CommentCard({
           )}
         </div>
       </div>
+      {isModalOpen && (
+        <ConfirmModal
+          message="정말로 댓글을 삭제하시겠습니까?"
+          onConfirm={handleDelete}
+          onCancel={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 }
