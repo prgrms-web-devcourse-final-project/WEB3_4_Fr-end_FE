@@ -24,9 +24,11 @@ export default function Search() {
     searchParams.get("region") || null
   );
   const [searchInput, setSearchInput] = useState(
-    searchParams.get("query") || ""
+    searchParams.get("title") || ""
   );
-  const [finalSearch, setFinalSearch] = useState(searchInput);
+  const [finalSearch, setFinalSearch] = useState(
+    searchParams.get("title") || ""
+  );
 
   const [data, setData] = useState<Accommodation[]>([]);
   const [totalData, setTotalData] = useState(0);
@@ -109,7 +111,7 @@ export default function Search() {
     <>
       <div className="h-75 w-screen relative left-1/2 right-1/2 -translate-x-1/2 mb-20">
         <Image
-          src={"/reservationImg/reservationBanner.webp"}
+          src={"/reservationImg/reservationBanner2.webp"}
           alt="예약메인배너이미지"
           fill
           style={{ objectFit: "cover" }}
