@@ -6,7 +6,6 @@ import { FaArrowCircleRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { formatPrice } from "@/utils/formatPrice";
 
-// Props 타입 정의
 interface Reservation {
   id: number;
   name: string;
@@ -21,7 +20,7 @@ interface TodayReservationSectionProps {
 export default function TodayReservationSection({
   reservations,
 }: TodayReservationSectionProps) {
-  const [activeIndex, setActiveIndex] = useState<number>(0); // 초기 인덱스를 0으로 수정
+  const [activeIndex, setActiveIndex] = useState<number>(1); // 맨처음 인덱스
 
   const handleClick = (index: number) => {
     setActiveIndex(index);
