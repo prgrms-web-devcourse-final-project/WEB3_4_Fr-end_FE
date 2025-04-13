@@ -7,8 +7,13 @@ import YourAcc from "./myAccompany/yourAcc";
 import AcceptAcc from "./myAccompany/acceptAcc";
 import { MateDummyData } from "@/dummyData/MateDummyData";
 import { commentDummyData } from "@/dummyData/CommentDummyData";
+import { MatePost } from "@/types/MatePost";
 
-export default function Accompany() {
+interface AccompanyProps {
+  accompanies: MatePost[]; // 타입 명확하면 any 대신 인터페이스로 지정 가능
+}
+
+export default function Accompany({ accompanies }: AccompanyProps) {
   const list = [
     "전체",
     "내가 받은 동행신청",
@@ -19,13 +24,13 @@ export default function Accompany() {
   const renderContent = () => {
     switch (selectedMenu) {
       case "전체":
-        return <AllAcc users={MateDummyData} comments={commentDummyData} />;
+        return <AllAcc users={accompanies} comments={commentDummyData} />;
       case "내가 받은 동행신청":
-        return <YourAcc users={MateDummyData} comments={commentDummyData} />;
+        return <YourAcc users={accompanies} comments={commentDummyData} />;
       case "내가 신청한 동행신청":
-        return <MyAcc users={MateDummyData} comments={commentDummyData} />;
+        return <MyAcc users={accompanies} comments={commentDummyData} />;
       case "동행 수락 목록":
-        return <AcceptAcc users={MateDummyData} comments={commentDummyData} />;
+        return <AcceptAcc users={accompanies} comments={commentDummyData} />;
       default:
         return null;
     }
