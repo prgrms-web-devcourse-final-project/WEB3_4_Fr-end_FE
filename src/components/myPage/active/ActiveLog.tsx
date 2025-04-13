@@ -5,10 +5,23 @@ import Post from "./post";
 import { dummyTravelPosts } from "@/dummyData/TravelPosts";
 import { commentDummyData } from "@/dummyData/CommentDummyData";
 import api from "@/lib/auth/axios";
+import { MatePostResponse } from "@/types/MatePostResponse";
+
+const transformPosts = (apiData: MatePostResponse[]) => {
+  return apiData.map((item) => ({
+    id: item.matePostId,
+    title: item.title,
+    place: item.travelRegion,
+    startDate: item.travelStartDate,
+    endDate: item.travelEndDate,
+    img: item.imageUrl,
+    city: item.travelRegion,
+  }));
+};
 
 export default function ActiveLog() {
   const [selectedMenu, setSelectedMenu] = useState<string>("작성한 게시물");
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<MatePostResponse[]>([]);
   const [comments, setComments] = useState([]);
   const [accompanies, setAccompanies] = useState([]);
 
@@ -38,7 +51,9 @@ export default function ActiveLog() {
   const renderContent = () => {
     switch (selectedMenu) {
       case "작성한 게시물":
-        return <Post posts={posts.length > 0 ? posts : dummyTravelPosts} />;
+        const transformedPosts =
+          posts.length > 0 ? transformPosts(posts) : dummyTravelPosts;
+        return <Post posts={transformedPosts} />;
       case "작성한 댓글":
         return (
           <Comment
