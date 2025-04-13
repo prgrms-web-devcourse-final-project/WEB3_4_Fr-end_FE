@@ -4,6 +4,7 @@ import { fetchAccommodationById } from "@/apis/reservation/reservationApi";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FaRegClock } from "react-icons/fa6";
 import { LuUserRound } from "react-icons/lu";
 
@@ -43,10 +44,10 @@ export default function Payment() {
   const applyCoupon = () => {
     if (couponCode === VALID_COUPON) {
       setDiscountAmount(10000); // 할인 금액 설정 (10,000원)
-      alert("쿠폰이 적용되었습니다!");
+      toast("쿠폰이 적용되었습니다!");
     } else {
       setDiscountAmount(0); // 할인 금액 초기화
-      alert("유효하지 않은 쿠폰 코드입니다.");
+      toast("유효하지 않은 쿠폰 코드입니다.");
     }
   };
 
@@ -69,11 +70,11 @@ export default function Payment() {
 
     // 필수 데이터 검증
     if (!userName || !userPhone || !accommodation) {
-      alert("결제를 진행하기 위해 필요한 정보가 누락되었습니다.");
+      toast("결제를 진행하기 위해 필요한 정보가 누락되었습니다.");
       return;
     }
     if (totalAmount <= 0) {
-      alert("결제 금액이 0원 이하입니다. 예약 정보를 확인해주세요.");
+      toast("결제 금액이 0원 이하입니다. 예약 정보를 확인해주세요.");
       return;
     }
 
@@ -131,7 +132,7 @@ export default function Payment() {
         });
 
         if (rsp.success) {
-          alert("결제가 완료되었습니다!");
+          toast("결제가 완료되었습니다!");
           console.log("결제 성공:", rsp);
 
           try {
