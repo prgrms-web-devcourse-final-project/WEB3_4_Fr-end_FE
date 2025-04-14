@@ -3,7 +3,7 @@
 import { CalendarData } from "@/types/ScheuduleData";
 import { useState } from "react";
 import { deleteCalendar } from "@/lib/myPage/calendarDelete";
-import toast from "react-hot-toast"; // 알림이 있으면 더 좋아요
+import toast from "react-hot-toast";
 
 interface CalendarProps {
   calendars: CalendarData[];
