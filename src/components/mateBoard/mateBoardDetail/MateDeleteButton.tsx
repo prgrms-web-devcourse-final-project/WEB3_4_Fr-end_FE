@@ -7,9 +7,16 @@ import { useState } from "react";
 
 export default function MateDeleteButton({ PostId }: { PostId: number }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleModalOpen = (): void => {
+  const [modalPosition, setModalPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const handleModalOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setModalPosition({ x: e.clientX, y: e.clientY });
     setIsModalOpen(true);
   };
+
   const router = useRouter();
   const handleDelete = async () => {
     try {
@@ -29,11 +36,12 @@ export default function MateDeleteButton({ PostId }: { PostId: number }) {
       >
         글 삭제
       </Button>
-      {isModalOpen && (
+      {isModalOpen && modalPosition && (
         <ConfirmModal
           message="정말로 게시글을 삭제하시겠습니까?"
           onConfirm={handleDelete}
           onCancel={() => setIsModalOpen(false)}
+          position={modalPosition}
         />
       )}
     </div>

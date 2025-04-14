@@ -9,25 +9,36 @@ const sampleChats: GroupChat[] = [
   {
     id: "1",
     name: "Project Team",
-    lastMessage: "Great work everyone!",
+    lastMessage: "대단하십니다!",
     timestamp: "10:30 AM",
     members: [
       {
         id: "1",
-        name: "Alice",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
+        name: "채연",
+        avatar: "/defaultAvatar/60.png",
         status: "online",
       },
       {
         id: "2",
-        name: "Bob",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
+        name: "지환",
+        avatar: "/defaultAvatar/avatar1.png",
+        status: "offline",
+      },
+      {
+        id: "3",
+        name: "윤호",
+        avatar: "/defaultAvatar/avrtar3.png",
+        status: "offline",
+      },
+      {
+        id: "4",
+        name: "석준",
+        avatar: "/defaultAvatar/45.png",
         status: "offline",
       },
     ],
     unreadCount: 3,
   },
-  // Add more sample chats as needed
 ];
 
 export default function ChatLayout() {

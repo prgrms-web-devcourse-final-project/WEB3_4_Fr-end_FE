@@ -19,12 +19,18 @@ export default function CommentCard({
   const userId = useAuthStore((state) => state.user?.id);
   const authorId = comment.authorId;
   const { matePostId, mateCommentId } = comment;
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleModalOpen = (): void => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalPosition, setModalPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const handleModalOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setModalPosition({ x: e.clientX, y: e.clientY });
     setIsModalOpen(true);
   };
-
+  
   const handleDelete = async () => {
     try {
       const response = await deleteComment(matePostId, mateCommentId);
@@ -35,6 +41,7 @@ export default function CommentCard({
       console.error(error);
     }
   };
+
   return (
     <div className="flex flex-row justify-between bg-customGray-100 rounded-2xl p-6 drop-shadow-xl relative">
       {/* 프로필 영역 */}
@@ -57,7 +64,7 @@ export default function CommentCard({
         </div>
       </div>
       <div className="flex flex-col items-end justify-center">
-        <div className=" text-s text-gray-500 mb-2">
+        <div className=" text-xs text-gray-500 mb-2">
           <span>{timeStamp(comment.createdAt)}</span>
         </div>
 
@@ -78,11 +85,12 @@ export default function CommentCard({
           )}
         </div>
       </div>
-      {isModalOpen && (
+      {isModalOpen && modalPosition && (
         <ConfirmModal
           message="정말로 댓글을 삭제하시겠습니까?"
           onConfirm={handleDelete}
           onCancel={() => setIsModalOpen(false)}
+          position={modalPosition}
         />
       )}
     </div>
