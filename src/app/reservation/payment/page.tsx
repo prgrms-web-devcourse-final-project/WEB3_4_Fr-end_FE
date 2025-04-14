@@ -136,22 +136,31 @@ export default function Payment() {
           console.log("결제 성공:", rsp);
 
           try {
+            // 전송할 데이터를 변수로 추출
+            const payload = {
+              imp_uid: rsp.imp_uid,
+              merchant_uid: rsp.merchant_uid,
+              payMethod: rsp.pay_method,
+              pgProvider: rsp.pg_provider,
+              pgTid: rsp.pg_tid,
+              paidAmount: rsp.paid_amount,
+              currency: "KRW",
+              status: rsp.status,
+              paid_at: rsp.paid_at,
+              receiptUrl: rsp.receipt_url,
+              custom_data: simplifiedCustomData,
+            };
+
+            // 전송할 데이터를 콘솔에 출력
+            console.log("API로 보낼 데이터:", payload);
+
+            // API 호출
             const response = await axios.post(
-              "http://api.sete.kr:8080/api/bookings/complete",
-              {
-                imp_uid: rsp.imp_uid,
-                merchant_uid: rsp.merchant_uid,
-                payMethod: rsp.pay_method,
-                pgProvider: rsp.pg_provider,
-                pgTid: rsp.pg_tid,
-                paidAmount: rsp.paid_amount,
-                currency: "KRW",
-                status: rsp.status,
-                paid_at: rsp.paid_at,
-                receiptUrl: rsp.receipt_url,
-                custom_data: simplifiedCustomData,
-              }
+              "http://api.sete.kr:8080/api/v1/bookings/complete",
+              payload
             );
+
+            // API 응답 결과 출력
             console.log("API 응답:", response.data);
           } catch (error) {
             console.error("API 호출 중 오류", error);
