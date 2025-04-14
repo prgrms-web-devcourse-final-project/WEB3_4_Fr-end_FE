@@ -5,9 +5,25 @@ import { CiLocationOn } from "react-icons/ci";
 import { FaCalendarAlt } from "react-icons/fa";
 import type { MateCardData } from "@/types/mateBoard/MateCardData";
 import { useRouter } from "next/navigation";
+import { travelRegions } from "@/constants/travelRegion";
 
 export default function MateCard({ data }: { data: MateCardData }) {
   const router = useRouter();
+
+  // 지역명을 변환하는 함수
+  const getRegionLabel = (regionValue: string) => {
+    const region = travelRegions.find((item) => item.value === regionValue);
+    return region ? region.label : regionValue;
+  };
+
+  // 여행 일수 계산 함수
+  const calculateTravelDays = (startDate: string, endDate: string): number => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = end.getTime() - start.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
 
   return (
     <>
@@ -24,7 +40,7 @@ export default function MateCard({ data }: { data: MateCardData }) {
         {/* 이미지 섹션 */}
         <div className="w-full h-49 relative overflow-hidden rounded-tr-2xl">
           <Image
-            src={data.thumbnailUrl}
+            src={data.imageUrl || "/reservationImg/testImg.webp"}
             alt="메이트카드 이미지"
             fill
             quality={100}
@@ -36,21 +52,24 @@ export default function MateCard({ data }: { data: MateCardData }) {
           <div className="font-semibold text-xl whitespace-nowrap overflow-hidden overflow-ellipsis">
             {data.title}
           </div>
-          <div className="text-sm mb-2">{data.user.name}</div>
+          <div className="text-sm mb-2">{data.nickname}</div>
           <div className="text-sm flex gap-1 items-center">
             <FaCalendarAlt />
             <div>
-              {data.period.startDate} - {data.period.endDate}(1일)
+              {data.travelStartDate} - {data.travelEndDate} (
+              {calculateTravelDays(data.travelStartDate, data.travelEndDate)}일)
+              {/* 여행 일수를 실제로 계산하여 표시 */}
             </div>
           </div>
           <div className="text-sm flex gap-1 items-center">
             <CiLocationOn />
-            <div>{data.region}</div>
+            <div>{getRegionLabel(data.travelRegion)}</div>{" "}
+            {/* 한국어 지역명 표시 */}
           </div>
           <button
             className="bg-customGray-100 w-full cursor-pointer text-center py-1 mt-2 rounded-xl"
             onClick={() => {
-              router.push(`/mateBoard/detail/${data.id}`);
+              router.push(`/mateBoard/detail/${data.matePostId}`);
             }}
           >
             더 알아보기
