@@ -14,17 +14,17 @@ export default function ReservationHistory() {
   const [visiblePastCount, setVisiblePastCount] = useState(3);
   const [visibleCurrentCount, setVisibleCurrentCount] = useState(3);
 
-  useEffect(() => {
-    const fetchReservation = async () => {
-      try {
-        const res = await api.get("/api/v1/booking/mypage");
-        console.log(res.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchReservation();
-  }, []);
+  // useEffect(() => {
+  //   const fetchReservation = async () => {
+  //     try {
+  //       const res = await api.get("/api/v1/booking/mypage");
+  //       console.log(res.data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   fetchReservation();
+  // }, []);
 
   const handlePastLoadMore = () => {
     setVisiblePastCount((prev) => prev + 3);
