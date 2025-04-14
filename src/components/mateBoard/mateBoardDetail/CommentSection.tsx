@@ -5,10 +5,10 @@ import CommentButton from "@/components/mateBoard/mateBoardDetail/CommentButton"
 import CommentCardList from "@/components/mateBoard/mateBoardDetail/CommentCardList";
 
 interface CommentsSectionProps {
-  matePostId: number;
+  postId: number;
 }
 
-export default function CommentsSection({ matePostId }: CommentsSectionProps) {
+export default function CommentsSection({ postId }: CommentsSectionProps) {
   const [refreshFlag, setRefreshFlag] = useState(false);
 
   const onCommentPosted = () => {
@@ -17,11 +17,8 @@ export default function CommentsSection({ matePostId }: CommentsSectionProps) {
 
   return (
     <div className="space-y-10">
-      <CommentButton mateId={matePostId} onCommentPosted={onCommentPosted} />
-      <CommentCardList
-        matePostId={matePostId}
-        newCommentTrigger={refreshFlag}
-      />
+      <CommentButton mateId={postId} onCommentPosted={onCommentPosted} />
+      <CommentCardList matePostId={postId} newCommentTrigger={refreshFlag} />
     </div>
   );
 }

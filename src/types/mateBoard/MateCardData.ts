@@ -16,4 +16,6 @@ export type MateCardData = {
   createdAt: string;
   imageUrl: string | null;
   bio: string | null;
+  commentCount: number;
+  likeCount: number;
 };

@@ -26,12 +26,12 @@ export default async function MateDetailPage({ params }: MateDetailPageProps) {
         <MateDetailInfo data={data} />
       </div>
       <div className="mb-15 flex gap-4 items-center justify-center">
-        <ApplyButton postId={id} />
-        <LikeButtonInfo />
+        <ApplyButton data={data} />
+        <LikeButtonInfo postId={id} />
       </div>
       <div className="mb-10 flex justify-center items-center">
         <div className="w-full max-w-5xl">
-          <CommentsSection matePostId={id} />
+          <CommentsSection postId={id} />
         </div>
       </div>
     </>
