@@ -1,4 +1,4 @@
-import { MateCardData } from "../types/mateBoard/MateCardData";
+import { MateCardData } from "@/types/MateCardData";
 
 export const dummyCards: MateCardData[] = [
   {
