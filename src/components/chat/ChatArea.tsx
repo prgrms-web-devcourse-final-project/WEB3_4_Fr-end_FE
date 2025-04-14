@@ -13,17 +13,76 @@ interface ChatAreaProps {
 const sampleMessages: ChatMessage[] = [
   {
     id: "1",
-    content: "Hey team! How's the progress?",
+    content: "안녕하세요! 모두들 반갑습니다!",
     sender: {
       id: "1",
-      name: "Alice",
-      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
+      name: "채연",
+      avatar: "/defaultAvatar/60.png",
       status: "online",
     },
     timestamp: "10:00 AM",
     status: "read",
   },
-  // 추가 샘플 메시지
+  {
+    id: "2",
+    content: "프로젝트하느라 수고 많으셨어요!",
+    sender: {
+      id: "2",
+      name: "윤호",
+      avatar: "/defaultAvatar/avrtar3.png",
+      status: "online",
+    },
+    timestamp: "10:03 AM",
+    status: "read",
+  },
+  {
+    id: "3",
+    content: "오늘 끝나고 소주 한잔씩들 하십니까?",
+    sender: {
+      id: "3",
+      name: "지환",
+      avatar: "/defaultAvatar/avatar1.png",
+      status: "online",
+    },
+    timestamp: "10:04 AM",
+    status: "read",
+  },
+  {
+    id: "4",
+    content: "피곤합니다",
+    sender: {
+      id: "4",
+      name: "윤호",
+      avatar: "/defaultAvatar/avrtar3.png",
+      status: "online",
+    },
+    timestamp: "10:10 AM",
+    status: "read",
+  },
+  {
+    id: "5",
+    content: "저는 이미 마시고 있어요! 낮술이 좋더라구요",
+    sender: {
+      id: "5",
+      name: "석준",
+      avatar: "/defaultAvatar/45.png",
+      status: "online",
+    },
+    timestamp: "10:15 AM",
+    status: "read",
+  },
+  {
+    id: "6",
+    content: "대단하십니다!",
+    sender: {
+      id: "1",
+      name: "채연",
+      avatar: "/defaultAvatar/60.png",
+      status: "online",
+    },
+    timestamp: "10:30 AM",
+    status: "read",
+  },
 ];
 
 export function ChatArea({ selectedChat }: ChatAreaProps) {
