@@ -40,7 +40,7 @@ export default function UserSidebar({
   }
 
   return (
-    <div className="w-[197px] h-[447px] flex flex-col items-center">
+    <div className="w-[197px] flex flex-col items-center">
       <div className="w-[196px] h-[196px] relative rounded-full overflow-hidden">
         <Image
           src={user.profileImage || "/defaultAvatar/31.png"}

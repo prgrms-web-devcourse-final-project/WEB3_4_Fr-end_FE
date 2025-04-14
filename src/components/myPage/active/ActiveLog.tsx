@@ -1,25 +1,75 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Accompany from "./accompany";
 import Comment from "./comment";
 import Post from "./post";
-import { dummyTravelPosts } from "@/dummyData/TravelPosts";
-import { commentDummyData } from "@/dummyData/CommentDummyData";
+import api from "@/lib/auth/axios";
+import { MatePostResponse } from "@/types/MatePostResponse";
+import axios from "axios";
+
+const transformPosts = (apiData: MatePostResponse[]) => {
+  return apiData.map((item) => ({
+    id: item.matePostId,
+    title: item.title,
+    place: item.travelRegion,
+    startDate: item.travelStartDate,
+    endDate: item.travelEndDate,
+    img: item.imageUrl,
+    city: item.travelRegion,
+  }));
+};
 
 export default function ActiveLog() {
   const [selectedMenu, setSelectedMenu] = useState<string>("작성한 게시물");
+  const [posts, setPosts] = useState<MatePostResponse[]>([]);
+  const [comments, setComments] = useState([]);
+  const [accompanies, setAccompanies] = useState([]);
+
+  const list = ["작성한 게시물", "작성한 댓글", "동행 목록"];
+
+  const fetchComments = async () => {
+    try {
+      const res = await api.get("/api/v1/user/me/activity/mate-comments");
+      setComments(res.data);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data || "❌데이터 가져오기 실패");
+      }
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (selectedMenu === "작성한 게시물") {
+          const res = await api.get("/api/v1/user/me/activity/mate-post");
+          setPosts(res.data);
+        } else if (selectedMenu === "작성한 댓글") {
+          await fetchComments();
+        } else if (selectedMenu === "동행 목록") {
+          const res = await api.get("/api/v1/user/me/activity/accompany");
+          setAccompanies(res.data);
+        }
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+      }
+    };
+
+    fetchData();
+  }, [selectedMenu]);
+
   const renderContent = () => {
     switch (selectedMenu) {
       case "작성한 게시물":
-        return <Post posts={dummyTravelPosts} />;
+        const transformedPosts = transformPosts(posts);
+        return <Post posts={transformedPosts} />;
       case "작성한 댓글":
-        return <Comment comments={commentDummyData}/>;
+        return <Comment comments={comments} onRefresh={fetchComments} />;
       case "동행 목록":
-        return <Accompany />;
+        return <Accompany accompanies={accompanies} />;
       default:
         return null;
     }
   };
-  const list = ["작성한 게시물", "작성한 댓글", "동행 목록"];
 
   return (
     <div className="w-[726px] min-h-[986px] flex-col">

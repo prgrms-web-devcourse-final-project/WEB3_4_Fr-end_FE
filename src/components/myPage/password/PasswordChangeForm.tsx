@@ -54,7 +54,7 @@ export default function PasswordChangeForm() {
     {
       label: "현재 비밀번호",
       placeholder: "현재 비밀번호를 입력해 주세요.",
-      e: "비밀번호가 다릅니다.",
+      error: "비밀번호가 다릅니다.",
       value: currentPassword,
       onChange: (val: string) => setCurrentPassword(val),
       showError: false,
@@ -62,7 +62,7 @@ export default function PasswordChangeForm() {
     {
       label: "새로운 비밀번호",
       placeholder: "새로운 비밀번호를 입력해 주세요.",
-      e: "비밀번호 형식이 올바르지 않습니다!",
+      error: "비밀번호 형식이 올바르지 않습니다!",
       value: newPassword,
       onChange: (val: string) => setNewPassword(val),
       showError: newPassword.length > 0 && !validatePassword(newPassword),
@@ -70,7 +70,7 @@ export default function PasswordChangeForm() {
     {
       label: "새로운 비밀번호 확인",
       placeholder: "새로운 비밀번호를 한 번 더 입력해 주세요.",
-      e: "입력한 새로운 비밀번호와 맞지 않습니다!",
+      error: "입력한 새로운 비밀번호와 맞지 않습니다!",
       value: confirmPassword,
       onChange: (val: string) => setConfirmPassword(val),
       showError: confirmPassword.length > 0 && newPassword !== confirmPassword,
@@ -115,14 +115,17 @@ export default function PasswordChangeForm() {
                   f.showError ? "block" : "hidden"
                 }`}
               >
-                {f.e}
+                {f.error}
               </div>
             </div>
           ))}
+          {error && (
+            <div className="text-sm text-red-500 text-center mt-2">{error}</div>
+          )}
         </div>
         <button
           type="submit"
-          className="bg-black text-white w-[196px] h-[39] py-2 mx-[265px] mt-[30px] mb-[169px] rounded-[8px] hover:bg-customGray-600 cursor-pointer"
+          className="bg-black text-white w-[196px] h-[39px] py-2 mx-[265px] mt-[30px] mb-[169px] rounded-[8px] hover:bg-customGray-600 cursor-pointer"
         >
           수정 완료
         </button>

@@ -32,9 +32,7 @@ export default function Confirmation() {
   const parsedUserData = JSON.parse(storedUserData || "");
 
   // 숙소 정보 상태
-  const [accommodation, setAccommodation] = useState<Accommodation | null>(
-    null
-  );
+  const [accommodation, setAccommodation] = useState<Accommodation>();
 
   const [userData, setUserData] = useState({
     reserverName: parsedUserData.nickname, // 예약자 이름

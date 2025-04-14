@@ -7,9 +7,9 @@ import SchedulerLinkBannerSection from "@/components/reservation/SchedulerLinkBa
 import TodayReservationSection from "@/components/reservation/TodayReservationSection";
 import Image from "next/image";
 
-import { dummyCards } from "@/dummyData/mateCards";
 import { useEffect, useState } from "react";
 import { fetchAccommodations } from "@/apis/reservation/reservationApi";
+import { fetchMateBoardPosts } from "@/apis/reservation/reservationMateApi";
 
 interface Accommodation {
   id: number;
@@ -22,20 +22,45 @@ interface Accommodation {
 
 export default function Reservation() {
   const [accommodations, setAccommodations] = useState<Accommodation[]>([]);
+  const [mateCards, setMateCards] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function getData() {
+    async function getAccommodationsData() {
       try {
         const data = await fetchAccommodations();
         setAccommodations(data);
       } catch (error) {
-        console.error("데이터 불러오기 실패:", error);
+        console.error("숙소 데이터를 불러오는 데 실패했습니다:", error);
       }
     }
-    getData();
+
+    async function getMateBoardData() {
+      setLoading(true);
+      try {
+        const response = await fetchMateBoardPosts();
+        console.log(response); // 반환된 데이터 확인
+        setMateCards(response.data); // 데이터가 올바른 경우 설정
+      } catch (error) {
+        console.error(
+          "메이트 게시글 데이터를 불러오는 데 실패했습니다:",
+          error
+        );
+        setError("데이터를 불러오는 데 실패했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getAccommodationsData();
+    getMateBoardData();
   }, []);
 
   const todayReservation = accommodations.slice(6, 10);
+
+  if (loading) return <p>로딩 중...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <>
@@ -71,7 +96,7 @@ export default function Reservation() {
       <ReservationlocationCategorySection />
 
       {/* 여행 메이트 섹션 */}
-      <ReservationMateSection cards={dummyCards} />
+      <ReservationMateSection cards={mateCards} />
     </>
   );
 }

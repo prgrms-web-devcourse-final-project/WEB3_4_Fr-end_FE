@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 interface UserInfo {
   id: number;
@@ -10,9 +10,6 @@ interface UserInfo {
   gender: string;
   profileImage: string | null;
   mailingType: boolean;
-  socialType: string | null;
-  bio: string | null;
-  status: string;
 }
 
 interface AuthState {
@@ -22,26 +19,42 @@ interface AuthState {
   setUser: (user: UserInfo) => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
   clearTokens: () => void;
+  checkExpiration: () => boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       accessToken: null,
       refreshToken: null,
       user: null,
       setUser: (user) => set({ user }),
-      setTokens: (accessToken, refreshToken) =>
-        set({ accessToken, refreshToken }),
-      clearTokens: () =>
-        set({
-          accessToken: null,
-          refreshToken: null,
-          user: null,
-        }),
+
+      setTokens: (accessToken, refreshToken) => {
+        const expirationTime = new Date().getTime() + 1000 * 60 * 60;
+        localStorage.setItem("auth-expiration", expirationTime.toString());
+        set({ accessToken, refreshToken });
+      },
+
+      clearTokens: () => {
+        localStorage.removeItem("auth-expiration");
+        set({ accessToken: null, refreshToken: null, user: null });
+      },
+
+      checkExpiration: () => {
+        const now = new Date().getTime();
+        const expiration = localStorage.getItem("auth-expiration");
+
+        if (expiration && now > Number(expiration)) {
+          get().clearTokens();
+          return false;
+        }
+        return true;
+      },
     }),
     {
       name: "auth-storage",
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );

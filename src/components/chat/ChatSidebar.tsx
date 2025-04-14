@@ -22,9 +22,7 @@ export function ChatSidebar({
   };
 
   return (
-    /** 전체 사이드바 컨테이너:  + 세로 스크롤 전체 */
     <div className="w-80 flex flex-col rounded-2xl border border-indigo-300">
-      {/* 상단 영역: 타이틀 + 검색창 */}
       <div className="p-4">
         <h2 className="text-lg font-semibold mb-4 text-center">채팅방 목록</h2>
         <div className="relative">

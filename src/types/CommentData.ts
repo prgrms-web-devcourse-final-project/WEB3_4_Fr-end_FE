@@ -1,8 +1,11 @@
 export interface CommentData {
-  id: number;
-  title: string;
-  author: string;
-  date: string;
+  mateCommentId: number;
+  matePostId: number;
+  matePostTitle: string;
+  authorId: number;
+  nickname: string;
+  profileImageUrl: string;
   content: string;
-  avatar: string;
+  createdAt: string; // ISO Date string
+  modifiedAt: string;
 }

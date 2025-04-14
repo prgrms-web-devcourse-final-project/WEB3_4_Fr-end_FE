@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { IoMdShare } from "react-icons/io";
-import { AiOutlineLike } from "react-icons/ai";
 import { CiLocationOn } from "react-icons/ci";
 import { MdOutlineKingBed } from "react-icons/md";
 import { FaRegClock } from "react-icons/fa6";
@@ -15,6 +14,7 @@ import RoomInfo from "@/components/reservation/RoomInfo";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { fetchAccommodationById } from "@/apis/reservation/reservationApi";
+import toast from "react-hot-toast";
 
 interface Accommodation {
   id: number;
@@ -56,19 +56,11 @@ export default function HouseDetail() {
       {/* 상단 */}
       <div className="flex justify-between items-baseline mt-10">
         <div className="font-bold text-3xl">{accommodation.name}</div>
-        <div className="flex gap-5 font-medium text-customGray-700">
+        <div className="font-medium text-customGray-700">
           <button
             onClick={() => {
-              alert("찜하기 버튼");
-            }}
-            className="flex gap-1 items-center cursor-pointer"
-          >
-            <AiOutlineLike />
-            <div>찜하기</div>
-          </button>
-          <button
-            onClick={() => {
-              alert("공유 버튼");
+              navigator.clipboard.writeText(window.location.href);
+              toast("url이 클립보드에 복사되었습니다");
             }}
             className="flex gap-1 items-center cursor-pointer"
           >
@@ -90,7 +82,7 @@ export default function HouseDetail() {
         <div className="w-full h-112 rounded-r-2xl overflow-hidden grid grid-cols-2 gap-4">
           <div className="size-full relative">
             <Image
-              src={"/reservationImg/testImg.webp"}
+              src={"/reservationImg/subImg1.webp"}
               alt="숙소 서브이미지"
               fill
               objectFit="cover"
@@ -98,7 +90,7 @@ export default function HouseDetail() {
           </div>
           <div className="size-full relative">
             <Image
-              src={"/reservationImg/testImg.webp"}
+              src={"/reservationImg/subImg2.webp"}
               alt="숙소 서브이미지"
               fill
               objectFit="cover"
@@ -106,7 +98,7 @@ export default function HouseDetail() {
           </div>
           <div className="size-full relative">
             <Image
-              src={"/reservationImg/testImg.webp"}
+              src={"/reservationImg/subImg3.webp"}
               alt="숙소 서브이미지"
               fill
               objectFit="cover"
@@ -114,7 +106,7 @@ export default function HouseDetail() {
           </div>
           <div className="size-full relative">
             <Image
-              src={"/reservationImg/testImg.webp"}
+              src={"/reservationImg/subImg4.webp"}
               alt="숙소 서브이미지"
               fill
               objectFit="cover"
@@ -135,15 +127,11 @@ export default function HouseDetail() {
           {/* 숙소 소개 */}
           <div className="font-bold text-2xl mt-10">숙소 소개</div>
           <div className="mt-5">
-            63빌딩의 1.8배 규모인 연면적 30만 3737m2, 높이 169m(38층)를 자랑하는
-            제주 최대 높이, 최대 규모의 랜드마크이다. 제주 고도제한선(55m)보다
-            높이 위치한 1,600 올스위트 객실, 월드클래스 셰프들이 포진해 있는
-            14개의 글로벌 레스토랑 & 바, 인피니티 풀을 포함한 8층 야외풀데크,
-            38층 스카이데크를 비롯해 HAN컬렉션 K패션 쇼핑몰, 2개의 프리미엄
-            스파, 8개의 연회장 등 라스베이거스, 싱가포르, 마카오에서나 볼 수
-            있는 세계적인 수준의 복합리조트이다. 제주국제공항에서 차량으로
-            10분거리(5km)이며 제주의 강남이라고 불리는 신제주 관광 중심지에
-            위치하고 있다.
+            조용한 휴식과 편안함을 모두 갖춘 공간에서 특별한 하루를 보내보세요.
+            <br />
+            깔끔한 시설과 아늑한 분위기로 여행의 피로를 잊게 해드립니다.
+            <br />
+            여유로운 여행을 위한 최적의 숙소, 지금 바로 만나보세요.
           </div>
 
           {/* 숙소 정보 */}
@@ -229,7 +217,14 @@ export default function HouseDetail() {
 
           {/* 객실 정보 */}
           <div className="font-bold text-2xl mt-10">객실 정보</div>
-          <RoomInfo />
+          <RoomInfo
+            imageUrl="/reservationImg/Room1.webp"
+            roomName="스탠다드 더블"
+          />
+          <RoomInfo
+            imageUrl="/reservationImg/Room2.webp"
+            roomName="슈페리얼 트윈"
+          />
         </div>
 
         {/* 우측 예약 블록 */}

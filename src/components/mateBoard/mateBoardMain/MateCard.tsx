@@ -69,13 +69,13 @@ export default function MateCard({ data }: { data: MateCardData }) {
         </div>
         <div className="flex items-center gap-x-3 text-sm">
           <LikeButton
-            count={5}
+            count={data.likeCount}
             onclick={(e) => {
               e.stopPropagation();
               alert("좋아요 완료");
             }}
           />
-          <CommentCount count={2} />
+          <CommentCount count={data.commentCount} />
         </div>
       </div>
 

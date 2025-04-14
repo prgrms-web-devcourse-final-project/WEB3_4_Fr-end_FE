@@ -1,6 +1,9 @@
 import apiClient from "@/config/axiosConfig";
+import { PostApplicationResponse } from "@/types/mateBoard/PostApplicationResponse";
 
-export const postApplication = async (postId: number) => {
+export const postApplication = async (
+  postId: number
+): Promise<PostApplicationResponse> => {
   try {
     console.log("동행신청 postId:", postId);
     const response = await apiClient.post(

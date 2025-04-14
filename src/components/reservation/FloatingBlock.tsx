@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 interface FloatingReservationBlockProps {
   id: number;
@@ -39,7 +40,7 @@ export default function FloatingReservationBlock({
       }).toString();
       router.push(`/reservation/confirmation?${query}`);
     } else {
-      alert("체크인 및 체크아웃 날짜를 선택해주세요.");
+      toast("체크인 및 체크아웃 날짜를 선택해주세요.");
     }
   };
 
