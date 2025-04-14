@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -16,19 +16,28 @@ const Header: React.FC = () => {
   const userId = useAuthStore((state) => state.user?.id);
   const isLoggedIn = !!accessToken;
 
+  const isLoginPage = pathname === "/auth/login";
+  const isMainPage = pathname === "/";
+
+  const [searchQuery, setSearchQuery] = useState("");
+
   useEffect(() => {
     if (pathname === "/auth/login") return;
     setIconPath(pathname === "/" ? "/svg" : "/icons");
   }, [pathname]);
 
-  if (pathname === "/auth/login") return null;
-
-  const isMainPage = pathname === "/";
-  const textColor = isMainPage ? "text-customGray-100" : "text-[#1a1a1a]";
-  const outlineColor = isMainPage
-    ? "outline-customGray-100"
-    : "outline-[#202020]";
-  const logoColor = isMainPage ? "/logo/white2.png" : "/logo/blue.png";
+  const textColor = useMemo(
+    () => (isMainPage ? "text-customGray-100" : "text-[#1a1a1a]"),
+    [isMainPage]
+  );
+  const outlineColor = useMemo(
+    () => (isMainPage ? "outline-customGray-100" : "outline-[#202020]"),
+    [isMainPage]
+  );
+  const logoColor = useMemo(
+    () => (isMainPage ? "/logo/white2.png" : "/logo/blue.png"),
+    [isMainPage]
+  );
 
   const handleScheduleClick = async () => {
     if (!userId) return;
@@ -44,8 +53,18 @@ const Header: React.FC = () => {
       }
     } catch (err) {
       console.error("캘린더 이동 실패:", err);
+      alert("캘린더 정보를 불러오지 못했습니다. 다시 시도해주세요.");
     }
   };
+
+  const navItems = [
+    { text: "홈으로", href: "/" },
+    { text: "숙소 예약", href: "/reservation" },
+    { text: "Schedule", onClick: handleScheduleClick },
+    { text: "메이트 찾기", href: "/mateBoard" },
+  ];
+
+  if (isLoginPage) return null;
 
   return (
     <>
@@ -65,24 +84,40 @@ const Header: React.FC = () => {
           <Link href="/">
             <Image src={logoColor} alt="Logo" width={110} height={50} />
           </Link>
+
           <div className="py-2.5 flex justify-start items-center gap-[27px]">
-            <div
+            {/* 검색창을 form으로 구성 */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const trimmed = searchQuery.trim();
+                if (trimmed) {
+                  router.push(
+                    `/reservation/search?title=${encodeURIComponent(
+                      trimmed
+                    )}&page=1`
+                  );
+                }
+              }}
               className={`w-[364px] h-[31px] px-4 py-[5px] rounded-[30px] outline-1 outline-offset-[-1px] ${outlineColor} flex justify-between items-center`}
             >
-              <div className="w-[138px] flex justify-between items-end">
-                <div
-                  className={`justify-start ${textColor} text-[13px] font-normal font-['Pretendard']`}
-                >
-                  어디로 떠나고 싶으신가요?
-                </div>
-              </div>
-              <Image
-                src={`${iconPath}/renz.svg`}
-                alt="search"
-                width={16}
-                height={16}
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="어디로 떠나고 싶으신가요?"
+                className={`w-full bg-transparent border-none focus:outline-none ${textColor} text-[13px] font-normal font-['Pretendard'] placeholder:${textColor}`}
               />
-            </div>
+              <button type="submit">
+                <Image
+                  src={`${iconPath}/renz.svg`}
+                  alt="search"
+                  width={16}
+                  height={16}
+                  className="cursor-pointer"
+                />
+              </button>
+            </form>
 
             <div className="flex justify-start items-center gap-[27px]">
               <div
@@ -111,9 +146,7 @@ const Header: React.FC = () => {
               <div className="w-[21px] h-[21px] relative">
                 <Link href={isLoggedIn ? "/myPage" : "/auth/login"}>
                   <Image
-                    src={`${iconPath}/${
-                      isLoggedIn ? "user.svg" : "login.png"
-                    }`}
+                    src={`${iconPath}/${isLoggedIn ? "user.svg" : "login.png"}`}
                     alt="user"
                     width={20}
                     height={20}
@@ -123,34 +156,19 @@ const Header: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="flex justify-start items-center w-full max-w-[1980px] h-[52px] px-2.5 gap-[30px] mx-auto">
-          {["홈으로", "숙소 예약", "Schedule", "메이트 찾기"].map(
-            (text, idx) => {
-              const hrefs = ["/", "/reservation", "", "/mateBoard"];
-
-              if (text === "Schedule") {
-                return (
-                  <div
-                    key={text}
-                    onClick={handleScheduleClick}
-                    className={`justify-start ${textColor} text-base font-semibold font-['Pretendard'] cursor-pointer`}
-                  >
-                    {text}
-                  </div>
-                );
-              }
-
-              return (
-                <div
-                  key={text}
-                  className={`justify-start ${textColor} text-base font-semibold font-['Pretendard']`}
-                >
-                  <Link href={hrefs[idx]}>{text}</Link>
-                </div>
-              );
-            }
-          )}
+          {navItems.map(({ text, href, onClick }) => (
+            <div
+              key={text}
+              className={`justify-start ${textColor} text-base font-semibold font-['Pretendard'] ${
+                onClick ? "cursor-pointer" : ""
+              }`}
+              {...(onClick ? { onClick } : {})}
+            >
+              {href ? <Link href={href}>{text}</Link> : text}
+            </div>
+          ))}
         </div>
       </header>
     </>

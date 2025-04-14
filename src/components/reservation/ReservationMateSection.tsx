@@ -42,7 +42,7 @@ export default function ReservationMateSection({
         >
           {cards.map((card, index) => (
             <SwiperSlide key={index}>
-              <MateCard key={card.id} data={card} />
+              <MateCard key={card.matePostId} data={card} />
             </SwiperSlide>
           ))}
         </Swiper>

@@ -1,19 +1,26 @@
+"use client";
+
 import Image from "next/image";
 
-export default function RoomInfo() {
+interface RoomInfoProps {
+  imageUrl: string;
+  roomName: string;
+}
+
+export default function RoomInfo({ imageUrl, roomName }: RoomInfoProps) {
   return (
     <>
       <div className="mt-5 flex gap-8 items-center mb-20">
         <div className="size-[302px] relative overflow-hidden rounded-2xl flex-shrink-0">
           <Image
-            src={"/reservationImg/testImg.webp"}
+            src={imageUrl || "/reservationImg/testImg.webp"}
             alt="객실 이미지"
             fill
             objectFit="cover"
           />
         </div>
         <div className="w-full">
-          <div className="font-semibold text-3xl">130m² 그랜드 스위트 트윈</div>
+          <div className="font-semibold text-3xl">{roomName}</div>{" "}
           <div className="text-customGray-600 mt-2 mb-3 h-12 border-b border-customGray-400">
             ※ 객실 가격 전화문의 요망
           </div>

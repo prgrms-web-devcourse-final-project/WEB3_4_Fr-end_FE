@@ -4,6 +4,7 @@ import { fetchAccommodationById } from "@/apis/reservation/reservationApi";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FaRegClock } from "react-icons/fa6";
 import { LuUserRound } from "react-icons/lu";
 
@@ -43,10 +44,10 @@ export default function Payment() {
   const applyCoupon = () => {
     if (couponCode === VALID_COUPON) {
       setDiscountAmount(10000); // 할인 금액 설정 (10,000원)
-      alert("쿠폰이 적용되었습니다!");
+      toast("쿠폰이 적용되었습니다!");
     } else {
       setDiscountAmount(0); // 할인 금액 초기화
-      alert("유효하지 않은 쿠폰 코드입니다.");
+      toast("유효하지 않은 쿠폰 코드입니다.");
     }
   };
 
@@ -69,11 +70,11 @@ export default function Payment() {
 
     // 필수 데이터 검증
     if (!userName || !userPhone || !accommodation) {
-      alert("결제를 진행하기 위해 필요한 정보가 누락되었습니다.");
+      toast("결제를 진행하기 위해 필요한 정보가 누락되었습니다.");
       return;
     }
     if (totalAmount <= 0) {
-      alert("결제 금액이 0원 이하입니다. 예약 정보를 확인해주세요.");
+      toast("결제 금액이 0원 이하입니다. 예약 정보를 확인해주세요.");
       return;
     }
 
@@ -83,8 +84,9 @@ export default function Payment() {
       accommodationName: accommodation.name, // 숙소 이름
       accommodationAddress: accommodation.location, // 숙소 주소
       accommodationImage: accommodation.mainImage, // 숙소 이미지
-      checkIn: checkIn || "", // 체크인 날짜
-      checkOut: checkOut || "", // 체크아웃 날짜
+      checkInDate: checkIn || "", // 체크인 날짜
+      checkOutDate: checkOut || "", // 체크아웃 날짜
+      checkInTime: accommodation.checkInTime || "", // 체크인 시간
       guestCount: people || "", // 예약 인원 수
       totalPrice: totalAmount, // 총 결제 금액
     };
@@ -107,8 +109,9 @@ export default function Payment() {
           accommodation_name: accommodation.name, // 숙소 이름
           accommodation_address: accommodation.location, // 숙소 주소
           accommodation_image: accommodation.mainImage, // 숙소 이미지
-          check_in: checkIn || "", // 체크인 날짜
-          check_out: checkOut || "", // 체크아웃 날짜
+          check_in_date: checkIn || "", // 체크인 날짜
+          check_out_date: checkOut || "", // 체크아웃 날짜
+          check_in_time: accommodation.checkInTime, // 체크인 시간
           guest_count: people || "", // 예약 인원 수
           total_price: totalAmount, // 총 결제 금액
           merchant_uid: `mid_${new Date().getTime()}`, // 주문 고유 ID
@@ -129,26 +132,35 @@ export default function Payment() {
         });
 
         if (rsp.success) {
-          alert("결제가 완료되었습니다!");
+          toast("결제가 완료되었습니다!");
           console.log("결제 성공:", rsp);
 
           try {
+            // 전송할 데이터를 변수로 추출
+            const payload = {
+              imp_uid: rsp.imp_uid,
+              merchant_uid: rsp.merchant_uid,
+              payMethod: rsp.pay_method,
+              pgProvider: rsp.pg_provider,
+              pgTid: rsp.pg_tid,
+              paidAmount: rsp.paid_amount,
+              currency: "KRW",
+              status: rsp.status,
+              paid_at: rsp.paid_at,
+              receiptUrl: rsp.receipt_url,
+              custom_data: simplifiedCustomData,
+            };
+
+            // 전송할 데이터를 콘솔에 출력
+            console.log("API로 보낼 데이터:", payload);
+
+            // API 호출
             const response = await axios.post(
-              "http://api.sete.kr:8080/api/bookings/complete",
-              {
-                imp_uid: rsp.imp_uid,
-                merchant_uid: rsp.merchant_uid,
-                payMethod: rsp.pay_method,
-                pgProvider: rsp.pg_provider,
-                pgTid: rsp.pg_tid,
-                paidAmount: rsp.paid_amount,
-                currency: "KRW",
-                status: rsp.status,
-                paid_at: rsp.paid_at,
-                receiptUrl: rsp.receipt_url,
-                custom_data: simplifiedCustomData,
-              }
+              "http://api.sete.kr:8080/api/v1/bookings/complete",
+              payload
             );
+
+            // API 응답 결과 출력
             console.log("API 응답:", response.data);
           } catch (error) {
             console.error("API 호출 중 오류", error);
