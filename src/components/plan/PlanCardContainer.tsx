@@ -51,13 +51,15 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
   const dateList = getDatesInRange(startDate, endDate);
 
   useEffect(() => {
-    // ✅ 조건을 만족하지 않으면 아예 실행하지 않도록
-    if (dailyTravels.length === 0 || scheduleDayIds.length === 0) return;
+    if (
+      hasGenerated.current ||
+      dailyTravels.length === 0 ||
+      scheduleDayIds.length === 0 ||
+      dateList.length === 0
+    )
+      return;
   
-    // ✅ 조건 만족했는데 hasGenerated이 이미 true면 재생성 방지
-    if (hasGenerated.current) return;
-  
-    let currentNextId = nextId;
+    let currentNextId = 1;
     const newCardsMap: Record<string, CardData[]> = {};
   
     dailyTravels.forEach((day) => {
