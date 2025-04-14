@@ -7,19 +7,21 @@ export const addNewCalendar = async (
 ) => {
   try {
     const created = await createCalendar("캘린더");
-    setItems(prev => [...prev, {
-      id: created.id.toString(),
-      label: created.calendarTitle,
-      shareOpen: false,
-      userId: created.userId.toString(), 
-    }]);
+    setItems(prev => [
+      ...prev,
+      {
+        id: created.id.toString(),
+        label: created.calendarTitle,
+        shareOpen: false,
+        userId: created.userId.toString(),
+      },
+    ]);
   } catch (err) {
     console.error(err);
     toast.error("캘린더 생성에 실패했습니다.");
   }
 };
 
-// 📌 캘린더 삭제
 export const deleteCalendar = async (
   id: string,
   setItems: React.Dispatch<React.SetStateAction<NavItem[]>>
@@ -33,7 +35,6 @@ export const deleteCalendar = async (
   }
 };
 
-// 📌 캘린더 이름 수정
 export const editCalendarTitle = async (
   id: string,
   newLabel: string,
@@ -62,7 +63,6 @@ export const editCalendarTitle = async (
   }
 };
 
-// URL 복사
 export const copyCalendarUrl = async (id: string) => {
   try {
     const url = `${window.location.origin}/calendar/${id}`;

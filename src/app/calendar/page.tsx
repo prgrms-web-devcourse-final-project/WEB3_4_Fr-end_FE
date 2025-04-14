@@ -1,35 +1,80 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { fetchCalendars } from '@/apis/Schedule/CalendarNav';
-import { useAuthStore } from '@/store/useAuthStore';
+import { useParams, useRouter } from "next/navigation";
+import React, { useState } from "react";
+import CalendarNav from "@/components/calendar/CalendarNav";
+import CalendarMain from "@/components/calendar/CalendarMain";
+import CalendarModal from "@/components/calendar/CalendarModal";
+import { handleAddNewEvent } from "@/utils/calendarEventHandlers";
+import type { DateClickArg } from "@fullcalendar/interaction";
+import type { EventClickArg } from "@fullcalendar/core";
+import type { CalendarEvent } from "@/types/Scheduleindex";
 
-export default function CalendarRedirectPage() {
+export default function CalendarPage() {
+  const { id } = useParams();
+  const calendarId = id as string;
   const router = useRouter();
-  const userId = useAuthStore((state) => state.user?.id);
 
-  useEffect(() => {
-    const redirectToFirstCalendar = async () => {
-      if (!userId) return;
-  
-      const calendarList = await fetchCalendars();
-      const myCalendars = calendarList.filter(
-        (item) => `${item.userId}` === `${userId}`
-      );
-  
-      if (myCalendars.length > 0) {
-        const firstId = myCalendars[0].id;
-        router.replace(`/calendar/${firstId}`);
-      } else {
-        router.replace('/calendar/empty');
-      }
-    };
-  
-    redirectToFirstCalendar();
-  }, [userId, router]); // ✅ 여기만 추가해주면 끝!
-  
-    
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [eventTitle, setEventTitle] = useState("");
+  const [eventColor, setEventColor] = useState("#3b82f6");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
-  return <div className="p-6 text-gray-700">캘린더를 불러오는 중입니다...</div>;
+  const dateClick = (arg: DateClickArg) => {
+    setStartDate(arg.dateStr);
+    setEndDate(arg.dateStr);
+    setIsModalOpen(true);
+  };
+
+  const eventClick = (clickInfo: EventClickArg) => {
+    router.push(`/calendar/${calendarId}/${clickInfo.event.id}`);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEventTitle("");
+    setStartDate("");
+    setEndDate("");
+    setEventColor("#3b82f6");
+  };
+
+  const addNewEvent = () => {
+    handleAddNewEvent(
+      calendarId,
+      eventTitle,
+      eventColor,
+      startDate,
+      endDate,
+      closeModal,
+      setEvents
+    );
+  };
+
+  return (
+    <div className="flex h-screen">
+      <CalendarNav />
+      <div className="flex-1 relative">
+        <CalendarMain
+          events={events}
+          onDateClick={dateClick}
+          onEventClick={eventClick}
+        />
+        <CalendarModal
+          isOpen={isModalOpen}
+          eventTitle={eventTitle}
+          setEventTitle={setEventTitle}
+          eventColor={eventColor}
+          setEventColor={setEventColor}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          addNewEvent={addNewEvent}
+          closeModal={closeModal}
+        />
+      </div>
+    </div>
+  );
 }
