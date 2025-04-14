@@ -51,16 +51,20 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
   const dateList = getDatesInRange(startDate, endDate);
 
   useEffect(() => {
-    if (hasGenerated.current || dailyTravels.length === 0 || scheduleDayIds.length === 0) return;
-
+    // ✅ 조건을 만족하지 않으면 아예 실행하지 않도록
+    if (dailyTravels.length === 0 || scheduleDayIds.length === 0) return;
+  
+    // ✅ 조건 만족했는데 hasGenerated이 이미 true면 재생성 방지
+    if (hasGenerated.current) return;
+  
     let currentNextId = nextId;
     const newCardsMap: Record<string, CardData[]> = {};
-
+  
     dailyTravels.forEach((day) => {
       const dayIndex = scheduleDayIds.indexOf(day.scheduleDayId);
       const date = dateList[dayIndex];
       if (!date) return;
-
+  
       newCardsMap[date] = day.travels.map((travel) => ({
         id: currentNextId++,
         placeName: travel.place_name,
@@ -76,11 +80,11 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
         },
       }));
     });
-
+  
     setCardsMap(newCardsMap);
     setNextId(currentNextId);
     hasGenerated.current = true;
-  }, [dailyTravels, scheduleDayIds]);
+  }, [dailyTravels, scheduleDayIds, dateList]);
 
   useEffect(() => {
     const date = dateList[activeDayIndex];
