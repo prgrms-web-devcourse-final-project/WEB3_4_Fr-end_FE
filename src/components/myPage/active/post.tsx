@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import dayjs from "dayjs";
+import { convertRegionToKorean } from "@/lib/myPage/covertRegion";
+import { useRouter } from "next/navigation";
 
 interface TravelPost {
   id: number;
@@ -21,10 +23,18 @@ interface PostProps {
 export default function Post({ posts }: PostProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = 9;
+  const router = useRouter();
   console.log(posts);
 
   const currentPosts = posts.slice(0, currentPage * postsPerPage);
   const totalPages = Math.ceil(posts.length / postsPerPage);
+  if (posts.length === 0) {
+    return (
+      <div className="text-sm text-gray-500 mt-4">
+        작성한 게시글이 없습니다.
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -33,18 +43,22 @@ export default function Post({ posts }: PostProps) {
           const start = dayjs(post.startDate);
           const end = dayjs(post.endDate);
           const duration = end.diff(start, "day") + 1;
-          const formatted = `${start.format(`YY.MM.DD`)} - ${end.format(
-            `YY.MM.DD`
+          const formatted = `${start.format("YY.MM.DD")} - ${end.format(
+            "YY.MM.DD"
           )} (${duration}일)`;
-          console.log("post 이미지:", post.img);
 
           return (
             <div
-              key={`/${post.id}`}
-              className="w-[210px] min-h-[260px] bg-white outline outline-customGray-400 rounded-[16px] flex-col"
+              key={post.id}
+              onClick={() => router.push(`/mateBoard/detail/${post.id}`)}
+              className="w-[210px] min-h-[260px] bg-white outline outline-customGray-400 rounded-[16px] flex-col cursor-pointer"
             >
               <Image
-                src={post.img}
+                src={
+                  post.img
+                    ? post.img
+                    : "/myReservation/apartment-406901_1280.jpg"
+                }
                 alt={post.title}
                 width={210}
                 height={181}
@@ -52,9 +66,9 @@ export default function Post({ posts }: PostProps) {
               />
               <div className="px-[20px] pb-[20px] flex-col justify-start items-start gap-[5px]">
                 <div className="font-bold text-[13px] font-pretendard text-customGray-700">
-                  {post.city}
+                  {convertRegionToKorean(post.city)}
                 </div>
-                <div className="font-semibold text-black text-[16px]">
+                <div className="font-semibold text-black text-[16px] truncate w-full">
                   {post.title}
                 </div>
                 <div className="flex items-center">
@@ -74,6 +88,7 @@ export default function Post({ posts }: PostProps) {
           );
         })}
       </div>
+
       {currentPage < totalPages && (
         <div
           onClick={() => setCurrentPage((prev) => prev + 1)}
