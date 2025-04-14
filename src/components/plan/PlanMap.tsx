@@ -20,11 +20,9 @@ const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
           mapRef.current = new window.kakao.maps.Map(mapContainerRef.current, options);
         }
       });
-    } else {
-      console.error("SDK가 로드되지 않았습니다");
     }
   }, []);
-  
+
   useEffect(() => {
     if (!mapRef.current) return;
 

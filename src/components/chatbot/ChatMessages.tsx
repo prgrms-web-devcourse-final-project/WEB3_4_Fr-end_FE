@@ -12,21 +12,18 @@ interface ChatMessagesProps {
 }
 
 export function ChatMessages({ messages, isTyping }: ChatMessagesProps) {
-  const chatRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
   let lastDate: string | null = null;
 
-  // 새 메시지 생기면 스크롤 맨 아래로
   useEffect(() => {
-    if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
   return (
-    <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+    <div className="flex-1 overflow-y-auto p-4 space-y-4">
       {messages.map((message) => {
         const messageDate = format(
-          new Date(Date.now()), // 채팅창 상단 날짜표시
+          new Date(message.timestamp),
           "yyyy년 MM월 dd일 EEEE",
           { locale: ko }
         );
@@ -53,6 +50,8 @@ export function ChatMessages({ messages, isTyping }: ChatMessagesProps) {
           <div className="animate-bounce delay-200">●</div>
         </div>
       )}
+
+      <div ref={bottomRef} />
     </div>
   );
 }
