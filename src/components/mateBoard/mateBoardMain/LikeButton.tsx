@@ -25,14 +25,12 @@ export default function LikeButton({
   const [liked, setLiked] = useState(initialLiked);
   const [likeCount, setLikeCount] = useState(count ?? 0);
 
-  // 부모에서 전달받은 postLikeData와 userId에 변화가 생기면 liked 상태를 다시 계산합니다.
   useEffect(() => {
     const newLiked =
       postLikeData?.some((like) => like.authorId === userId) ?? false;
     setLiked(newLiked);
   }, [postLikeData, userId]);
 
-  // count 값이 변경되면 likeCount 상태도 업데이트합니다.
   useEffect(() => {
     setLikeCount(count ?? 0);
   }, [count]);
