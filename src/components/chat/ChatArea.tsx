@@ -87,10 +87,8 @@ const sampleMessages: ChatMessage[] = [
 
 export function ChatArea({ selectedChat }: ChatAreaProps) {
   const [messages, setMessages] = useState<ChatMessage[]>(sampleMessages);
-  // 채팅 메시지 영역에 대한 ref
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // 메시지가 업데이트될 때마다 채팅 영역의 scrollTop을 최신 높이로 설정하여 자동 스크롤
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -109,7 +107,6 @@ export function ChatArea({ selectedChat }: ChatAreaProps) {
   return (
     <div className="flex-1 flex flex-col rounded-2xl border border-indigo-300">
       <ChatHeader chat={selectedChat} />
-      {/* 채팅 메시지 영역에 ref를 지정하고, overflow-y-auto로 스크롤 가능하게 함 */}
       <div
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto p-4 space-y-4"
@@ -169,7 +166,7 @@ export function ChatArea({ selectedChat }: ChatAreaProps) {
               sender: {
                 id: "1",
                 name: "You",
-                avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=You",
+                avatar: "/defaultAvatar/60.png",
                 status: "online",
               },
               timestamp: new Date().toLocaleTimeString([], {
