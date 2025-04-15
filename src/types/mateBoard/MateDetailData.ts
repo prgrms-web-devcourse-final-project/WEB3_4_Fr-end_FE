@@ -1,3 +1,12 @@
+interface PostLike {
+  authorId: number;
+  matePostId: number;
+}
+
+interface MateApplication {
+  authorId: number;
+  matePostId: number;
+}
 export type MateDetailData = {
   matePostId: number;
   authorId: number;
@@ -16,4 +25,6 @@ export type MateDetailData = {
   createdAt: string;
   imageUrl: string;
   bio: string | null;
+  postLike: PostLike[];
+  mateApplications: MateApplication[];
 };

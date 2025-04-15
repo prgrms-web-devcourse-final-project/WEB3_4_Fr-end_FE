@@ -27,7 +27,7 @@ export default async function MateDetailPage({ params }: MateDetailPageProps) {
       </div>
       <div className="mb-15 flex gap-4 items-center justify-center">
         <ApplyButton data={data} />
-        <LikeButtonInfo postId={id} />
+        <LikeButtonInfo data={data} />
       </div>
       <div className="mb-10 flex justify-center items-center">
         <div className="w-full max-w-5xl">

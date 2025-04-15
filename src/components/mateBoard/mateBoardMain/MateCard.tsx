@@ -65,15 +65,12 @@ export default function MateCard({ data }: { data: MateCardData }) {
         <div className="flex items-center text-sm text-muted-foreground">
           <CalendarIcon className="w-4 h-4 mr-2" />
           {data.travelStartDate} - {data.travelEndDate}
-          {/* {data.period.durationText}) */}
         </div>
         <div className="flex items-center gap-x-3 text-sm">
           <LikeButton
             count={data.likeCount}
-            onclick={(e) => {
-              e.stopPropagation();
-              alert("좋아요 완료");
-            }}
+            postLikeData={data.postLike}
+            matePostId={data.matePostId}
           />
           <CommentCount count={data.commentCount} />
         </div>
