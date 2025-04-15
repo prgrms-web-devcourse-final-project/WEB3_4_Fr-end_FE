@@ -19,6 +19,7 @@ export default function ApplyButton({ data }: { data: MateDetailData }) {
   const userId = useAuthStore((state) => state.user?.id);
   const authorId = data.authorId;
   const isAuthor = userId === authorId;
+  const isClosed = data.recruitmentStatus === "CLOSED";
   const initialApplied =
     data.mateApplications?.some((applied) => applied.authorId === userId) ??
     false;
@@ -80,6 +81,7 @@ export default function ApplyButton({ data }: { data: MateDetailData }) {
     <Button
       type="submit"
       onClick={handleApply}
+      disabled={isClosed}
       className="p-5 w-30 text-[16px] cursor-pointer hover:bg-customGray-700 focus:outline-2"
     >
       {applied ? "신청 취소" : "동행 신청"}
