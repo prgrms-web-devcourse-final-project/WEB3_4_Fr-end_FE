@@ -1,3 +1,8 @@
+export interface CommentLikeType {
+  authorId: number;
+  commentId: number;
+}
+
 export interface MateComment {
   mateCommentId: number;
   matePostId: number;
@@ -8,4 +13,5 @@ export interface MateComment {
   likeCount: number;
   createdAt: string;
   modifiedAt: string;
+  commentLike: CommentLikeType[];
 }

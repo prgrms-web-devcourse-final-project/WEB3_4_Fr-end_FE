@@ -113,6 +113,14 @@ export default function MateWritingForm() {
           {/* 이미지 업로드 및 미리보기 영역 */}
           <div className="space-y-2">
             {/* 새 이미지 미리보기: 파일이 선택된 경우 */}
+            <div>
+              <label
+                htmlFor="fileInput"
+                className="cursor-pointer text-[20px] font-bold mb-2"
+              >
+                이미지첨부
+              </label>
+            </div>
             {selectedFile && (
               <div>
                 <p>이미지 미리보기:</p>

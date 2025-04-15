@@ -50,7 +50,9 @@ export default function MateDetailInfo({ data }: MateDetailPageProps) {
           👥 모집인원 및 선호성별
         </div>
         <div className="text-[20px] text-customGray-600 ">
-          모집인원 : {data.recruitCount}명
+          {data.recruitmentStatus === "CLOSED"
+            ? "모집완료"
+            : `모집인원 : ${data.recruitCount}명`}
         </div>
         <div className="text-[20px] text-customGray-600 ">
           선호성별 : {getGenderLabel(data.mateGender)}
