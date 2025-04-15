@@ -27,13 +27,13 @@ export default function MateCard({ data }: { data: MateCardData }) {
         <div
           className={`text-sm font-medium rounded-md px-3 py-1 w-fit
     ${
-      data.recruitCount === 0
+      data.recruitCount === 0 || data.recruitmentStatus === "CLOSED"
         ? "text-customPink-300 bg-white"
         : "text-customGreen-200 bg-white"
     }
   `}
         >
-          {data.recruitCount === 0
+          {data.recruitCount === 0 || data.recruitmentStatus === "CLOSED"
             ? "모집완료"
             : `${data.recruitCount}명 모집 중`}
         </div>
