@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { HeartIcon, Trash2Icon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 import { MateComment } from "@/types/mateBoard/MateComment";
 import { useAuthStore } from "@/store/useAuthStore";
 import { timeStamp } from "@/utils/timeStamp";
 import { deleteComment } from "@/apis/mateBoard/deleteComment";
 import ConfirmModal from "@/components/mateBoard/common/ConfirmModal";
 import { useState } from "react";
+import CommentLike from "@/components/mateBoard/mateBoardDetail/CommentLike";
 
 export default function CommentCard({
   comment,
@@ -30,7 +31,7 @@ export default function CommentCard({
     setModalPosition({ x: e.clientX, y: e.clientY });
     setIsModalOpen(true);
   };
-  
+
   const handleDelete = async () => {
     try {
       const response = await deleteComment(matePostId, mateCommentId);
@@ -69,12 +70,11 @@ export default function CommentCard({
         </div>
 
         <div className="flex gap-2">
-          <span className="text-gray-800 text-sm font-semibold -mr-1">
-            {comment.likeCount || 0}
-          </span>
-          <button className="text-gray-400  transition cursor-pointer">
-            <HeartIcon className="w-5 h-5 fill-red-500 stroke-0" />
-          </button>
+          <CommentLike
+            commentLikeData={comment.commentLike}
+            postId={matePostId}
+            commentId={comment.mateCommentId}
+          />
           {userId === authorId && (
             <button
               onClick={handleModalOpen}

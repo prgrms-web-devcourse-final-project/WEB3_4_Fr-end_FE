@@ -76,7 +76,11 @@ export default function CompleteProfilePage() {
 
       window.removeEventListener("beforeunload", handleBeforeUnload);
 
-      await api.patch("/api/v1/user/me/first-info", payload);
+      await api.patch("/api/v1/user/me/first-info", payload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       router.push("/");
     } catch (err) {
       console.error("추가 정보 제출 실패", err);

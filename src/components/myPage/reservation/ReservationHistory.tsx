@@ -4,27 +4,43 @@ import { useEffect, useState } from "react";
 import MyReservationPastCard from "./MyReservationPastCard";
 import Link from "next/link";
 import MyReservationCurrentCard from "./MyReservationCurrentCard";
-import {
-  dummyPastContents,
-  dummyCurrentContents,
-} from "@/dummyData/MyReservation";
 import api from "@/lib/auth/axios";
+import { Booking } from "@/types/myPage/booking";
+
+interface BookingResponse {
+  upcoming: Booking[];
+  pastOrCanceled: Booking[];
+}
 
 export default function ReservationHistory() {
+  const [reservationData, setReservationData] = useState<BookingResponse>({
+    upcoming: [],
+    pastOrCanceled: [],
+  });
   const [visiblePastCount, setVisiblePastCount] = useState(3);
   const [visibleCurrentCount, setVisibleCurrentCount] = useState(3);
 
-  // useEffect(() => {
-  //   const fetchReservation = async () => {
-  //     try {
-  //       const res = await api.get("/api/v1/booking/mypage");
-  //       console.log(res.data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   fetchReservation();
-  // }, []);
+  const fetchReservation = async () => {
+    try {
+      const res = await api.get<BookingResponse>("/api/v1/bookings/mypage");
+      setReservationData(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchReservation();
+  }, []);
+
+  const upcoming = reservationData.upcoming;
+  const pastOrCanceled = reservationData.pastOrCanceled;
+
+  const visibleCurrentItems = upcoming.slice(0, visibleCurrentCount);
+  const visiblePastItems = pastOrCanceled.slice(0, visiblePastCount);
+  const hasCurrentMore = visibleCurrentCount < upcoming.length;
+  const hasPastMore = visiblePastCount < pastOrCanceled.length;
 
   const handlePastLoadMore = () => {
     setVisiblePastCount((prev) => prev + 3);
@@ -34,20 +50,12 @@ export default function ReservationHistory() {
     setVisibleCurrentCount((prev) => prev + 3);
   };
 
-  const visibleCurrentItems = dummyCurrentContents.slice(
-    0,
-    visibleCurrentCount
-  );
-  const visiblePastItems = dummyPastContents.slice(0, visiblePastCount);
-  const hasCurrentMore = visibleCurrentCount < dummyCurrentContents.length;
-  const hasPastMore = visiblePastCount < dummyPastContents.length;
-
   return (
     <div className="w-[726px] min-h-[763px] flex-col">
       <div className="font-bold text-[28px] font-[pretendard] mb-[21px]">
         내 예약 내역
       </div>
-      {!dummyCurrentContents || dummyCurrentContents.length === 0 ? (
+      {upcoming.length === 0 ? (
         <div className="w-[726px] bg-customGray-100 px-[25px] py-[30px] rounded-[4px]">
           <p className="font-semibold text-[16px] font-[pretendard]">
             예정된 여행이 없습니다.
@@ -63,7 +71,11 @@ export default function ReservationHistory() {
       ) : (
         <>
           {visibleCurrentItems.map((item) => (
-            <MyReservationCurrentCard key={item.id} item={item} />
+            <MyReservationCurrentCard
+              key={item.bookingId}
+              item={item}
+              onCancelSuccess={fetchReservation}
+            />
           ))}
           {hasCurrentMore && (
             <div
@@ -83,7 +95,11 @@ export default function ReservationHistory() {
           이용완료 및 예약 취소
         </div>
         {visiblePastItems.map((item) => (
-          <MyReservationPastCard key={item.id} item={item} />
+          <MyReservationPastCard
+            key={item.bookingId}
+            item={item}
+            onDeleteSuccess={fetchReservation}
+          />
         ))}
       </div>
       {hasPastMore && (

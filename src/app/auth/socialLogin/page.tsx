@@ -8,19 +8,13 @@ import { useAuthStore } from "@/store/useAuthStore";
 export default function SocialLogin() {
   const searchParams = useSearchParams();
   const code = searchParams.get("code");
+  const socialType =
+    searchParams.get("socialType") ??
+    (typeof window !== "undefined" ? localStorage.getItem("socialType") : null);
   const router = useRouter();
   const setTokens = useAuthStore((state) => state.setTokens);
-  const [dotCount, setDotCount] = useState<number>(1);
   const setUser = useAuthStore((state) => state.setUser);
-  const [socialType, setSocialType] = useState<string>("GOOGLE");
-
-  useEffect(() => {
-    const typeFromParams = searchParams.get("socialType");
-    const typeFromStorage =
-      typeof window !== "undefined" ? localStorage.getItem("socialType") : null;
-
-    setSocialType(typeFromParams ?? typeFromStorage ?? "GOOGLE");
-  }, [searchParams]);
+  const [dotCount, setDotCount] = useState<number>(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,16 +25,19 @@ export default function SocialLogin() {
   }, []);
 
   useEffect(() => {
-    const handleSocialLogin = async () => {
-      if (!code) return;
+    if (!code || !socialType) {
+      console.log("❌ code 또는 socialType 누락:", { code, socialType });
+      return;
+    }
 
+    console.log("✅ 로그인 시작 →", { code, socialType });
+
+    const handleSocialLogin = async () => {
       try {
         const res = await api.post("/api/v1/auth/social-login", {
           socialType,
           code,
         });
-        console.log("code:", code);
-        console.log("socialType:", socialType);
 
         const { accessToken, refreshToken, needAdditionalInfo } = res.data;
 
@@ -56,12 +53,12 @@ export default function SocialLogin() {
         router.push(needAdditionalInfo ? "/auth/completeProfile" : "/");
         localStorage.removeItem("socialType");
       } catch (err) {
-        console.error("소셜 로그인 실패:", err);
+        console.error("❌ 소셜 로그인 실패:", err);
       }
     };
 
     handleSocialLogin();
-  }, [code, router, setTokens, socialType, setUser]);
+  }, [code, socialType]);
 
   const dots = ".".repeat(dotCount);
 

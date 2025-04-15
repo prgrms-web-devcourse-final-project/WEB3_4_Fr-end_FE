@@ -12,18 +12,38 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useEffect, useState } from "react";
+import { deleteApplication } from "@/apis/mateBoard/deleteAppliciation";
 
 export default function ApplyButton({ data }: { data: MateDetailData }) {
   const userId = useAuthStore((state) => state.user?.id);
   const authorId = data.authorId;
   const isAuthor = userId === authorId;
+  const initialApplied =
+    data.mateApplications?.some((applied) => applied.authorId === userId) ??
+    false;
+
+  const [applied, setApplied] = useState(initialApplied);
+
+  useEffect(() => {
+    setApplied(initialApplied);
+  }, [initialApplied]);
+
   const handleApply = async () => {
     try {
-      const result = (await postApplication(
-        data.matePostId
-      )) as PostApplicationResponse;
-      console.log(result);
-      if (result.status === 201) {
+      if (applied) {
+        const result = (await deleteApplication(
+          data.matePostId
+        )) as PostApplicationResponse;
+        setApplied(false);
+        console.log("동행 신청 취소 :", result);
+        toast.success("동행신청을 취소하였습니다.");
+      } else {
+        const result = (await postApplication(
+          data.matePostId
+        )) as PostApplicationResponse;
+        setApplied(true);
+        console.log(result);
         toast.success("동행신청을 완료하였습니다.");
       }
     } catch (error) {
@@ -62,7 +82,7 @@ export default function ApplyButton({ data }: { data: MateDetailData }) {
       onClick={handleApply}
       className="p-5 w-30 text-[16px] cursor-pointer hover:bg-customGray-700 focus:outline-2"
     >
-      동행 신청
+      {applied ? "신청 취소" : "동행 신청"}
     </Button>
   );
 }

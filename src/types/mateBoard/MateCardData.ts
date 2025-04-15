@@ -1,3 +1,8 @@
+export interface PostLike {
+  authorId: number;
+  matePostId: number;
+}
+
 export type MateCardData = {
   matePostId: number;
   authorId: number;
@@ -18,4 +23,5 @@ export type MateCardData = {
   bio: string | null;
   commentCount: number;
   likeCount: number;
+  postLike: PostLike[];
 };
