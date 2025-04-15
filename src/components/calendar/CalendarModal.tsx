@@ -19,7 +19,7 @@ export default function CalendarModal({
   closeModal,
 }: CalendarModalProps) {
   if (!isOpen) return null;
-  
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-[520px]">
@@ -37,9 +37,7 @@ export default function CalendarModal({
         <div className="mt-4 -mx-8 bg-gray-300 h-[2px] mb-4" />
         <div className="flex gap-4 mb-5">
           <div className="w-1/2">
-            <label className="block text-sm mb-1 font-semibold">
-              이벤트 타입
-            </label>
+            <label className="block text-sm mb-1 font-semibold">이벤트 타입</label>
             <select className="w-full p-2 border border-gray-300 rounded-md">
               <option>친구와 함께</option>
               <option>일반 일정</option>

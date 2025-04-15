@@ -8,15 +8,16 @@ const api = axios.create({
   },
 });
 
-api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().accessToken;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+api.interceptors.request.use(
+  (config) => {
+    const token = useAuthStore.getState().accessToken;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export interface CalendarResponse {
   id: number;
@@ -39,33 +40,25 @@ export interface UpdateCalendarBody {
   note: string;
 }
 
-// 캘린더 목록 가져오기
+// 캘린더 목록 조회
 export const fetchCalendars = async (): Promise<CalendarResponse[]> => {
-  try {
-    const res = await api.get('/calendar');
-    console.log("📦 캘린더 응답 확인:", res.data);
-    return res.data.data;
-  } catch (err) {
-    console.error("❌ 캘린더 불러오기 실패:", err);
-    throw err;
-  }
+  const res = await api.get('/calendar');
+  return res.data.data;
 };
 
 // 캘린더 생성
 export const createCalendar = async (
   title: string
 ): Promise<CalendarResponse> => {
-  const now = new Date().toISOString(); // ISO 8601 포맷
-
+  const now = new Date().toISOString();
   const body = {
     calendarTitle: title,
     startDate: now,
     endDate: now,
     alertTime: now,
     labelColor: "#3b82f6",
-    note: ""
+    note: "",
   };
-
   const res = await api.post("/calendar", body);
   return res.data;
 };

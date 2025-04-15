@@ -1,5 +1,5 @@
-import type { DateClickArg, EventDragStopArg } from "@fullcalendar/interaction";
-import type { EventClickArg } from "@fullcalendar/core";
+import type { DateClickArg } from "@fullcalendar/interaction";
+import type { EventClickArg, EventMountArg } from "@fullcalendar/core";
 
 export interface CalendarEvent {
   id: string;
@@ -13,7 +13,7 @@ export interface CalendarMainProps {
   events: CalendarEvent[];
   onDateClick: (arg: DateClickArg) => void;
   onEventClick: (arg: EventClickArg) => void;
-  onEventDragStop: (arg: EventDragStopArg) => void;
+  eventDidMount?: (info: EventMountArg) => void;
 }
 
 export interface CalendarModalProps {
@@ -43,6 +43,7 @@ export interface SearchResult {
   address_name: string;
   x: number;
   y: number;
+  id?: string;
 }
 
 export interface PlanMapProps {
@@ -53,10 +54,20 @@ export interface CardData {
   id: number;
   placeName: string;
   searchResult: SearchResult | null;
+  time?: string;
+  travelId?: number;
 }
 
 export interface PlanCardContainerProps {
   onSearchResultsChange: (results: SearchResult[]) => void;
+  calendarId: string;
+  scheduleId: string;
+  startDate: string;
+  endDate: string;
+  dailyTravels: DailyTravelResponse[];
+  scheduleDayIds: number[];
+  activeDayIndex: number;
+  onDayClick: (index: number) => void;
 }
 
 export interface PlanSearchBarProps {
@@ -64,17 +75,15 @@ export interface PlanSearchBarProps {
   onPlaceNameChange: (placeName: string) => void;
   onSearchResult: (result: SearchResult | null) => void;
 }
+
 export interface PlanCardProps extends PlanSearchBarProps {
   searchResult: SearchResult | null;
   onDelete: () => void;
-}
-
-export interface SearchResult {
-  place_name: string;
-  category_name: string;
-  address_name: string;
-  x: number;
-  y: number;
+  onBookmarkClick?: (result: SearchResult, time: string) => void;
+  time?: string;
+  scheduleId: string;
+  travelId?: number;
+  scheduleDayId: number;
 }
 
 export interface KakaoPlace {
@@ -83,17 +92,76 @@ export interface KakaoPlace {
   address_name: string;
   x: string;
   y: string;
-}
-export interface CalendarEvent {
-  id: string;
-  title: string;
-  start: string;
-  end?: string;
-  color: string;
+  id?: string;
 }
 
 export interface CalendarPageProps {
   params: Promise<{
     id: string;
   }>;
+}
+
+export interface FetchedEvent {
+  schedule_id: number;
+  scheduleTitle: string;
+  startDate: string;
+  endDate: string;
+  note: string;
+  alertTime: string;
+  blockColor: string;
+}
+
+export interface ScheduleDetailResponse {
+  schedule_id: number;
+  scheduleTitle: string;
+  startDate: string;
+  endDate: string;
+  alertTime: string;
+  note: string;
+  labelColor?: string;
+}
+
+export interface PlanHeaderProps {
+  title: string;
+  startDate: string;
+  endDate: string;
+  calendarId: string;
+}
+
+export interface TravelPlaceRequest {
+  scheduleDayId: number;
+  hour: string;
+  minute: string;
+  id: string;
+  place_name: string;
+  category_group_name: string;
+  x: number;
+  y: number;
+}
+
+export interface TravelResponse {
+  travel_id: number;
+  schedule_day_id: number;
+  hour: number;
+  minute: number;
+  id: string;
+  place_name: string;
+  category_group_name: string;
+  x: number;
+  y: number;
+}
+
+export interface DailyTravelResponse {
+  scheduleDayId: number;
+  date: string;
+  travelCount: number;
+  travels: TravelResponse[];
+}
+
+export interface ScheduleTravelsResponse {
+  scheduleTitle: string;
+  startDate: string;
+  endDate: string;
+  scheduleDayIds: number[];
+  dailyTravels: DailyTravelResponse[];
 }
