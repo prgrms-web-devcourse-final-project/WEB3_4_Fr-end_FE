@@ -44,7 +44,7 @@ export default function Page() {
         setDailyTravels(data.dailyTravels);
         setScheduleDayIds(data.scheduleDayIds);
       } catch (error) {
-        console.error("여행지 불러오기 실패:", error);
+        console.error(error);
       }
     };
     loadTravels();
@@ -53,13 +53,13 @@ export default function Page() {
   return (
     <div className="h-screen">
       <PlanHeader
-  calendarId={calendarId} // 👈 꼭 전달하세요!
+  calendarId={calendarId}
   title={scheduleTitle}
   startDate={startDate}
   endDate={endDate}
 />
 
-      <div className="flex h-[calc(100vh-96px)] overflow-hidden">
+      <div className="flex h-[calc(100vh-98px)] overflow-hidden">
         <div className="w-1/3 h-full overflow-y-auto pr-1">
           <PlanCardContainer
             calendarId={calendarId}

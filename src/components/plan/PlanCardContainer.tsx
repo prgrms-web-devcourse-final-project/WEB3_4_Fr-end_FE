@@ -161,7 +161,7 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
   };
 
   return (
-    <div className="w-full h-[700px] overflow-y-auto overflow-x-hidden px-4 pb-10">
+    <div className="w-full h-[750px] overflow-y-auto overflow-x-hidden px-4 pb-10">
       {dateList.map((date, index) => {
         const dayLabel = getDayLabel(date);
         const formatted = date.replace(/-/g, ".");

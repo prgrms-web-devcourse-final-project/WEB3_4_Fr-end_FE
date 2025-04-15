@@ -7,7 +7,7 @@ import MainSchedule from "@/components/main/MainSchedule";
 export default function Home() {
   return (
     <>
-   <MainBanner/>
+    <MainBanner/>
    <MainLodging/>
    <MainLocation/>
    <MainSchedule/>

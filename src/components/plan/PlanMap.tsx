@@ -64,7 +64,7 @@ const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
     });
   }, [searchResults]);
 
-  return <div ref={mapContainerRef} style={{ width: "98%", height: "100%" }} />;
+  return <div ref={mapContainerRef} style={{ width: "100%", height: "90%" }} />;
 };
 
 export default PlanMap;
