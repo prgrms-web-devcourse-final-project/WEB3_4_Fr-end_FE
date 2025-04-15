@@ -84,6 +84,7 @@ export default function Login() {
       const { redirectUri } = res.data;
 
       if (redirectUri) {
+        localStorage.setItem("socialType", "GOOGLE");
         const joiner = redirectUri.includes("?") ? "&" : "?";
         window.location.href = `${redirectUri}${joiner}socialType=GOOGLE`;
       } else {
