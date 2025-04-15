@@ -27,6 +27,7 @@ const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
     if (!mapRef.current) return;
 
     window.kakao.maps.load(() => {
+      // 기존 마커 제거
       markersRef.current.forEach((marker) => marker.setMap(null));
       markersRef.current = [];
 
@@ -34,21 +35,32 @@ const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
         (result) => new window.kakao.maps.LatLng(result.y, result.x)
       );
 
-      positions.forEach((pos) => {
-        const marker = new window.kakao.maps.Marker({ position: pos });
+      // 새 마커 추가
+      positions.forEach((pos, index) => {
+        const markerImageSrc = `/svg/marker${index + 1}.png`; // 숫자별 마커 이미지
+        const imageSize = new window.kakao.maps.Size(32, 40);
+        const markerImage = new window.kakao.maps.MarkerImage(markerImageSrc, imageSize);
+      
+        const marker = new window.kakao.maps.Marker({
+          position: pos,
+          image: markerImage,
+        });
+      
         marker.setMap(mapRef.current!);
         markersRef.current.push(marker);
       });
-
+      
+      // 기존 선 제거
       if (polylineRef.current) {
         polylineRef.current.setMap(null);
       }
 
+      // 선 다시 그림
       if (positions.length >= 2) {
         const polyline = new window.kakao.maps.Polyline({
           path: positions,
           strokeWeight: 5,
-          strokeColor: "#FF0000",
+          strokeColor: "#89ADEF",
           strokeOpacity: 0.7,
           strokeStyle: "solid",
         });
@@ -56,6 +68,7 @@ const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
         polylineRef.current = polyline;
       }
 
+      // 지도 범위 설정
       if (positions.length > 0) {
         const bounds = new window.kakao.maps.LatLngBounds();
         positions.forEach((pos) => bounds.extend(pos));
