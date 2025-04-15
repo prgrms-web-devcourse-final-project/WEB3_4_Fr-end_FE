@@ -1,10 +1,9 @@
-// lib/mate/buildMatePayload.ts
 import { format } from "date-fns";
 import type { MateFormType } from "./mateFormSchema";
 
 type BuildMatePayloadProps = MateFormType & {
-  mateGender: string; // useState에서 관리하는 값
-  images: File[]; // 이미지 배열
+  mateGender: string;
+  images: File[];
   imageUrl?: string;
 };
 
