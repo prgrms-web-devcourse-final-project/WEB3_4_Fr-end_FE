@@ -30,8 +30,10 @@ export default function Post({ posts }: PostProps) {
   const totalPages = Math.ceil(posts.length / postsPerPage);
   if (posts.length === 0) {
     return (
-      <div className="text-sm text-gray-500 mt-4">
-        작성한 게시글이 없습니다.
+      <div className="flex flex-col items-center">
+        <div className="text-sm text-gray-500 mt-4">
+          작성한 게시글이 없습니다.
+        </div>
       </div>
     );
   }

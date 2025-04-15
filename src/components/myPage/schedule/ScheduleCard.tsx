@@ -4,6 +4,7 @@ import { CalendarData } from "@/types/ScheuduleData";
 import { useState } from "react";
 import { deleteCalendar } from "@/lib/myPage/calendarDelete";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface CalendarProps {
   calendars: CalendarData[];
@@ -23,6 +24,7 @@ const badgeColors = [
 ];
 
 export default function ScheduleCard({ calendars, onDelete }: CalendarProps) {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const commentPerPage = 3;
 
@@ -36,6 +38,7 @@ export default function ScheduleCard({ calendars, onDelete }: CalendarProps) {
         return (
           <div
             key={calendar.id}
+            onClick={() => router.push(`/calendar/${calendar.id}`)}
             className="w-[726px] min-h-[115px] outline outline-customGray-300 rounded-[4px] p-[15px] mb-[15px]"
           >
             <div className="flex justify-between mb-[5px]">
