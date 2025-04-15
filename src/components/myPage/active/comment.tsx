@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/ko"; // 한국어 locale
 import { useState } from "react";
-import { CommentData } from "@/types/CommentData";
+import { CommentData } from "@/types/myPage/MateComments";
 import { useRouter } from "next/navigation";
 import { deleteComment } from "@/apis/mateBoard/deleteComment";
 import axios from "axios";

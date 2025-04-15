@@ -1,11 +1,17 @@
 export interface CommentData {
-  mateCommentId: number;
-  matePostId: number;
-  matePostTitle: string;
-  authorId: number;
-  nickname: string;
-  profileImageUrl: string;
+  title: string;
   content: string;
-  createdAt: string; // ISO Date string
-  modifiedAt: string;
+  author: string;
+  avatar: string;
+  date: string;
+}
+
+export type UniversalComment = CommentData | MateCommentPreview;
+
+interface MateCommentPreview {
+  title: string;
+  content: string;
+  author: string;
+  avatar: string;
+  date: string;
 }
