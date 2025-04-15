@@ -92,17 +92,17 @@ export default function Search() {
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
-    setCurrentPage(1);
+    setCurrentPage(0);
   };
 
   const handleRegionClick = (region: string) => {
-    setSelectedRegion(region);
-    setCurrentPage(1);
+    setSelectedRegion((prevRegion) => (prevRegion === region ? null : region));
+    setCurrentPage(0);
   };
 
   const handleSearchSubmit = () => {
     setFinalSearch(searchInput);
-    setCurrentPage(1);
+    setCurrentPage(0);
   };
 
   const totalPages = Math.ceil(totalData / 10);

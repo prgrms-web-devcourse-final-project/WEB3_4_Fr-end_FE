@@ -1,36 +1,42 @@
 "use client";
 
-import { useState } from "react";
-import AllAcc from "./myAccompany/allAcc";
+import { useEffect, useState } from "react";
 import MyAcc from "./myAccompany/myAcc";
 import YourAcc from "./myAccompany/yourAcc";
-import AcceptAcc from "./myAccompany/acceptAcc";
-import { MateDummyData } from "@/dummyData/MateDummyData";
-import { commentDummyData } from "@/dummyData/CommentDummyData";
-import { MatePost } from "@/types/MatePost";
+import { MateApplication } from "@/types/myPage/MateApplication";
+import api from "@/lib/auth/axios";
 
-interface AccompanyProps {
-  accompanies: MatePost[]; // 타입 명확하면 any 대신 인터페이스로 지정 가능
-}
+export default function Accompany() {
+  const list = ["내가 받은 동행신청", "내가 신청한 동행신청"];
+  const [selectedMenu, setSelectedMenu] =
+    useState<string>("내가 받은 동행신청");
+  const [applications, setApplications] = useState<MateApplication[]>([]);
 
-export default function Accompany({ accompanies }: AccompanyProps) {
-  const list = [
-    "전체",
-    "내가 받은 동행신청",
-    "내가 신청한 동행신청",
-    "동행 수락 목록",
-  ];
-  const [selectedMenu, setSelectedMenu] = useState<string>("전체");
+  const fetchApplications = async () => {
+    try {
+      const endpoint =
+        selectedMenu === "내가 받은 동행신청"
+          ? "/api/v1/user/me/activity/mate-applications/received"
+          : "/api/v1/user/me/activity/mate-applications/sent";
+      const res = await api.get<MateApplication[]>(endpoint);
+      setApplications(res.data);
+    } catch (err) {
+      console.error("신청 목록 조회 실패", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchApplications();
+  }, [selectedMenu]);
+
   const renderContent = () => {
     switch (selectedMenu) {
-      case "전체":
-        return <AllAcc users={accompanies} comments={commentDummyData} />;
       case "내가 받은 동행신청":
-        return <YourAcc users={accompanies} comments={commentDummyData} />;
+        return (
+          <YourAcc applications={applications} onChanged={fetchApplications} />
+        );
       case "내가 신청한 동행신청":
-        return <MyAcc users={accompanies} comments={commentDummyData} />;
-      case "동행 수락 목록":
-        return <AcceptAcc users={accompanies} comments={commentDummyData} />;
+        return <MyAcc applications={applications} />;
       default:
         return null;
     }

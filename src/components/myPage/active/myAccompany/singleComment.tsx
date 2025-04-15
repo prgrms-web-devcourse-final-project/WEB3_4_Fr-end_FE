@@ -1,12 +1,10 @@
 import Image from "next/image";
-import { CommentData } from "@/types/CommentData";
+import type { UniversalComment } from "@/types/CommentData";
 import dayjs from "dayjs";
 
 interface SingleCommentProps {
-  comment: CommentData;
+  comment: UniversalComment;
 }
-
-// 코멘트를 가져왔지만 연결하려면 게시물 이름, 작성자, 작성날짜, 게시물 내용(string)을 가져오면 됌.
 
 export default function SingleComment({ comment }: SingleCommentProps) {
   const now = dayjs();
@@ -32,7 +30,7 @@ export default function SingleComment({ comment }: SingleCommentProps) {
       <div className="p-[16px]">
         <div className="flex items-center mb-[15px]">
           <Image
-            src={`/defaultAvatar/${comment.avatar}`}
+            src={comment.avatar}
             alt="Avatar"
             width={32}
             height={32}
