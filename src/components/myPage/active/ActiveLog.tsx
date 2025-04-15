@@ -22,7 +22,6 @@ export default function ActiveLog() {
   const [selectedMenu, setSelectedMenu] = useState<string>("작성한 게시물");
   const [posts, setPosts] = useState<MatePostResponse[]>([]);
   const [comments, setComments] = useState([]);
-  const [accompanies, setAccompanies] = useState([]);
 
   const list = ["작성한 게시물", "작성한 댓글", "동행 목록"];
 
@@ -45,9 +44,6 @@ export default function ActiveLog() {
           setPosts(res.data);
         } else if (selectedMenu === "작성한 댓글") {
           await fetchComments();
-        } else if (selectedMenu === "동행 목록") {
-          const res = await api.get("/api/v1/user/me/activity/accompany");
-          setAccompanies(res.data);
         }
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
@@ -65,7 +61,7 @@ export default function ActiveLog() {
       case "작성한 댓글":
         return <Comment comments={comments} onRefresh={fetchComments} />;
       case "동행 목록":
-        return <Accompany accompanies={accompanies} />;
+        return <Accompany />;
       default:
         return null;
     }

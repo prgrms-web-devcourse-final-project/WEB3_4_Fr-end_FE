@@ -24,7 +24,6 @@ export default function Post({ posts }: PostProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = 9;
   const router = useRouter();
-  console.log(posts);
 
   const currentPosts = posts.slice(0, currentPage * postsPerPage);
   const totalPages = Math.ceil(posts.length / postsPerPage);
