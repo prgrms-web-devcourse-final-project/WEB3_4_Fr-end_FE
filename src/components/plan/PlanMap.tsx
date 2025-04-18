@@ -37,7 +37,7 @@ const PlanMap: React.FC<PlanMapProps> = ({ searchResults }) => {
 
       // 새 마커 추가
       positions.forEach((pos, index) => {
-        const markerImageSrc = `/svg/marker${index + 1}.png`; // 숫자별 마커 이미지
+        const markerImageSrc = `/svg/marker${index + 1}.png`;
         const imageSize = new window.kakao.maps.Size(32, 40);
         const markerImage = new window.kakao.maps.MarkerImage(markerImageSrc, imageSize);
       

@@ -55,7 +55,7 @@ export default function MainSchedule() {
         <div className='flex flex-1 justify-center items-center'>
           {/* 노트북 */}
           <Image
-            src='/main/notebook.png'
+            src="/main/notebook.png"
             alt='notebook'
             width={540}
             height={345}
