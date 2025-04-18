@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import PlanCard from "@/components/plan/PlanCard";
 import Image from "next/image";
 import { createTravelPlace } from "@/apis/Schedule/PlanSchedule";
@@ -48,7 +48,8 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
   const [nextId, setNextId] = useState<number>(1);
   const hasGenerated = useRef(false);
 
-  const dateList = getDatesInRange(startDate, endDate);
+  // ✅ 안정적인 dateList 계산
+  const dateList = useMemo(() => getDatesInRange(startDate, endDate), [startDate, endDate]);
 
   useEffect(() => {
     if (
@@ -58,15 +59,15 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
       dateList.length === 0
     )
       return;
-  
+
     let currentNextId = 1;
     const newCardsMap: Record<string, CardData[]> = {};
-  
+
     dailyTravels.forEach((day) => {
       const dayIndex = scheduleDayIds.indexOf(day.scheduleDayId);
       const date = dateList[dayIndex];
       if (!date) return;
-  
+
       newCardsMap[date] = day.travels.map((travel) => ({
         id: currentNextId++,
         placeName: travel.place_name,
@@ -82,7 +83,7 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
         },
       }));
     });
-  
+
     setCardsMap(newCardsMap);
     setNextId(currentNextId);
     hasGenerated.current = true;
@@ -95,7 +96,7 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
       .filter((card) => card.searchResult !== null)
       .map((card) => card.searchResult!);
     onSearchResultsChange(results);
-  }, [cardsMap, activeDayIndex]);
+  }, [cardsMap, activeDayIndex, dateList, onSearchResultsChange]); // ✅ 안정적으로 포함
 
   const addCard = (date: string) => {
     const newCard: CardData = {
@@ -155,13 +156,13 @@ const PlanCardContainer: React.FC<PlanCardContainerProps> = ({
       await createTravelPlace(scheduleId, body);
       toast.success("✅ 장소가 저장되었습니다!");
     } catch (err) {
-      console.log(err)
+      console.error(err);
       toast.error("❌ 장소 저장에 실패했습니다.");
     }
   };
 
   return (
-    <div className="w-full h-[700px] overflow-y-auto overflow-x-hidden px-4 pb-10">
+    <div className="w-full h-[750px] overflow-y-auto overflow-x-hidden px-4 pb-10">
       {dateList.map((date, index) => {
         const dayLabel = getDayLabel(date);
         const formatted = date.replace(/-/g, ".");

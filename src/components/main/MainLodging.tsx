@@ -1,7 +1,19 @@
+'use client'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button';
+import { useRouter } from "next/navigation";
 
 export default function MainLodging() {
+  const router = useRouter();
+
+  const recommendClick = () => {
+    router.push(
+      "/reservation/search?category=" + encodeURIComponent("호텔") +
+      "&region=" + encodeURIComponent("서울") +
+      "&page=1"
+    );
+  };
+
   return (
     <div>
       <div className='relative'>
@@ -12,13 +24,21 @@ export default function MainLodging() {
         {/* 서브타이틀 */}
         <p className='text-lg pt-2 font-medium'>국내여행 숙소 모두 여기서, 숙소 찾고 결제까지 Planit에서 한번에!</p>
         {/* 버튼*/}
-        <Button className='mr-2 mb-4 rounded-2xl w-28 shadow-customBlack-400
-        transition-transform duration-300 ease-in-out hover:scale-110'>전체보기</Button>
+        <Button
+          className="mr-2 mb-4 rounded-2xl w-28 shadow-customBlack-400
+          transition-transform duration-300 ease-in-out hover:scale-110"
+          onClick={() => router.push("/reservation")}
+        >
+          전체보기
+        </Button>
         </div>
 
       {/* 이미지1 */}
         <div className="flex w-full gap-14 ">
-  <div className="pt-4 flex-grow-[5] relative h-[418px] transition-transform duration-300 ease-in-out hover:scale-105">
+  <div
+  onClick={() => router.push("/reservation/search")}
+  className="pt-4 flex-grow-[5] relative h-[418px] transition-transform duration-300 ease-in-out hover:scale-105">
+   
     <Image 
       src='/main/lodging1.jpg' 
       alt='mainlodging' 
@@ -44,7 +64,9 @@ export default function MainLodging() {
   </div>
   
    {/* 이미지2 */}
-  <div className="pt-4 flex-grow-[3] relative transition-transform duration-300 ease-in-out hover:scale-105">
+  <div
+  onClick={recommendClick}
+  className="pt-4 flex-grow-[3] relative transition-transform duration-300 ease-in-out hover:scale-105">
     <Image 
       src='/main/lodging2.jpg' 
       alt='mainlodging' 

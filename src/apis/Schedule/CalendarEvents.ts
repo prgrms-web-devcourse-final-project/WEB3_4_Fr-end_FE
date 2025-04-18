@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import type { FetchedEvent } from "@/types/Scheduleindex";
 
 export interface CreateEventBody {
@@ -37,13 +37,26 @@ export const createCalendarEvent = async (
 export const fetchCalendarEvents = async (
   calendarId: string
 ): Promise<FetchedEvent[]> => {
-  const response = await axios.get(
-    `http://api.sete.kr:8080/api/v1/calendars/${calendarId}/schedules`,
-    {
-      headers: getAuthHeader(),
+  try {
+    const response = await axios.get<FetchedEvent[]>(
+      `http://api.sete.kr:8080/api/v1/calendars/${calendarId}/schedules`,
+      {
+        headers: getAuthHeader(),
+      }
+    );
+
+    console.log("📦 일정 응답:", response.data);
+    return response.data; // ✅ 그대로 사용하면 됨
+  } catch (error) {
+    const err = error as AxiosError;
+
+    if (err.response?.status === 404) {
+      console.warn("📭 일정 없음 (404 응답) → 빈 배열 반환");
+      return [];
     }
-  );
-  return response.data;
+
+    throw err;
+  }
 };
 
 // 일정 삭제

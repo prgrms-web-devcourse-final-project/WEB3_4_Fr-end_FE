@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import PlanHeader from "@/components/plan/PlanHeader";
 import PlanCardContainer from "@/components/plan/PlanCardContainer";
@@ -25,6 +25,11 @@ export default function Page() {
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
+  // 🔧 useCallback으로 감싼 핸들러
+  const handleSearchResultsChange = useCallback((results: SearchResult[]) => {
+    setSearchResults(results);
+  }, []);
+
   useEffect(() => {
     const loadSchedule = async () => {
       const data = await getPlanEventData(scheduleId);
@@ -44,7 +49,7 @@ export default function Page() {
         setDailyTravels(data.dailyTravels);
         setScheduleDayIds(data.scheduleDayIds);
       } catch (error) {
-        console.error("여행지 불러오기 실패:", error);
+        console.error(error);
       }
     };
     loadTravels();
@@ -53,13 +58,13 @@ export default function Page() {
   return (
     <div className="h-screen">
       <PlanHeader
-  calendarId={calendarId} // 👈 꼭 전달하세요!
-  title={scheduleTitle}
-  startDate={startDate}
-  endDate={endDate}
-/>
+        calendarId={calendarId}
+        title={scheduleTitle}
+        startDate={startDate}
+        endDate={endDate}
+      />
 
-      <div className="flex h-[calc(100vh-96px)] overflow-hidden">
+      <div className="flex h-[calc(100vh-98px)] overflow-hidden">
         <div className="w-1/3 h-full overflow-y-auto pr-1">
           <PlanCardContainer
             calendarId={calendarId}
@@ -70,7 +75,7 @@ export default function Page() {
             scheduleDayIds={scheduleDayIds}
             activeDayIndex={activeDayIndex}
             onDayClick={setActiveDayIndex}
-            onSearchResultsChange={setSearchResults}
+            onSearchResultsChange={handleSearchResultsChange} // ✅ 수정된 부분
           />
         </div>
         <div className="w-2/3 h-full min-w-0 pl-4">

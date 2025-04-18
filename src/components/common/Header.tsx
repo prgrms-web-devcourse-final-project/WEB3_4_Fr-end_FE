@@ -6,6 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
 import { fetchCalendars } from "@/apis/Schedule/CalendarNav";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, EffectFade } from "swiper/modules";
 
 const Header: React.FC = () => {
   const pathname = usePathname();
@@ -52,8 +54,7 @@ const Header: React.FC = () => {
         router.push("/calendar/empty");
       }
     } catch (err) {
-      console.error("캘린더 이동 실패:", err);
-      alert("캘린더 정보를 불러오지 못했습니다. 다시 시도해주세요.");
+      console.error(err);
     }
   };
 
@@ -69,16 +70,31 @@ const Header: React.FC = () => {
   return (
     <>
       {isMainPage && (
-        <div className="absolute inset-0 w-full h-[600px] z-[-1]">
-          <Image
-            src="/main/banner.jpg"
-            alt="banner"
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
-      )}
+  <div className="absolute inset-0 w-full h-[600px] z-[-1]">
+    <div className="relative w-full h-full">
+      <Swiper
+        modules={[Autoplay, Pagination, EffectFade]}
+        effect="fade"
+        speed={3000}
+        loop
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        className="w-full h-full"
+      >
+        {[1, 2, 3].map((num) => (
+          <SwiperSlide key={num}>
+            <Image
+              src={`/main/banner${num}.jpg`}
+              alt={`banner${num}`}
+              fill
+              className="object-cover"
+              priority={num === 1}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
+  </div>
+)}
       <header className="mx-52 h-[125px] relative overflow-hidden mt-5">
         <div className="flex justify-between items-center w-full max-w-[1980px] px-2.5 mx-auto">
           <Link href="/">
